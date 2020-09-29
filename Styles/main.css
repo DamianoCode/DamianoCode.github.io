@@ -1,0 +1,17 @@
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  max-width: 100%;
+}
+
+body {
+  height: 100vh;
+}
+
+body {
+  background-color: #2e2b2b;
+  color: #fdf6f6;
+}
+/*# sourceMappingURL=main.css.map */
