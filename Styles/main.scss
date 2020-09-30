@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
 @import "start.scss";
 @import "header.scss";
 
@@ -5,8 +7,8 @@ $primary-color:#2e2b2b;
 $text-color:#fdf6f6;
 $second-color: #00a79d;
 
-
 body{
     background-color: $primary-color;
     color: $text-color;
+    font-family: 'Montserrat', sans-serif;
 }
