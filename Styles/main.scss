@@ -2,13 +2,24 @@
 
 @import "start.scss";
 @import "header.scss";
-
-$primary-color:#2e2b2b;
-$text-color:#fdf6f6;
-$second-color: #00a79d;
+@import 'colors.scss';
 
 body{
     background-color: $primary-color;
     color: $text-color;
     font-family: 'Montserrat', sans-serif;
+}
+main{
+    height: 100%;
+    width: 100%;
+}
+.section{
+    height: 50vw;
+    width: 100%;
+}
+.hero{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: black;
 }
