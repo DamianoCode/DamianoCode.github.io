@@ -24,7 +24,9 @@
 }
 
 .header__menu {
-  width: 40vw;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
