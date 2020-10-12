@@ -66,8 +66,6 @@ body {
 
 .header__menu > a:hover {
   scale: 1.05;
-  -webkit-transform: translateY(1);
-          transform: translateY(1);
   color: #00a79d;
 }
 
