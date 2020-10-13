@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=fallback');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=block');
 
 @import "start.scss";
 @import "header.scss";
@@ -14,7 +14,7 @@ main{
     width: 100%;
 }
 .section{
-    height: 50vw;
+    height: 90vh;
     width: 100%;
 }
 .hero{
