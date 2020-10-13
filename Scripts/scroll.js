@@ -1,4 +1,5 @@
-  let scrollpos = window.scrollY
+ //Navbar opacity animation
+ let scrollpos = window.scrollY
   const header = document.querySelector(".header")
   const header_height = header.offsetHeight
 
@@ -10,6 +11,20 @@
 
     if (scrollpos >= header_height) { add_class_on_scroll() }
     else { remove_class_on_scroll() }
-
-    console.log(scrollpos)
   })
+
+//Remove anchors hashtag
+function removeLocationHash(){
+    var noHashURL = window.location.href.replace(/#.*$/, '');
+    window.history.replaceState('', document.title, noHashURL) 
+}
+window.addEventListener("popstate", function(event){
+    removeLocationHash();
+});
+window.addEventListener("hashchange", function(event){
+    event.preventDefault();
+    removeLocationHash();
+});
+window.addEventListener("load", function(){
+    removeLocationHash();
+});

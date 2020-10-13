@@ -11,6 +11,10 @@ body {
   height: 100vh;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .header {
   position: fixed;
   top: 0;
@@ -98,6 +102,13 @@ body {
 
 .visibility:hover {
   opacity: 1;
+}
+
+.logo {
+  text-decoration: none;
+  color: #fdf6f6;
+  font-weight: 600;
+  font-size: 12px;
 }
 
 body {
