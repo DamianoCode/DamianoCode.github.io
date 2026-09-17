@@ -1,0 +1,67 @@
+---
+import { interests } from '../../data/profile';
+---
+
+<section class="wrap block" id="po-godzinach" aria-labelledby="po-godzinach-h">
+  <h2 id="po-godzinach-h" class="block-title">Po godzinach</h2>
+  <p class="block-intro">Kod to nie wszystko. Tym zajmuję się, kiedy laptop jest zamknięty.</p>
+
+  <ul class="interests">
+    {interests.map((item) => (
+      <li style={`--rest: ${item.stretch}%; --hover: ${item.hover}%`}>
+        <h3 class="word">{item.word}</h3>
+        <p class="text">{item.text}</p>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .interests {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    display: grid;
+    gap: 0.5rem 3rem;
+    padding-block: 1.5rem 1.75rem;
+    border-top: 1px solid var(--rule);
+  }
+  li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Każde słowo ma własną szerokość; po najechaniu zamienia ją na przeciwną. */
+  .word {
+    font-size: clamp(2.4rem, 7vw, 5.5rem);
+    font-weight: 700;
+    font-stretch: var(--rest);
+    line-height: 0.95;
+    overflow-wrap: anywhere;
+  }
+  .text {
+    color: var(--ink-soft);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .word {
+      transition: font-stretch 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+  }
+  @media (hover: hover) {
+    li:hover .word {
+      font-stretch: var(--hover);
+    }
+  }
+
+  @media (min-width: 60rem) {
+    li {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      align-items: end;
+    }
+    .text {
+      padding-bottom: 0.4rem;
+    }
+  }
+</style>

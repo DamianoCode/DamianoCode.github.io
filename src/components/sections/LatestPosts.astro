@@ -1,0 +1,52 @@
+---
+import { formatDate } from '../../lib/format';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = (await getPublishedPosts()).slice(0, 3);
+---
+
+<section class="wrap block" id="blog" aria-labelledby="blog-h">
+  <h2 id="blog-h" class="block-title">Blog</h2>
+  {posts.length > 0 ? (
+    <ul class="posts">
+      {posts.map((post) => (
+        <li>
+          <a href={`/blog/${post.id}`}>{post.data.title}</a>
+          <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="block-intro">
+      Pierwsze wpisy są w drodze: notatki z budowania tych projektów i z codziennej pracy z agentami.
+    </p>
+  )}
+  <p class="actions">
+    <a href="/blog">Wszystkie wpisy</a>
+  </p>
+</section>
+
+<style>
+  .posts {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+  }
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 2rem;
+    padding-block: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+  li a {
+    font-family: var(--display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    color: var(--ink);
+  }
+  time {
+    color: var(--ink-soft);
+  }
+</style>

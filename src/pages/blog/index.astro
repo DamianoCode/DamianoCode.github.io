@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import { profile } from '../../data/profile';
+import { formatDate } from '../../lib/format';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+---
+
+<Base
+  title={`Blog, ${profile.fullName}: fullstack i agenci AI`}
+  description="Notatki z budowania aplikacji fullstack w Next.js i TypeScript oraz z codziennej pracy z agentami AI w Claude Code."
+>
+  <section class="wrap page">
+    <h1 class="page-title">Blog</h1>
+    {posts.length === 0 ? (
+      <div class="empty-state">
+        <p>
+          Nie ma jeszcze żadnych wpisów. Pierwsze będą o budowaniu PlaceMates i o pracy z kilkoma sesjami Claude Code
+          naraz. Kanał RSS jest już gotowy.
+        </p>
+        <p class="actions">
+          <a href="/#projekty">Zobacz projekty</a>
+          <a href="/rss.xml">Subskrybuj RSS</a>
+        </p>
+      </div>
+    ) : (
+      <ul class="list">
+        {posts.map((post) => (
+          <li>
+            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+            <h2>
+              <a href={`/blog/${post.id}`}>{post.data.title}</a>
+            </h2>
+            <p>{post.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Base>
+
+<style>
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    display: grid;
+    gap: 0.35rem;
+    padding-block: 1.75rem;
+    border-top: 1px solid var(--rule);
+  }
+  time {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  h2 {
+    font-size: var(--step-2);
+    font-stretch: 115%;
+  }
+  h2 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  h2 a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--cobalt);
+  }
+</style>

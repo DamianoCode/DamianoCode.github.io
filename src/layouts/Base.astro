@@ -1,0 +1,195 @@
+---
+import '@fontsource-variable/anybody/standard.css';
+import '@fontsource-variable/literata/opsz.css';
+import '../styles/global.css';
+import anybodyLatin from '@fontsource-variable/anybody/files/anybody-latin-standard-normal.woff2?url';
+import anybodyLatinExt from '@fontsource-variable/anybody/files/anybody-latin-ext-standard-normal.woff2?url';
+import { profile, seo } from '../data/profile';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Ścieżka do obrazka udostępniania w public/. */
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  /** Dodatkowe dane strukturalne schema.org dla tej strony. */
+  jsonLd?: Record<string, unknown>[];
+}
+
+const {
+  title = seo.title,
+  description = seo.description,
+  image = '/og.png',
+  type = 'website',
+  noindex = false,
+  jsonLd = [],
+} = Astro.props;
+
+const site = Astro.site!;
+// Przy build.format 'file' ścieżki kończą się na .html; adres kanoniczny ich nie zawiera.
+const cleanPath =
+  Astro.url.pathname
+    .replace(/(index)?\.html$/, '')
+    .replace(/(.)\/$/, '$1') || '/';
+const canonical = new URL(cleanPath, site).href;
+const imageUrl = new URL(image, site).href;
+const path = Astro.url.pathname;
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': new URL('/#person', site).href,
+  name: profile.fullName,
+  givenName: profile.name,
+  familyName: profile.surname,
+  jobTitle: profile.role,
+  url: site.href,
+  email: `mailto:${profile.email}`,
+  image: imageUrl,
+  address: { '@type': 'PostalAddress', addressLocality: profile.city, addressCountry: 'PL' },
+  sameAs: [profile.github, profile.linkedin],
+  knowsAbout: seo.knowsAbout,
+};
+
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': new URL('/#website', site).href,
+  name: profile.fullName,
+  url: site.href,
+  inLanguage: 'pl-PL',
+  author: { '@id': person['@id'] },
+};
+
+const nav = [
+  { href: '/#projekty', label: 'Projekty' },
+  { href: '/#ai', label: 'AI' },
+  { href: '/#umiejetnosci', label: 'Umiejętności' },
+  { href: '/blog', label: 'Blog', current: path.startsWith('/blog') },
+  { href: '/cv', label: 'CV', current: path.startsWith('/cv') },
+  { href: '/#kontakt', label: 'Kontakt' },
+];
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.fullName} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:site_name" content={profile.fullName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${profile.fullName}, ${profile.role.toLowerCase()}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#dce2e8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#131c2e" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`Blog, ${profile.fullName}`} href="/rss.xml" />
+
+    <link rel="preload" href={anybodyLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={anybodyLatinExt} as="font" type="font/woff2" crossorigin />
+
+    {[person, website, ...jsonLd].map((data) => (
+      <script type="application/ld+json" set:html={JSON.stringify(data)} />
+    ))}
+  </head>
+  <body>
+    <a class="skip" href="#tresc">Przejdź do treści</a>
+    <header class="wrap site-head">
+      <a class="home" href="/">{profile.fullName}</a>
+      <nav aria-label="Główna">
+        {nav.map((item) => (
+          <a href={item.href} aria-current={item.current ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    </header>
+    <main id="tresc">
+      <slot />
+    </main>
+    <footer class="wrap site-foot">
+      <p>{profile.fullName}, {profile.role.toLowerCase()}, {profile.city}</p>
+      <p class="foot-links">
+        <a href={profile.github}>GitHub</a>
+        <a href={profile.linkedin}>LinkedIn</a>
+        <a href="/rss.xml">RSS</a>
+      </p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 1.25rem;
+  }
+  .home {
+    font-family: var(--display);
+    font-weight: 800;
+    font-stretch: 115%;
+    font-size: 1.15rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    font-family: var(--display);
+    font-size: 1rem;
+    font-stretch: 90%;
+  }
+  nav a {
+    color: var(--ink);
+    text-decoration: none;
+    padding-block: 0.25rem;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover,
+  nav a[aria-current='page'] {
+    border-color: var(--cobalt);
+  }
+  @media (max-width: 30rem) {
+    nav {
+      gap: 0.25rem 0.8rem;
+      font-stretch: 78%;
+    }
+  }
+  .site-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 3rem 2.5rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+  .foot-links {
+    display: flex;
+    gap: 1.25rem;
+  }
+  .foot-links a {
+    padding-block: 0.6rem;
+  }
+</style>

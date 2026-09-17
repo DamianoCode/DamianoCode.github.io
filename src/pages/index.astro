@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import AiWork from '../components/sections/AiWork.astro';
+import Contact from '../components/sections/Contact.astro';
+import Interests from '../components/sections/Interests.astro';
+import LatestPosts from '../components/sections/LatestPosts.astro';
+import Projects from '../components/sections/Projects.astro';
+import Skills from '../components/sections/Skills.astro';
+
+const profilePage = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: { '@id': new URL('/#person', Astro.site).href },
+  inLanguage: 'pl-PL',
+};
+---
+
+<Base jsonLd={[profilePage]}>
+  <Hero />
+  <Projects />
+  <AiWork />
+  <Skills />
+  <LatestPosts />
+  <Interests />
+  <Contact />
+</Base>

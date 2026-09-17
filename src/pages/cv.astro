@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import { cv, cvReady } from '../data/cv';
+import { profile } from '../data/profile';
+
+const sections = [
+  { title: 'Doświadczenie', entries: cv.experience },
+  { title: 'Edukacja', entries: cv.education },
+].filter((s) => s.entries.length > 0);
+---
+
+<Base
+  title={`CV, ${profile.fullName}, ${profile.role.toLowerCase()}`}
+  description={`Doświadczenie zawodowe i edukacja: ${profile.fullName}, ${profile.role.toLowerCase()} z Zamościa.`}
+  noindex={!cvReady}
+>
+  <section class="wrap page">
+    <h1 class="page-title">CV</h1>
+
+    {!cvReady ? (
+      <div class="empty-state">
+        <p>
+          Pełne CV jest w przygotowaniu. Do tego czasu projekty i umiejętności znajdziesz na stronie głównej,
+          a szczegóły doświadczenia podam w mailu.
+        </p>
+        <p class="actions">
+          <a href="/#projekty">Zobacz projekty</a>
+          <a href={`mailto:${profile.email}?subject=CV`}>Poproś o CV</a>
+        </p>
+      </div>
+    ) : (
+      <>
+        {cv.pdf && (
+          <p class="actions download">
+            <a href={cv.pdf} download>Pobierz CV (PDF)</a>
+          </p>
+        )}
+        {sections.map((section) => (
+          <section class="cv-section">
+            <h2>{section.title}</h2>
+            <ol>
+              {section.entries.map((entry) => (
+                <li>
+                  <span class="period">{entry.period}</span>
+                  <div>
+                    <h3>{entry.title}</h3>
+                    <p class="place">{entry.place}</p>
+                    {entry.description && <p>{entry.description}</p>}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
+      </>
+    )}
+  </section>
+</Base>
+
+<style>
+  .download {
+    margin-bottom: 3rem;
+  }
+  .cv-section + .cv-section {
+    margin-top: 4rem;
+  }
+  .cv-section h2 {
+    font-size: var(--step-3);
+    font-stretch: 120%;
+    margin-bottom: 1rem;
+  }
+  .cv-section ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .cv-section li {
+    display: grid;
+    gap: 0.25rem 2rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+  .period {
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .cv-section h3 {
+    font-size: var(--step-1);
+  }
+  .place {
+    color: var(--ink-soft);
+    margin-bottom: 0.5rem;
+  }
+  @media (min-width: 48rem) {
+    .cv-section li {
+      grid-template-columns: 12rem 1fr;
+    }
+  }
+</style>

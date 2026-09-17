@@ -1,0 +1,155 @@
+---
+import { alsoUsed, columns, skills } from '../../data/skills';
+
+const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : `#${id}`);
+---
+
+<section class="wrap block" id="umiejetnosci" aria-labelledby="umiejetnosci-h">
+  <h2 id="umiejetnosci-h" class="block-title">Umiejętności</h2>
+  <p class="block-intro">
+    Zamiast deklaracji: tabela pokazuje, gdzie naprawdę czego użyłem. Wiersz to umiejętność, kolumna to projekt.
+    Ostatnia kolumna zbiera wcześniejsze repozytoria.
+  </p>
+
+  <!-- Szerokie ekrany: tabela. Wąskie: lista z nazwami projektów. -->
+  <table class="matrix">
+    <thead>
+      <tr>
+        <td></td>
+        {columns.map((c) => (
+          <th scope="col">
+            <a href={columnHref(c.id)}>{c.short}</a>
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {skills.map((s) => (
+        <tr>
+          <th scope="row">
+            <span class="name">{s.name}</span>
+            <span class="note">{s.note}</span>
+          </th>
+          {columns.map((c) => (
+            <td>
+              {s.usedIn.includes(c.id) ? (
+                <span class:list={['hit', { past: c.id === 'wczesniej' }]} role="img" aria-label="tak" />
+              ) : (
+                <span class="visually-hidden">nie</span>
+              )}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <ul class="list">
+    {skills.map((s) => (
+      <li>
+        <span class="name">{s.name}</span>
+        <span class="note">{s.note}</span>
+        <span class="where">
+          {columns
+            .filter((c) => s.usedIn.includes(c.id))
+            .map((c) => c.short)
+            .join(', ')}
+        </span>
+      </li>
+    ))}
+  </ul>
+
+  <p class="also">Poza tabelą: {alsoUsed.join(', ')}.</p>
+</section>
+
+<style>
+  .matrix {
+    display: none;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead th {
+    padding: 0 0.5rem 1rem;
+    vertical-align: bottom;
+    font-family: var(--display);
+    font-weight: 600;
+    font-stretch: 85%;
+    font-size: 1rem;
+  }
+  thead a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 2px solid var(--cobalt);
+  }
+  tbody tr {
+    border-top: 1px solid var(--rule);
+  }
+  tbody tr:hover {
+    background: var(--paper-deep);
+  }
+  tbody th {
+    width: 36%;
+    padding: 0.8rem 1.5rem 0.8rem 0;
+    text-align: left;
+    font-weight: 400;
+  }
+  td {
+    text-align: center;
+  }
+  .hit {
+    display: inline-block;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    background: var(--cobalt);
+  }
+  .hit.past {
+    background: var(--ink);
+  }
+
+  .name {
+    display: block;
+    font-family: var(--display);
+    font-weight: 600;
+    font-stretch: 110%;
+    font-size: var(--step-1);
+    line-height: 1.2;
+  }
+  .note {
+    display: block;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .list li {
+    padding-block: 0.9rem;
+    border-top: 1px solid var(--rule);
+  }
+  .where {
+    display: block;
+    margin-top: 0.25rem;
+    font-family: var(--display);
+    font-stretch: 85%;
+    font-size: 0.95rem;
+    color: var(--cobalt);
+  }
+
+  .also {
+    margin-top: 1.5rem;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 52rem) {
+    .matrix {
+      display: table;
+    }
+    .list {
+      display: none;
+    }
+  }
+</style>

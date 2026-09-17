@@ -1,0 +1,178 @@
+:root {
+  --paper: #dce2e8;
+  --paper-deep: #c9d1db;
+  --ink: #16223a;
+  --ink-soft: #4e5b72;
+  --cobalt: #2f45e0;
+  --rule: #b3bdca;
+
+  --display: 'Anybody Variable', 'Arial Narrow', sans-serif;
+  --text: 'Literata Variable', Georgia, serif;
+
+  /* Skala typograficzna: kwarta (1.333) od 18 px. */
+  --step--1: 0.8125rem;
+  --step-0: 1.125rem;
+  --step-1: 1.5rem;
+  --step-2: 2rem;
+  --step-3: clamp(2.2rem, 5vw, 2.67rem);
+  --step-4: clamp(2.6rem, 7vw, 3.55rem);
+
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+  --measure: 36em;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #131c2e;
+    --paper-deep: #1f2a40;
+    --ink: #dce2e8;
+    --ink-soft: #97a3b7;
+    --cobalt: #8d9cff;
+    --rule: #33405a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --paper: #131c2e;
+  --paper-deep: #1f2a40;
+  --ink: #dce2e8;
+  --ink-soft: #97a3b7;
+  --cobalt: #8d9cff;
+  --rule: #33405a;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1.02;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--cobalt);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: -4rem;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.5rem 1rem;
+  z-index: 10;
+}
+.skip:focus {
+  top: 1rem;
+}
+
+/* Sekcje strony */
+.block {
+  padding-block: clamp(3rem, 9vh, 6.5rem);
+}
+.block-title {
+  font-size: var(--step-4);
+  font-weight: 300;
+  font-stretch: 105%;
+  overflow-wrap: anywhere;
+  margin-bottom: 1.5rem;
+}
+.block-intro {
+  color: var(--ink-soft);
+  margin-bottom: 2.5rem;
+}
+@media (min-width: 48rem) {
+  .block-title {
+    font-stretch: 140%;
+  }
+}
+
+/* Podstrony: blog, CV */
+.page {
+  padding-block: clamp(2rem, 8vh, 5rem);
+  min-height: 60vh;
+}
+.page-title {
+  font-size: clamp(4rem, 16vw, 11rem);
+  font-weight: 300;
+  font-stretch: 150%;
+  line-height: 0.9;
+  margin-bottom: 2.5rem;
+}
+.empty-state {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: start;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--ink);
+}
+
+/* Linki-akcje w kroju nagłówkowym */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  font-family: var(--display);
+  font-weight: 600;
+}

@@ -1,0 +1,38 @@
+---
+import { profile } from '../../data/profile';
+
+// Na wąskich ekranach adres łamie się tylko po „@”, nigdy w środku domeny.
+const [emailUser, emailDomain] = profile.email.split('@');
+---
+
+<section class="wrap block" id="kontakt" aria-labelledby="kontakt-h">
+  <h2 id="kontakt-h" class="block-title">Kontakt</h2>
+  <p class="block-intro">
+    Szukasz fullstack developera albo kogoś, kto pomoże wdrożyć agentów AI w zespole? Napisz maila.
+  </p>
+  <a class="email" href={`mailto:${profile.email}`}>{emailUser}@<wbr />{emailDomain}</a>
+  <p class="actions more">
+    <a href={profile.linkedin}>LinkedIn</a>
+    <a href={profile.github}>GitHub</a>
+    <a href="/cv">CV</a>
+  </p>
+</section>
+
+<style>
+  .email {
+    display: inline-block;
+    font-family: var(--display);
+    font-weight: 700;
+    font-stretch: 100%;
+    font-size: clamp(1.5rem, 5.5vw, 3.2rem);
+    line-height: 1.1;
+  }
+  @media (min-width: 48rem) {
+    .email {
+      font-stretch: 120%;
+    }
+  }
+  .more {
+    margin-top: 1.25rem;
+  }
+</style>

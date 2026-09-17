@@ -1,0 +1,77 @@
+---
+import type { ProjectId } from '../data/projects';
+
+interface Props {
+  id: ProjectId;
+}
+
+const { id } = Astro.props;
+---
+
+<svg class="glyph" viewBox="0 0 160 120" aria-hidden="true" focusable="false">
+  {id === 'placemates' && (
+    <g>
+      <path d="M8 96 C 40 70, 60 104, 92 78 S 140 60, 152 30" class="g-route" />
+      <path d="M36 44a12 12 0 1 1 24 0c0 10-12 22-12 22S36 54 36 44z" class="g-fill" />
+      <circle cx="48" cy="44" r="4" class="g-paper" />
+      <path d="M96 22a9 9 0 1 1 18 0c0 8-9 17-9 17s-9-9-9-17z" class="g-line" />
+      <path d="M118 70a9 9 0 1 1 18 0c0 8-9 17-9 17s-9-9-9-17z" class="g-accent" />
+    </g>
+  )}
+  {id === 'claudius' && (
+    <g>
+      <path d="M80 30 V52 M80 52 H26 V76 M80 52 H62 V76 M80 52 H98 V76 M80 52 H134 V76" class="g-thin" />
+      <rect x="62" y="12" width="36" height="22" rx="3" class="g-fill" />
+      <rect x="14" y="76" width="24" height="18" rx="3" class="g-line" />
+      <rect x="50" y="76" width="24" height="18" rx="3" class="g-line" />
+      <rect x="86" y="76" width="24" height="18" rx="3" class="g-line" />
+      <rect x="122" y="76" width="24" height="18" rx="3" class="g-accent" />
+    </g>
+  )}
+  {id === 'widget' && (
+    <g>
+      <rect x="58" y="6" width="44" height="108" rx="22" class="g-fill" />
+      <circle cx="80" cy="30" r="11" class="g-red" />
+      <circle cx="80" cy="60" r="11" class="g-dim" />
+      <circle cx="80" cy="90" r="11" class="g-dim" />
+      <text x="112" y="35" class="g-text">2</text>
+    </g>
+  )}
+  {id === 'ecommerce' && (
+    <g>
+      <rect x="8" y="14" width="144" height="92" rx="6" class="g-line" />
+      <rect x="8" y="14" width="36" height="92" class="g-fill" />
+      <path d="M56 38 H140 M56 58 H140 M56 78 H140" class="g-thin" />
+      <rect x="56" y="24" width="40" height="8" rx="2" class="g-soft" />
+      <rect x="56" y="44" width="52" height="8" rx="2" class="g-soft" />
+      <rect x="56" y="64" width="30" height="8" rx="2" class="g-accent" />
+      <rect x="56" y="84" width="46" height="8" rx="2" class="g-soft" />
+    </g>
+  )}
+</svg>
+
+<style>
+  .glyph {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+  .g-fill { fill: var(--ink); }
+  .g-paper { fill: var(--paper); }
+  .g-soft { fill: var(--paper-deep); }
+  .g-accent { fill: var(--cobalt); }
+  .g-line { fill: none; stroke: var(--ink); stroke-width: 2.5; }
+  .g-thin { fill: none; stroke: var(--ink-soft); stroke-width: 1.5; }
+  .g-route { fill: none; stroke: var(--cobalt); stroke-width: 2.5; stroke-dasharray: 2 7; stroke-linecap: round; }
+  .g-red { fill: #e0483e; }
+  .g-dim { fill: var(--ink-soft); opacity: 0.45; }
+  .g-text { fill: var(--ink); font: 700 20px/1 var(--display); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .g-red { animation: pulse 1.8s ease-in-out infinite; }
+  }
+  @keyframes pulse {
+    50% { opacity: 0.45; }
+  }
+</style>

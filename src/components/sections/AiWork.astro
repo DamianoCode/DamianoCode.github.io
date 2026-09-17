@@ -1,0 +1,119 @@
+---
+import { aiWork, flowSteps } from '../../data/ai';
+---
+
+<section class="ai" id="ai" aria-labelledby="ai-h">
+  <div class="wrap block">
+    <h2 id="ai-h" class="block-title">Agenci AI i Claude Code</h2>
+    <p class="lead">{aiWork.lead}</p>
+
+    <div class="points">
+      {aiWork.points.map((p) => (
+        <div>
+          <h3>{p.title}</h3>
+          <p class="muted">{p.text}</p>
+        </div>
+      ))}
+    </div>
+
+    <figure class="flow">
+      <figcaption>Jak zmiana przechodzi przez Claudiusa</figcaption>
+      <ol>
+        {flowSteps.map((step) => (
+          <li>
+            <strong>{step.name}</strong>
+            <span class="muted">{step.text}</span>
+          </li>
+        ))}
+      </ol>
+    </figure>
+  </div>
+</section>
+
+<style>
+  /* Odwrócone kolory: pasek wyróżnia sekcję na tle strony w obu motywach. */
+  .ai {
+    --rule: color-mix(in srgb, var(--paper) 22%, transparent);
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .muted {
+    color: color-mix(in srgb, var(--paper) 75%, var(--ink));
+  }
+  .lead {
+    font-size: clamp(1.3rem, 2.6vw, var(--step-2));
+    line-height: 1.35;
+    max-width: 26em;
+  }
+  .points {
+    display: grid;
+    gap: 2rem 3rem;
+    margin-top: 3rem;
+  }
+  h3 {
+    font-size: var(--step-1);
+    font-stretch: 110%;
+    margin-bottom: 0.5rem;
+  }
+
+  .flow {
+    margin: 4rem 0 0;
+  }
+  figcaption {
+    font-family: var(--display);
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+  }
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    counter-reset: step;
+  }
+  li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    column-gap: 0.75rem;
+    padding-block: 0.9rem;
+    border-top: 1px solid var(--rule);
+  }
+  li::before {
+    content: counter(step);
+    grid-row: span 2;
+    font-family: var(--display);
+    font-weight: 800;
+    font-stretch: 130%;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: color-mix(in srgb, var(--cobalt) 45%, var(--paper));
+  }
+  strong {
+    font-family: var(--display);
+    font-size: 1.15rem;
+  }
+  li .muted {
+    font-size: 0.95rem;
+  }
+
+  @media (min-width: 60rem) {
+    .points {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    ol {
+      grid-template-columns: repeat(6, 1fr);
+      column-gap: 1rem;
+    }
+    li {
+      grid-template-columns: 1fr;
+      align-content: start;
+      padding-top: 1rem;
+      border-top-width: 3px;
+    }
+    li::before {
+      grid-row: auto;
+      margin-bottom: 0.75rem;
+    }
+  }
+</style>

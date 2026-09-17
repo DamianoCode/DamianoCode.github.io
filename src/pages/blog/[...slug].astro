@@ -1,0 +1,111 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { profile } from '../../data/profile';
+import { formatDate } from '../../lib/format';
+import { getPublishedPosts } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const date = formatDate(post.data.date);
+---
+
+<Base
+  title={`${post.data.title}, ${profile.fullName}`}
+  description={post.data.description}
+  type="article"
+  jsonLd={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: post.data.title,
+      description: post.data.description,
+      datePublished: post.data.date.toISOString(),
+      inLanguage: 'pl-PL',
+      mainEntityOfPage: new URL(`/blog/${post.id}`, Astro.site).href,
+      author: { '@id': new URL('/#person', Astro.site).href },
+    },
+  ]}
+>
+  <article class="wrap post">
+    <header class="post-head">
+      <a href="/blog">Wszystkie wpisy</a>
+      <h1>{post.data.title}</h1>
+      <time datetime={post.data.date.toISOString()}>{date}</time>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .post {
+    padding-block: clamp(2rem, 8vh, 5rem);
+  }
+  .post-head {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--ink);
+  }
+  .post-head a {
+    font-family: var(--display);
+    font-weight: 600;
+  }
+  .post-head h1 {
+    font-size: var(--step-4);
+    font-stretch: 120%;
+    max-width: 18em;
+  }
+  .post-head time {
+    color: var(--ink-soft);
+  }
+  .prose {
+    max-width: 38em;
+    line-height: 1.7;
+  }
+  .prose :global(* + *) {
+    margin-top: 1.1em;
+  }
+  .prose :global(h2) {
+    font-size: var(--step-2);
+    margin-top: 2em;
+  }
+  .prose :global(h3) {
+    font-size: var(--step-1);
+    margin-top: 1.6em;
+  }
+  .prose :global(code) {
+    font-size: 0.88em;
+    background: var(--paper-deep);
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+  }
+  .prose :global(pre) {
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+  .prose :global(blockquote) {
+    margin-inline: 0;
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--cobalt);
+    color: var(--ink-soft);
+  }
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

@@ -1,0 +1,147 @@
+---
+import ProjectGlyph from '../ProjectGlyph.astro';
+import { archive, projects } from '../../data/projects';
+---
+
+<section class="wrap block" id="projekty" aria-labelledby="projekty-h">
+  <h2 id="projekty-h" class="block-title">Projekty</h2>
+
+  {projects.map((p) => (
+    <article class="project" id={p.id}>
+      <div class="glyph">
+        <ProjectGlyph id={p.id} />
+      </div>
+      <div>
+        <h3 class="name">
+          {p.name}
+          <span class="year">{p.year}</span>
+        </h3>
+        <p class="summary">{p.summary}</p>
+        <p class="detail">{p.detail}</p>
+        <p class="stack">
+          <span class="visually-hidden">Technologie: </span>
+          {p.stack.join(', ')}
+        </p>
+        <p class="actions links">
+          {p.links.map((l) => (
+            <a href={l.href}>{l.label}</a>
+          ))}
+        </p>
+      </div>
+    </article>
+  ))}
+
+  <div class="archive" id="projekty-archiwum">
+    <h3 class="archive-title">Wcześniejsze repozytoria</h3>
+    <ul class="archive-list">
+      {archive.map((a) => (
+        <li>
+          <span class="archive-year">{a.year}</span>
+          <a href={a.href}>{a.name}</a>
+          <span class="archive-what">{a.what}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .project {
+    display: grid;
+    gap: 1.25rem 3rem;
+    padding-block: 2.5rem 3rem;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 1rem;
+  }
+  .project:last-of-type {
+    border-bottom: 1px solid var(--rule);
+  }
+  .glyph {
+    width: 7.5rem;
+  }
+  .name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    font-size: var(--step-3);
+    overflow-wrap: anywhere;
+  }
+  .year {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+  .summary {
+    margin-top: 1rem;
+    font-size: var(--step-1);
+    line-height: 1.4;
+    max-width: 26em;
+  }
+  .detail {
+    margin-top: 1rem;
+    color: var(--ink-soft);
+  }
+  .stack {
+    margin-top: 1.25rem;
+    font-family: var(--display);
+    font-stretch: 90%;
+    font-size: 1rem;
+  }
+  .links {
+    margin-top: 1rem;
+  }
+
+  .archive {
+    margin-top: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .archive-title {
+    font-size: var(--step-1);
+    font-stretch: 110%;
+    margin-bottom: 1rem;
+  }
+  .archive-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem 2.5rem;
+  }
+  .archive-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.75rem;
+  }
+  .archive-year {
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .archive-list a {
+    font-family: var(--display);
+    font-weight: 600;
+  }
+  .archive-what {
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 48rem) {
+    .project {
+      grid-template-columns: 14rem 1fr;
+    }
+    .glyph {
+      width: 100%;
+      padding-top: 0.5rem;
+    }
+    .name {
+      font-stretch: 125%;
+    }
+    .archive {
+      margin-left: 17rem;
+    }
+    .archive-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
