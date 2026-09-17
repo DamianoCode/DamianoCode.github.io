@@ -2,15 +2,22 @@
  * Soczewka typograficzna w hero: litery blisko kursora (albo miejsca przewinięcia na ekranach dotykowych)
  * robią się szerokie i grube, dalsze wąskie i lekkie.
  *
- * Wydajność: pętla animacji niczego nie mierzy. Szerokości liter są mierzone raz, dla siatki wartości osi,
- * a w każdej klatce interpolowane. Rozmiar napisu zmienia `transform: scale`, więc strona nie przelicza
- * układu od nowa, a litera zmienia kształt tylko wtedy, gdy wartość osi przeskoczy o cały krok.
+ * Wydajność:
+ * - Każda litera ma jeden parametr `u` (0 = wąsko i lekko, 1 = szeroko i grubo), z którego wynikają obie osie
+ *   kroju. `u` jest zaokrąglane do LEVELS poziomów, więc wszystkich wariantów kroju jest tylko LEVELS + 1.
+ * - Nowy wariant jest dla przeglądarki kosztowny, dlatego wszystkie powstają z góry, razem z pomiarem
+ *   ich szerokości: małymi porcjami w wolnych chwilach, od najgrubszych kroków do najdrobniejszych.
+ *   Zanim wszystkie będą gotowe, animacja używa najbliższego gotowego wariantu.
+ * - Pętla animacji niczego nie mierzy, a rozmiar napisu zmienia `transform: scale`, nie `font-size`.
  */
 
-const W = { min: 50, max: 150, rest: 100, step: 2.5 };
-const G = { min: 280, max: 860, rest: 640, step: 20 };
-const W_SAMPLES = [50, 75, 100, 125, 150];
-const G_SAMPLES = [280, 570, 860];
+/** Tyle poziomów daje kroki ok. 1 jednostki szerokości i 6 jednostek grubości: poniżej progu widoczności. */
+const LEVELS = 100;
+const W_RANGE = [50, 150] as const;
+const G_RANGE = [280, 860] as const;
+/** Spoczynek: szerokość 100, grubość 640. Krzywa grubości jest dobrana tak, by oba punkty wypadły przy u = 0.5. */
+const U_REST = 0.5;
+const G_CURVE = Math.log((640 - G_RANGE[0]) / (G_RANGE[1] - G_RANGE[0])) / Math.log(U_REST);
 const SPREAD = 0.17;
 const SWEEP_MS = 1500;
 const EASE = 0.16;
@@ -19,13 +26,11 @@ const LINE_HEIGHT = 0.8;
 
 type Char = {
   el: HTMLElement;
-  /** Bieżąca (płynna) wartość osi. */
-  w: number;
-  g: number;
-  /** Wartość zaokrócona do kroku, która jest aktualnie w stylu. */
-  shownW: number;
-  shownG: number;
-  /** Szerokość litery przy 100px dla każdej pary (W_SAMPLES × G_SAMPLES). */
+  /** Bieżąca, płynna wartość parametru. */
+  u: number;
+  /** Poziom, który jest aktualnie w stylu. */
+  level: number;
+  /** Szerokość litery przy 100px dla każdego poziomu (puste, dopóki poziom nie jest zmierzony). */
   advances: number[];
 };
 
@@ -34,7 +39,15 @@ type Line = {
   word: HTMLElement;
   chars: Char[];
   alignEnd: boolean;
+  /** Szerokość w spoczynku przy 100px. */
+  restWidth: number;
   fontSize: number;
+  /** Rozmiar, dla którego trwa albo zakończyło się przygotowanie wariantów. */
+  preparedSize: number;
+  /** Dla każdego poziomu: najbliższy poziom, który już ma zmierzoną szerokość. */
+  nearest: number[];
+  /** Kończy się, gdy wszystkie warianty w bieżącym rozmiarze są gotowe. */
+  ready: Promise<void>;
   boxLeft: number;
   boxWidth: number;
   boxHeight: number;
@@ -44,44 +57,93 @@ type Line = {
   visualWidth: number;
 };
 
-const variation = (w: number, g: number) => `'wdth' ${w}, 'wght' ${g}`;
-const quantize = (value: number, step: number) => Math.round(value / step) * step;
-const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+const REST_LEVEL = Math.round(U_REST * LEVELS);
+const VARIATIONS = Array.from({ length: LEVELS + 1 }, (_, level) => {
+  const u = level / LEVELS;
+  const w = W_RANGE[0] + (W_RANGE[1] - W_RANGE[0]) * u;
+  const g = G_RANGE[0] + (G_RANGE[1] - G_RANGE[0]) * u ** G_CURVE;
+  return `'wdth' ${w.toFixed(1)}, 'wght' ${g.toFixed(0)}`;
+});
 
-/** Interpolacja dwuliniowa szerokości litery z siatki pomiarów. */
-function advanceAt(c: Char, w: number, g: number) {
-  const wi = Math.min(W_SAMPLES.length - 2, Math.floor((w - W_SAMPLES[0]) / 25));
-  const gi = Math.min(G_SAMPLES.length - 2, Math.floor((g - G_SAMPLES[0]) / 290));
-  const tw = clamp01((w - W_SAMPLES[wi]) / 25);
-  const tg = clamp01((g - G_SAMPLES[gi]) / 290);
-  const at = (i: number, j: number) => c.advances[i * G_SAMPLES.length + j];
-  const low = at(wi, gi) + (at(wi + 1, gi) - at(wi, gi)) * tw;
-  const high = at(wi, gi + 1) + (at(wi + 1, gi + 1) - at(wi, gi + 1)) * tw;
-  return low + (high - low) * tg;
+const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+const levelOf = (u: number) => Math.round(clamp01(u) * LEVELS);
+
+/** Ukryty element o stylach napisu, w którym można mierzyć litery bez wpływu na stronę. */
+function withProbe<T>(line: Line, fontSize: number, fill: (probe: HTMLElement) => () => T): T {
+  const probe = line.word.cloneNode(false) as HTMLElement;
+  probe.style.cssText = `position:absolute;left:0;top:0;visibility:hidden;transform:none;font-size:${fontSize}px`;
+  const read = fill(probe);
+  document.body.append(probe);
+  const result = read();
+  probe.remove();
+  return result;
 }
 
-/** Jeden odczyt układu dla wszystkich liter i wartości osi. */
-function measureAdvances(lines: Line[]) {
-  const probe = lines[0].word.cloneNode(false) as HTMLElement;
-  probe.style.cssText = 'position:absolute;left:0;top:0;visibility:hidden;font-size:100px;transform:none';
-  const cells: { c: Char; el: HTMLElement }[] = [];
-
-  for (const line of lines) {
+/** Szerokość napisu w spoczynku przy 100px. */
+function measureRestWidth(line: Line) {
+  return withProbe(line, 100, (probe) => {
     for (const c of line.chars) {
-      for (const w of W_SAMPLES) {
-        for (const g of G_SAMPLES) {
-          const el = c.el.cloneNode(true) as HTMLElement;
-          el.style.fontVariationSettings = variation(w, g);
-          probe.append(el);
-          cells.push({ c, el });
-        }
-      }
+      const el = c.el.cloneNode(true) as HTMLElement;
+      el.style.fontVariationSettings = VARIATIONS[REST_LEVEL];
+      probe.append(el);
     }
-  }
+    return () => probe.getBoundingClientRect().width;
+  });
+}
 
-  document.body.append(probe);
-  for (const { c, el } of cells) c.advances.push(el.getBoundingClientRect().width);
-  probe.remove();
+/** Poziomy od najgrubszych kroków do najdrobniejszych: spoczynek i skrajności są gotowe najwcześniej. */
+const PREPARE_ORDER = [...new Set([REST_LEVEL, ...[50, 25, 12, 6, 3, 1].flatMap((stride) =>
+  Array.from({ length: Math.floor(LEVELS / stride) + 1 }, (_, i) => i * stride),
+)])];
+/** Tyle liter w porcji mieści się w kilkunastu milisekundach nawet na słabszym telefonie. */
+const LETTERS_PER_CHUNK = 24;
+
+const idle = () =>
+  new Promise<void>((resolve) =>
+    'requestIdleCallback' in window ? requestIdleCallback(() => resolve(), { timeout: 250 }) : setTimeout(resolve, 16),
+  );
+
+function updateNearest(line: Line) {
+  const measured = line.chars[0].advances;
+  let last = -1;
+  for (let level = 0; level <= LEVELS; level++) {
+    if (measured[level] !== undefined) last = level;
+    line.nearest[level] = last;
+  }
+  let next = -1;
+  for (let level = LEVELS; level >= 0; level--) {
+    if (measured[level] !== undefined) next = level;
+    const prev = line.nearest[level];
+    line.nearest[level] = prev === -1 || (next !== -1 && next - level < level - prev) ? next : prev;
+  }
+}
+
+/**
+ * Tworzy warianty liter w docelowym rozmiarze i mierzy ich szerokość, porcjami. Pierwsza porcja
+ * (spoczynek i skrajności) wykonuje się od razu, reszta w wolnych chwilach przeglądarki.
+ * Przerywa się, gdy w międzyczasie zmieni się rozmiar napisu.
+ */
+async function prepareVariants(line: Line, fontSize: number) {
+  const perChunk = Math.max(1, Math.floor(LETTERS_PER_CHUNK / line.chars.length));
+  for (let i = 0; i < PREPARE_ORDER.length; i += perChunk) {
+    if (line.preparedSize !== fontSize) return;
+    const levels = PREPARE_ORDER.slice(i, i + perChunk);
+    withProbe(line, fontSize, (probe) => {
+      const cells = line.chars.flatMap((c) =>
+        levels.map((level) => {
+          const el = c.el.cloneNode(true) as HTMLElement;
+          el.style.fontVariationSettings = VARIATIONS[level];
+          probe.append(el);
+          return { c, level, el };
+        }),
+      );
+      return () => {
+        for (const { c, level, el } of cells) c.advances[level] = (el.getBoundingClientRect().width * 100) / fontSize;
+      };
+    });
+    updateNearest(line);
+    await idle();
+  }
 }
 
 export function initTypeLens(root: HTMLElement, section: HTMLElement) {
@@ -93,18 +155,20 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
     word: box.firstElementChild as HTMLElement,
     chars: [...box.querySelectorAll<HTMLElement>('.ch')].map((el) => ({
       el,
-      w: W.rest,
-      g: G.rest,
-      shownW: W.rest,
-      shownG: G.rest,
+      u: U_REST,
+      level: -1,
       advances: [],
     })),
     alignEnd: box.classList.contains('line-end'),
+    restWidth: 0,
     fontSize: 0,
+    preparedSize: 0,
+    nearest: [],
+    ready: Promise.resolve(),
     boxLeft: 0,
     boxWidth: 0,
     boxHeight: 0,
-    scale: 1,
+    scale: 0,
     visualLeft: 0,
     visualWidth: 0,
   }));
@@ -121,12 +185,17 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
   let sweepStart = 0;
   let frame = 0;
 
-  const wordWidth = (line: Line) =>
-    line.chars.reduce((sum, c) => sum + advanceAt(c, c.shownW, c.shownG), 0) * (line.fontSize / 100);
+  const show = (line: Line, c: Char) => {
+    const level = line.nearest[levelOf(c.u)];
+    if (level !== c.level) {
+      c.level = level;
+      c.el.style.fontVariationSettings = VARIATIONS[level];
+    }
+  };
 
   /** Skaluje napis tak, by wypełnił szerokość, ale nie przekroczył wysokości linii. Bez odczytu układu. */
   const place = (line: Line) => {
-    const width = wordWidth(line);
+    const width = line.chars.reduce((sum, c) => sum + c.advances[c.level], 0) * (line.fontSize / 100);
     const scale = Math.min(line.boxWidth / width, line.boxHeight / (LINE_HEIGHT * line.fontSize));
     if (Math.abs(scale - line.scale) > 0.0005) {
       line.scale = scale;
@@ -134,16 +203,6 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
     }
     line.visualWidth = width * scale;
     line.visualLeft = line.alignEnd ? line.boxLeft + line.boxWidth - line.visualWidth : line.boxLeft;
-  };
-
-  const show = (c: Char) => {
-    const w = quantize(c.w, W.step);
-    const g = quantize(c.g, G.step);
-    if (w !== c.shownW || g !== c.shownG) {
-      c.shownW = w;
-      c.shownG = g;
-      c.el.style.fontVariationSettings = variation(w, g);
-    }
   };
 
   /** Odczyt geometrii tylko przy starcie i zmianie rozmiaru. */
@@ -161,10 +220,15 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
       line.boxWidth = rect.width;
       line.boxHeight = rect.height;
       // Rozmiar bazowy dopasowany do stanu spoczynku; ruch soczewki zmienia już tylko skalę.
-      const restWidth = line.chars.reduce((sum, c) => sum + advanceAt(c, W.rest, G.rest), 0);
-      line.fontSize = Math.min((rect.width / restWidth) * 100, rect.height / LINE_HEIGHT);
-      line.word.style.fontSize = `${line.fontSize.toFixed(2)}px`;
+      line.restWidth ||= measureRestWidth(line);
+      line.fontSize = Math.round(Math.min((rect.width / line.restWidth) * 100, rect.height / LINE_HEIGHT));
+      line.word.style.fontSize = `${line.fontSize}px`;
+      if (line.fontSize !== line.preparedSize) {
+        line.preparedSize = line.fontSize;
+        line.ready = prepareVariants(line, line.fontSize);
+      }
       line.scale = 0;
+      for (const c of line.chars) show(line, c);
       place(line);
     }
   };
@@ -193,22 +257,13 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
       const n = line.chars.length;
 
       line.chars.forEach((c, k) => {
-        let tw = W.rest;
-        let tg = G.rest;
-        if (lensX !== null) {
-          // Blisko soczewki: szeroko i grubo. Daleko: wąsko i lekko.
-          const influence = Math.exp(-(((k + 0.5) / n - x) ** 2) / (2 * SPREAD ** 2)) * amp;
-          tw = W.min + (W.max - W.min) * influence;
-          tg = G.min + (G.max - G.min) * influence;
-        }
-        c.w += (tw - c.w) * EASE;
-        c.g += (tg - c.g) * EASE;
-        if (Math.abs(tw - c.w) > 0.5 || Math.abs(tg - c.g) > 2) moving = true;
-        else {
-          c.w = tw;
-          c.g = tg;
-        }
-        show(c);
+        // Blisko soczewki: szeroko i grubo. Daleko: wąsko i lekko.
+        const target =
+          lensX === null ? U_REST : Math.exp(-(((k + 0.5) / n - x) ** 2) / (2 * SPREAD ** 2)) * amp;
+        c.u += (target - c.u) * EASE;
+        if (Math.abs(target - c.u) > 0.004) moving = true;
+        else c.u = target;
+        show(line, c);
       });
 
       place(line);
@@ -250,9 +305,8 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
     sweepStart = 0;
     for (const line of lines) {
       for (const c of line.chars) {
-        c.w = W.rest;
-        c.g = G.rest;
-        show(c);
+        c.u = U_REST;
+        show(line, c);
       }
       place(line);
     }
@@ -271,10 +325,10 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
     }
   };
 
-  document.fonts.ready.then(() => {
-    measureAdvances(lines);
+  document.fonts.ready.then(async () => {
     measureGeometry();
     bind();
+    await Promise.all(lines.map((line) => line.ready));
     if (!reduce.matches) {
       // Jedno wejście: soczewka przejeżdża przez napis, potem wszystko wraca do spoczynku.
       sweepStart = performance.now();
