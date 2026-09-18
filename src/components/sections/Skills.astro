@@ -85,7 +85,16 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
     border-top: 1px solid var(--rule);
   }
   tbody tr:hover {
-    background: var(--paper-deep);
+    background: color-mix(in srgb, currentColor 7%, transparent);
+  }
+  /* Kursor nad nagłówkiem kolumny podświetla całą kolumnę: w szerokiej tabeli łatwiej trafić wzrokiem. */
+  .matrix:has(thead th:nth-child(2):hover) tbody td:nth-child(2),
+  .matrix:has(thead th:nth-child(3):hover) tbody td:nth-child(3),
+  .matrix:has(thead th:nth-child(4):hover) tbody td:nth-child(4),
+  .matrix:has(thead th:nth-child(5):hover) tbody td:nth-child(5),
+  .matrix:has(thead th:nth-child(6):hover) tbody td:nth-child(6),
+  .matrix:has(thead th:nth-child(7):hover) tbody td:nth-child(7) {
+    background: color-mix(in srgb, currentColor 7%, transparent);
   }
   tbody th {
     width: 36%;
