@@ -8,8 +8,10 @@
 
 /** Ułamek wysokości ekranu, na którym „stoi” bieżący krok w układzie pionowym. */
 const FOCUS = 0.55;
-/** Na jakiej części ekranu rozgrywa się cały przebieg w układzie poziomym. */
-const RUN = 0.9;
+/** Układ poziomy: przebieg zaczyna się, gdy tor wjeżdża na tej wysokości ekranu… */
+const ENTER = 0.85;
+/** …i kończy po przewinięciu takiej części wysokości ekranu, gdy tor jest jeszcze dobrze widoczny. */
+const RUN = 0.55;
 
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 
@@ -19,7 +21,6 @@ export function initFlowTrack(flow: HTMLElement) {
   if (!track || stations.length === 0) return;
 
   const horizontal = matchMedia('(min-width: 60rem)');
-  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 
   let active = -1;
   let fills = stations.map(() => -1);
@@ -46,23 +47,31 @@ export function initFlowTrack(flow: HTMLElement) {
   const fromScroll = () => {
     const rect = flow.getBoundingClientRect();
     const progress = horizontal.matches
-      ? (innerHeight - rect.top) / (innerHeight * RUN)
+      ? (innerHeight * ENTER - rect.top) / (innerHeight * RUN)
       : (innerHeight * FOCUS - rect.top) / Math.max(rect.height, 1);
     apply(clamp01(progress) * stations.length);
   };
 
+  // Przewijanie zawsze ma pierwszeństwo: zdejmuje wskazanie kursorem.
   const onScroll = () => {
-    if (frame || pinned !== null || !near) return;
+    pinned = null;
+    if (frame || !near) return;
     frame = requestAnimationFrame(() => {
       frame = 0;
       fromScroll();
     });
   };
 
-  // Na dużych ekranach kursor wskazuje krok od razu, bez czekania na przewinięcie.
-  const onEnter = (event: PointerEvent) => {
-    if (!horizontal.matches || !finePointer.matches) return;
-    const index = stations.indexOf(event.currentTarget as HTMLElement);
+  // Na dużych ekranach kursor wskazuje krok, ale dopiero gdy naprawdę się poruszy.
+  let pointerX = -1;
+  let pointerY = -1;
+  const onPointerMove = (event: PointerEvent) => {
+    if (!horizontal.matches || event.pointerType !== 'mouse') return;
+    if (Math.abs(event.clientX - pointerX) < 2 && Math.abs(event.clientY - pointerY) < 2) return;
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    const station = (event.target as HTMLElement).closest('[data-station]') as HTMLElement | null;
+    const index = station ? stations.indexOf(station) : -1;
     if (index < 0) return;
     pinned = index;
     apply(index + 0.999);
@@ -79,10 +88,8 @@ export function initFlowTrack(flow: HTMLElement) {
 
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', onScroll, { passive: true });
-  for (const station of stations) {
-    station.addEventListener('pointerenter', onEnter);
-    station.addEventListener('pointerleave', onLeave);
-  }
+  track.addEventListener('pointermove', onPointerMove, { passive: true });
+  track.addEventListener('pointerleave', onLeave, { passive: true });
 
   new IntersectionObserver(
     ([entry]) => {

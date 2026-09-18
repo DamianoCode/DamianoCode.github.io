@@ -16,7 +16,7 @@ import { aiWork, flowSteps } from '../../data/ai';
       ))}
     </div>
 
-    <figure class="flow" data-flow>
+    <figure class="flow plate" data-flow>
       <figcaption>Jak zmiana przechodzi przez Claudiusa</figcaption>
       <ol class="track" role="list">
         {flowSteps.map((step) => (
@@ -66,6 +66,7 @@ import { aiWork, flowSteps } from '../../data/ai';
 
   .flow {
     margin: 4rem 0 0;
+    padding: 1.5rem 1.25rem 1.75rem;
   }
   figcaption {
     font-family: var(--display);

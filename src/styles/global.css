@@ -176,3 +176,14 @@ a:hover {
   font-family: var(--display);
   font-weight: 600;
 }
+
+/* Płyta rysunkowa: schematy i diagramy leżą na siatce, jak na papierze technicznym. */
+.plate {
+  --grid: color-mix(in srgb, currentColor 8%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  background-color: color-mix(in srgb, currentColor 5%, transparent);
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 0.75rem 0.75rem;
+}
