@@ -22,12 +22,12 @@ const lines = [profile.name, profile.surname];
 
   <div class="intro">
     <p class="role">
-      Fullstack developer.<br />Na co dzień z agentami AI.
+      Fullstack developer.<br />Piszę kod razem z agentami AI.
     </p>
     <div class="intro-text">
       <p>
-        Buduję aplikacje od bazy danych po interfejs: Next.js, TypeScript, PostgreSQL. Z agentami AI i modelami
-        językowymi pracuję codziennie, głównie w Claude Code, i piszę dla nich własne narzędzia.
+        Buduję aplikacje od bazy danych po interfejs: Next.js, TypeScript, PostgreSQL. Z Claude Code pracuję
+        jak z drugim programistą, a do tego piszę narzędzia, które tę pracę porządkują.
       </p>
       <p class="intro-meta">{profile.city}. Jestem otwarty na nowe projekty.</p>
       <p class="intro-actions">
@@ -94,6 +94,21 @@ const lines = [profile.name, profile.surname];
   .ch {
     display: inline-block;
     font-variation-settings: 'wdth' 100, 'wght' 640;
+  }
+
+  /* Po starcie skryptu każda litera stoi na własnej pozycji i przesuwa ją transform.
+     Dzięki temu zmiana szerokości niczego nie przesuwa w układzie strony (zero CLS). */
+  .type.is-live .line {
+    position: relative;
+  }
+  .type.is-live .word,
+  .type.is-live .ch {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+  .type.is-live .word {
+    transform-origin: left bottom;
   }
 
   .intro {

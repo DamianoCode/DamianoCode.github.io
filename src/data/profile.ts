@@ -12,7 +12,7 @@ export const profile = {
 };
 
 export const seo = {
-  title: 'Damian Ułaś – fullstack developer, Next.js, TypeScript i agenci AI',
+  title: 'Damian Ułaś – fullstack developer, Next.js i agenci AI',
   description:
     'Damian Ułaś, fullstack developer z Zamościa. Buduję aplikacje w Next.js, TypeScript i PostgreSQL oraz narzędzia do pracy z agentami AI i Claude Code.',
   knowsAbout: [

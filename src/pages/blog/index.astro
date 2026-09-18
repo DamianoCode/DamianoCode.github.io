@@ -5,11 +5,21 @@ import { formatDate } from '../../lib/format';
 import { getPublishedPosts } from '../../lib/posts';
 
 const posts = await getPublishedPosts();
+
+const blog = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: `Blog, ${profile.fullName}`,
+  url: new URL('/blog', Astro.site).href,
+  inLanguage: 'pl-PL',
+  author: { '@id': new URL('/#person', Astro.site).href },
+};
 ---
 
 <Base
   title={`Blog, ${profile.fullName}: fullstack i agenci AI`}
   description="Notatki z budowania aplikacji fullstack w Next.js i TypeScript oraz z codziennej pracy z agentami AI w Claude Code."
+  jsonLd={[blog]}
 >
   <section class="wrap page">
     <h1 class="page-title">Blog</h1>

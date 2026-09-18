@@ -12,6 +12,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/cv'),
+      // Data builda: strona jest statyczna, więc publikacja = ostatnia zmiana.
+      serialize: (item) => ({ ...item, lastmod: new Date().toISOString() }),
     }),
   ],
 });

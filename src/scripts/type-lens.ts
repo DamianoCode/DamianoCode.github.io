@@ -8,7 +8,9 @@
  * - Nowy wariant jest dla przeglądarki kosztowny, dlatego wszystkie powstają z góry, razem z pomiarem
  *   ich szerokości: małymi porcjami w wolnych chwilach, od najgrubszych kroków do najdrobniejszych.
  *   Zanim wszystkie będą gotowe, animacja używa najbliższego gotowego wariantu.
- * - Pętla animacji niczego nie mierzy, a rozmiar napisu zmienia `transform: scale`, nie `font-size`.
+ * - Pętla animacji niczego nie mierzy. Litery stoją na pozycjach absolutnych i przesuwa je `transform`,
+ *   podobnie jak rozmiar całego napisu. Dzięki temu animacja nie przelicza układu strony i nie liczy się
+ *   do wskaźnika przesunięć układu (CLS).
  */
 
 /** Tyle poziomów daje kroki ok. 1 jednostki szerokości i 6 jednostek grubości: poniżej progu widoczności. */
@@ -30,6 +32,8 @@ type Char = {
   u: number;
   /** Poziom, który jest aktualnie w stylu. */
   level: number;
+  /** Przesunięcie litery w napisie, w pikselach przed przeskalowaniem. */
+  x: number;
   /** Szerokość litery przy 100px dla każdego poziomu (puste, dopóki poziom nie jest zmierzony). */
   advances: number[];
 };
@@ -52,6 +56,8 @@ type Line = {
   boxWidth: number;
   boxHeight: number;
   scale: number;
+  /** Przesunięcie napisu w linii (wyrównanie do prawej dla drugiej linii). */
+  offset: number;
   /** Położenie napisu na ekranie z poprzedniej klatki, do mapowania kursora na litery. */
   visualLeft: number;
   visualWidth: number;
@@ -157,6 +163,7 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
       el,
       u: U_REST,
       level: -1,
+      x: -1,
       advances: [],
     })),
     alignEnd: box.classList.contains('line-end'),
@@ -169,6 +176,7 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
     boxWidth: 0,
     boxHeight: 0,
     scale: 0,
+    offset: -1,
     visualLeft: 0,
     visualWidth: 0,
   }));
@@ -193,16 +201,30 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
     }
   };
 
-  /** Skaluje napis tak, by wypełnił szerokość, ale nie przekroczył wysokości linii. Bez odczytu układu. */
+  /**
+   * Ustawia litery obok siebie i skaluje napis tak, by wypełnił szerokość, ale nie przekroczył
+   * wysokości linii. Same zapisy stylów, bez odczytu układu.
+   */
   const place = (line: Line) => {
-    const width = line.chars.reduce((sum, c) => sum + c.advances[c.level], 0) * (line.fontSize / 100);
-    const scale = Math.min(line.boxWidth / width, line.boxHeight / (LINE_HEIGHT * line.fontSize));
-    if (Math.abs(scale - line.scale) > 0.0005) {
-      line.scale = scale;
-      line.word.style.transform = `scale(${scale.toFixed(4)})`;
+    const unit = line.fontSize / 100;
+    let x = 0;
+    for (const c of line.chars) {
+      if (Math.abs(x - c.x) > 0.15) {
+        c.x = x;
+        c.el.style.transform = `translateX(${x.toFixed(1)}px)`;
+      }
+      x += c.advances[c.level] * unit;
     }
-    line.visualWidth = width * scale;
-    line.visualLeft = line.alignEnd ? line.boxLeft + line.boxWidth - line.visualWidth : line.boxLeft;
+
+    const scale = Math.min(line.boxWidth / x, line.boxHeight / (LINE_HEIGHT * line.fontSize));
+    const offset = line.alignEnd ? line.boxWidth - x * scale : 0;
+    if (Math.abs(scale - line.scale) > 0.0005 || Math.abs(offset - line.offset) > 0.2) {
+      line.scale = scale;
+      line.offset = offset;
+      line.word.style.transform = `translateX(${offset.toFixed(1)}px) scale(${scale.toFixed(4)})`;
+    }
+    line.visualWidth = x * scale;
+    line.visualLeft = line.boxLeft + offset;
   };
 
   /** Odczyt geometrii tylko przy starcie i zmianie rozmiaru. */
@@ -228,7 +250,11 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
         line.ready = prepareVariants(line, line.fontSize);
       }
       line.scale = 0;
-      for (const c of line.chars) show(line, c);
+      line.offset = -1;
+      for (const c of line.chars) {
+        c.x = -1;
+        show(line, c);
+      }
       place(line);
     }
   };
@@ -326,6 +352,7 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
   };
 
   document.fonts.ready.then(async () => {
+    root.classList.add('is-live');
     measureGeometry();
     bind();
     await Promise.all(lines.map((line) => line.ready));
