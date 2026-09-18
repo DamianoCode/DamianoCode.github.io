@@ -7,16 +7,40 @@ import Interests from '../components/sections/Interests.astro';
 import LatestPosts from '../components/sections/LatestPosts.astro';
 import Projects from '../components/sections/Projects.astro';
 import Skills from '../components/sections/Skills.astro';
+import { projects } from '../data/projects';
+
+const site = Astro.site!;
+
+/** Projekty jako lista dzieł autora: wyszukiwarki wiążą je z osobą. */
+const projectList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Projekty',
+  itemListOrder: 'https://schema.org/ItemListOrderDescending',
+  itemListElement: projects.map((project, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'SoftwareSourceCode',
+      name: project.name,
+      description: project.summary,
+      url: new URL(`/#${project.id}`, site).href,
+      codeRepository: project.links.find((link) => link.label === 'Kod')?.href,
+      programmingLanguage: project.stack,
+      author: { '@id': new URL('/#person', site).href },
+    },
+  })),
+};
 
 const profilePage = {
   '@context': 'https://schema.org',
   '@type': 'ProfilePage',
-  mainEntity: { '@id': new URL('/#person', Astro.site).href },
+  mainEntity: { '@id': new URL('/#person', site).href },
   inLanguage: 'pl-PL',
 };
 ---
 
-<Base jsonLd={[profilePage]}>
+<Base jsonLd={[profilePage, projectList]}>
   <Hero />
   <Projects />
   <AiWork />
