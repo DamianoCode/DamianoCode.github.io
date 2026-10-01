@@ -5,34 +5,122 @@ import { profile } from '../../data/profile';
 const [emailUser, emailDomain] = profile.email.split('@');
 ---
 
-<section class="wrap block" id="kontakt" aria-labelledby="kontakt-h">
-  <h2 id="kontakt-h" class="block-title">Kontakt</h2>
-  <p class="block-intro">
+<!-- Finał strony: arkusz w kolorze akcentu, adres na całą szerokość. -->
+<section class="sheet contact" id="kontakt" aria-labelledby="kontakt-h">
+  <div class="wrap block">
+  <h2 id="kontakt-h" class="block-title kinetic" style="--fit: 6.78">Kontakt</h2>
+  <p class="intro">
     Szukasz fullstack developera albo kogoś, kto pomoże wdrożyć agentów AI w zespole? Napisz maila.
   </p>
-  <a class="email" href={`mailto:${profile.email}`}>{emailUser}@<wbr />{emailDomain}</a>
+  <a class="email" href={`mailto:${profile.email}`}><span>{emailUser}@</span><span>{emailDomain}</span></a>
   <p class="actions more">
+    <button class="copy" type="button" data-copy={profile.email} hidden>Kopiuj adres</button>
     <a href={profile.linkedin} rel="me">LinkedIn</a>
     <a href={profile.github} rel="me">GitHub</a>
     <a href="/cv">CV</a>
   </p>
+  <p class="copied" role="status" aria-live="polite"></p>
+  </div>
 </section>
 
+<script>
+  // Przycisk pojawia się tylko tam, gdzie schowek jest dostępny; bez skryptu zostaje sam link mailto.
+  const button = document.querySelector<HTMLButtonElement>('[data-copy]');
+  const status = document.querySelector<HTMLElement>('#kontakt .copied');
+  if (button && status && navigator.clipboard) {
+    button.hidden = false;
+    let timer = 0;
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy!);
+        status.textContent = 'Skopiowano';
+      } catch {
+        status.textContent = 'Nie udało się skopiować';
+      }
+      clearTimeout(timer);
+      timer = window.setTimeout(() => (status.textContent = ''), 2500);
+    });
+  }
+</script>
+
 <style>
+  .contact {
+    --ink: #f4f6ff;
+    --soft: #d3d9ff;
+    margin-top: clamp(3rem, 8vh, 6rem);
+    background: #2f45e0;
+    color: var(--ink);
+  }
+  .contact :focus-visible {
+    outline-color: var(--ink);
+  }
+  .intro {
+    margin-top: 1rem;
+    color: var(--soft);
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  }
+
+  /* Adres wypełnia szerokość: na telefonie w dwóch liniach (łamanie po „@”), na szerszych ekranach w jednej.
+     Rozmiar wynika ze zmierzonej szerokości napisu w em (Anybody, grubość 800). */
   .email {
-    display: inline-block;
+    --space: calc(min(100vw, 88rem) - 2 * var(--gutter) - 2 * var(--sheet-gap));
+    display: block;
+    margin-top: clamp(2rem, 5vw, 3.5rem);
     font-family: var(--display);
-    font-weight: 700;
+    font-weight: 800;
     font-stretch: 100%;
-    font-size: clamp(1.5rem, 5.5vw, 3.2rem);
-    line-height: 1.1;
+    font-size: calc(var(--space) / (7.48 * 1.06));
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .email span {
+    display: block;
+    white-space: nowrap;
+  }
+  .email:hover span {
+    text-decoration: underline;
+    text-decoration-thickness: 0.06em;
+    text-underline-offset: 0.1em;
   }
   @media (min-width: 48rem) {
     .email {
-      font-stretch: 120%;
+      font-stretch: 125%;
+      font-size: min(7.5rem, calc(var(--space) / (16.43 * 1.05)));
+    }
+    .email span {
+      display: inline;
     }
   }
+
   .more {
-    margin-top: 1.25rem;
+    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+    align-items: center;
+  }
+  .more a {
+    color: var(--ink);
+    text-decoration-thickness: 2px;
+  }
+  .copy {
+    font: inherit;
+    color: #2f45e0;
+    background: var(--ink);
+    border: 0;
+    border-radius: 999px;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+  }
+  .copy:hover {
+    background: #ffffff;
+  }
+  .copy:active {
+    transform: translateY(1px);
+  }
+  /* Komunikat ma stałe miejsce, więc jego pojawienie się niczego nie przesuwa. */
+  .copied {
+    min-height: 1.6em;
+    margin-top: 0.5rem;
+    color: var(--soft);
   }
 </style>

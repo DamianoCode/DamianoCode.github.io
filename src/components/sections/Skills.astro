@@ -1,11 +1,23 @@
 ---
-import { alsoUsed, columns, skills } from '../../data/skills';
+import { alsoUsed, columns, skillGroups, skills } from '../../data/skills';
+
+const grouped = skillGroups.map((group) => ({ group, items: skills.filter((s) => s.group === group) }));
+
+/** Kolor kolumny = kolor karty projektu: tabela łączy się wzrokowo z projektami wyżej. */
+const tone: Record<string, string> = {
+  placemates: '#e8834a',
+  korepetytor: '#d4533d',
+  widget: '#e3a21a',
+  claudius: 'var(--cobalt)',
+  ecommerce: '#7d8aa5',
+  wczesniej: 'var(--ink-soft)',
+};
 
 const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : `#${id}`);
 ---
 
 <section class="wrap block" id="umiejetnosci" aria-labelledby="umiejetnosci-h">
-  <h2 id="umiejetnosci-h" class="block-title">Umiejętności</h2>
+  <h2 id="umiejetnosci-h" class="block-title kinetic" style="--fit: 11.08">Umiejętności</h2>
   <p class="block-intro">
     Zamiast deklaracji: tabela pokazuje, gdzie naprawdę czego użyłem. Wiersz to umiejętność, kolumna to projekt.
     Ostatnia kolumna zbiera wcześniejsze repozytoria.
@@ -17,23 +29,27 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
       <tr>
         <td></td>
         {columns.map((c) => (
-          <th scope="col">
+          <th scope="col" style={`--c: ${tone[c.id]}`}>
             <a href={columnHref(c.id)}>{c.short}</a>
           </th>
         ))}
       </tr>
     </thead>
+    {grouped.map(({ group, items }) => (
     <tbody>
-      {skills.map((s) => (
+      <tr class="group">
+        <th scope="rowgroup" colspan={columns.length + 1}>{group}</th>
+      </tr>
+      {items.map((s) => (
         <tr>
           <th scope="row">
             <span class="name">{s.name}</span>
             <span class="note">{s.note}</span>
           </th>
           {columns.map((c) => (
-            <td>
+            <td style={`--c: ${tone[c.id]}`}>
               {s.usedIn.includes(c.id) ? (
-                <span class:list={['hit', { past: c.id === 'wczesniej' }]} role="img" aria-label="tak" />
+                <span class="hit" role="img" aria-label="tak" />
               ) : (
                 <span class="visually-hidden">nie</span>
               )}
@@ -42,22 +58,29 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
         </tr>
       ))}
     </tbody>
+    ))}
   </table>
 
-  <ul class="list">
-    {skills.map((s) => (
+  {grouped.map(({ group, items }) => (
+  <div class="list">
+    <h3 class="group-title">{group}</h3>
+    <ul>
+    {items.map((s) => (
       <li>
         <span class="name">{s.name}</span>
         <span class="note">{s.note}</span>
         <span class="where">
           {columns
             .filter((c) => s.usedIn.includes(c.id))
-            .map((c) => c.short)
-            .join(', ')}
+            .map((c) => (
+              <span class="where-item" style={`--c: ${tone[c.id]}`}>{c.short}</span>
+            ))}
         </span>
       </li>
     ))}
-  </ul>
+    </ul>
+  </div>
+  ))}
 
   <p class="also">Poza tabelą: {alsoUsed.join(', ')}.</p>
 </section>
@@ -79,12 +102,22 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
   thead a {
     color: var(--ink);
     text-decoration: none;
-    border-bottom: 2px solid var(--cobalt);
+    border-bottom: 3px solid var(--c);
   }
-  tbody tr {
+  /* Linia tylko nad grupą; wiersze w grupie rozdziela sam odstęp. */
+  tbody {
     border-top: 1px solid var(--rule);
   }
-  tbody tr:hover {
+  .group th {
+    padding: 1.25rem 0 0.25rem;
+    text-align: left;
+    font-family: var(--display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-stretch: 85%;
+    color: var(--ink-soft);
+  }
+  tbody tr:not(.group):hover {
     background: color-mix(in srgb, currentColor 7%, transparent);
   }
   /* Kursor nad nagłówkiem kolumny podświetla całą kolumnę: w szerokiej tabeli łatwiej trafić wzrokiem. */
@@ -98,22 +131,22 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
   }
   tbody th {
     width: 36%;
-    padding: 0.8rem 1.5rem 0.8rem 0;
+    padding: 0.55rem 1.5rem 0.55rem 0;
     text-align: left;
     font-weight: 400;
   }
   td {
     text-align: center;
   }
+  /* Trafienie: kafelek w kolorze projektu. Kolumna czyta się jak pasek z karty projektu. */
   .hit {
     display: inline-block;
-    width: 1.1rem;
-    height: 1.1rem;
-    border-radius: 50%;
-    background: var(--cobalt);
-  }
-  .hit.past {
-    background: var(--ink);
+    width: 70%;
+    max-width: 4.5rem;
+    height: 1.6rem;
+    border-radius: 0.4rem;
+    background: var(--c);
+    vertical-align: middle;
   }
 
   .name {
@@ -131,21 +164,45 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
   }
 
   .list {
+    margin-top: 1.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+  .group-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-stretch: 85%;
+    color: var(--ink-soft);
+    margin-bottom: 0.25rem;
+  }
+  .list ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
   .list li {
-    padding-block: 0.9rem;
-    border-top: 1px solid var(--rule);
+    padding-block: 0.6rem;
   }
   .where {
-    display: block;
-    margin-top: 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.9rem;
+    margin-top: 0.35rem;
     font-family: var(--display);
     font-stretch: 85%;
     font-size: 0.95rem;
-    color: var(--cobalt);
+  }
+  .where-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .where-item::before {
+    content: '';
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 0.2rem;
+    background: var(--c);
   }
 
   .also {

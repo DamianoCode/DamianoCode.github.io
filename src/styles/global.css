@@ -18,6 +18,8 @@
   --step-4: clamp(2.6rem, 7vw, 3.55rem);
 
   --gutter: clamp(1rem, 4vw, 3.5rem);
+  /* Odstęp arkuszy (karty projektów, sekcje na kolorowym tle) od krawędzi okna. */
+  --sheet-gap: clamp(0.5rem, 1.2vw, 1rem);
   --measure: 36em;
 
   color-scheme: light;
@@ -186,4 +188,49 @@ a:hover {
     linear-gradient(to right, var(--grid) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
   background-size: 0.75rem 0.75rem;
+}
+
+/* Kinetyczny tytuł sekcji: przy wjeździe na ekran krój rośnie z wąskiego i lekkiego do szerokiego i grubego,
+   jak soczewka w hero. Napis się nie zawija, a rozmiar mieści stan końcowy w szerokości strony.
+   `--fit` to szerokość napisu w em przy szerokości 150% i grubości 800, zmierzona w przeglądarce. */
+.kinetic {
+  font-size: min(9rem, calc((min(100vw, 88rem) - 2 * var(--gutter)) / (var(--fit) * 1.05)));
+  font-weight: 700;
+  font-stretch: 150%;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .kinetic {
+      animation: kinetic linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+  }
+}
+@keyframes kinetic {
+  from {
+    font-stretch: 55%;
+    font-weight: 250;
+  }
+  to {
+    font-stretch: 150%;
+    font-weight: 700;
+  }
+}
+
+/* Arkusz: sekcja na prawie całą szerokość okna, z zaokrąglonymi rogami, w tym samym systemie co karty projektów.
+   Treść w środku trzyma zwykła kolumna `.wrap`. */
+.sheet {
+  margin-inline: var(--sheet-gap);
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+@media (min-width: 64rem) {
+  .sheet {
+    border-radius: 2rem;
+  }
 }

@@ -1,42 +1,160 @@
 ---
-import ProjectGlyph from '../ProjectGlyph.astro';
-import { archive, projects } from '../../data/projects';
+import { Image } from 'astro:assets';
+import ClaudiusFlow from '../ClaudiusFlow.astro';
+import placematesShot from '../../assets/projects/placemates.png';
+import placematesMap from '../../assets/projects/placemates-map-telefon.png';
+import tutorWeek from '../../assets/projects/korepetytor-terminarz-desktop.png';
+import tutorToday from '../../assets/projects/korepetytor-dzis-telefon.png';
+import widgetPanel from '../../assets/projects/widget-panel.png';
+import widgetRobot from '../../assets/projects/widget-robot.png';
+import widgetMini from '../../assets/projects/widget-mini.png';
+import widgetBar from '../../assets/projects/widget-bar.png';
+import { archive, projects, type Project } from '../../data/projects';
+
+/** Karty w kolejności na stronie. `flip`: scena po lewej, tekst po prawej. */
+const cases = projects
+  .filter((p) => p.tier !== 'minor')
+  .map((project, i) => ({ project, i, flip: i % 2 === 1 }));
+const minor = projects.filter((p) => p.tier === 'minor');
+
+/** Zrzuty „laptop + telefon” dla aplikacji webowych. */
+const duos = {
+  placemates: {
+    desk: placematesShot,
+    deskAlt: 'Ekran startowy PlaceMates: hasło „Wróć do wspólnego atlasu”, formularz logowania i karty kategorii miejsc',
+    phone: placematesMap,
+    phoneAlt: 'PlaceMates na telefonie: mapa miasta z filtrami miejsc i dolnym menu aplikacji',
+  },
+  korepetytor: {
+    desk: tutorWeek,
+    deskAlt: 'Terminarz tygodnia: lekcje uczniów w kolorach, sprawdzian w piątek i linia bieżącej godziny',
+    phone: tutorToday,
+    phoneAlt: 'Ekran „Dziś” na telefonie: lekcja o 16:00 z planem, lekcja bez notatki i sprawdzian ucznia jutro',
+  },
+} as const;
+
+const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
 ---
 
-<section class="wrap block" id="projekty" aria-labelledby="projekty-h">
-  <h2 id="projekty-h" class="block-title">Projekty</h2>
+<section class="block" id="projekty" aria-labelledby="projekty-h">
+  <div class="wrap">
+    <h2 id="projekty-h" class="block-title kinetic" style="--fit: 7.39">Projekty</h2>
+  </div>
 
-  {projects.map((p) => (
-    <article class="project" id={p.id}>
-      <div class="glyph plate">
-        <ProjectGlyph id={p.id} />
-      </div>
-      <div>
-        <h3 class="name">
-          {p.name}
+  <!--
+    Każdy projekt to karta w barwach własnego produktu. Na dużych ekranach karty przyklejają się do góry
+    i nachodzą na siebie przy przewijaniu; na telefonie leżą jedna pod drugą.
+  -->
+  <div class="cases">
+    {cases.map(({ project: p, i, flip }) => {
+      const duo = p.id in duos ? duos[p.id as keyof typeof duos] : null;
+      return (
+        <article class:list={['case', `case-${p.id}`, { flip }]} id={p.id} style={`--i: ${i}`}>
+          <header class="case-head">
+            <h3 class="case-name">{p.name}</h3>
+            <p class="case-meta">
+              <span>{p.kind}</span>
+              <span>
+                {p.year}
+                {p.status && <>, <b class="status">{p.status}</b></>}
+              </span>
+            </p>
+          </header>
+
+          <div class="case-stage">
+            {duo && (
+              <div class="rig rig-duo">
+                <div class="screen duo-desk">
+                  <Image
+                    src={duo.desk}
+                    alt={duo.deskAlt}
+                    widths={[700, 1100, 1440, 1920]}
+                    sizes="(min-width: 64rem) 46vw, 92vw"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="phone duo-phone">
+                  <Image
+                    src={duo.phone}
+                    alt={duo.phoneAlt}
+                    widths={[300, 520, 780]}
+                    sizes="(min-width: 64rem) 14vw, 46vw"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            )}
+
+            {p.id === 'widget' && (
+              <div class="rig rig-widget">
+                <Image class="w-panel" src={widgetPanel} alt="Pełny panel: sygnalizator, stan sesji, limit 5-godzinny, tygodniowy i zajętość kontekstu" loading="lazy" />
+                <Image class="w-robot" src={widgetRobot} alt="Maskotka z dymkiem: sesja ma nowy wynik" loading="lazy" />
+                <Image class="w-mini" src={widgetMini} alt="Sam sygnalizator, najmniejszy tryb" loading="lazy" />
+                <Image class="w-bar" src={widgetBar} alt="Pasek przy dolnej krawędzi ekranu ze światłami i limitami" loading="lazy" />
+              </div>
+            )}
+
+            {p.id === 'claudius' && <ClaudiusFlow />}
+          </div>
+
+          <div class="case-text">
+            <p class="summary">{p.summary}</p>
+            {p.states && (
+              <ul class="states" aria-label="Stany sygnalizatora">
+                {p.states.map((s) => (
+                  <li>
+                    <span class={`light light-${s.tone}`} aria-hidden="true" />
+                    <b>{s.label}</b>
+                    <span>{s.text}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p class="detail">{p.detail}</p>
+            <ul class="chips" aria-label="Technologie">
+              {p.stack.map((t) => <li>{t}</li>)}
+            </ul>
+            {p.links.length > 0 && (
+              <p class="case-links">
+                {p.links.map((l, k) => (
+                  <a href={l.href} class:list={{ primary: k === 0 }}>{l.label}</a>
+                ))}
+              </p>
+            )}
+          </div>
+        </article>
+      );
+    })}
+  </div>
+
+  <div class="wrap earlier" id="projekty-archiwum">
+    <h3 class="earlier-title">Wcześniej</h3>
+
+    {minor.map((p) => (
+      <article class="minor" id={p.id}>
+        <div class="minor-head">
+          <h4 class="minor-name">{p.name}</h4>
           <span class="year">{p.year}</span>
-        </h3>
-        <p class="summary">{p.summary}</p>
-        <p class="detail">{p.detail}</p>
-        <p class="stack">
-          <span class="visually-hidden">Technologie: </span>
-          {p.stack.join(', ')}
-        </p>
-        <p class="actions links">
-          {p.links.map((l) => (
-            <a href={l.href}>{l.label}</a>
-          ))}
-        </p>
-      </div>
-    </article>
-  ))}
+        </div>
+        <div>
+          <p class="minor-text">{p.summary} {p.detail}</p>
+          <p class="minor-stack">
+            <span class="visually-hidden">Technologie: </span>
+            {p.stack.join(', ')}
+          </p>
+          {codeLink(p) && (
+            <p class="actions minor-links">
+              <a href={codeLink(p)!.href}>Kod</a>
+            </p>
+          )}
+        </div>
+      </article>
+    ))}
 
-  <div class="archive" id="projekty-archiwum">
-    <h3 class="archive-title">Wcześniejsze repozytoria</h3>
     <ul class="archive-list">
       {archive.map((a) => (
         <li>
-          <span class="archive-year">{a.year}</span>
+          <span class="year">{a.year}</span>
           <a href={a.href}>{a.name}</a>
           <span class="archive-what">{a.what}</span>
         </li>
@@ -46,82 +164,344 @@ import { archive, projects } from '../../data/projects';
 </section>
 
 <style>
-  .project {
+  /*
+    Kształty: karty 1.5-2rem, ekrany w kartach 0.75rem, telefon jak urządzenie, przyciski i tagi w pigułce.
+    Kolory kart pochodzą z produktów (ze zrzutów); cobalt zostaje akcentem reszty strony.
+  */
+  .case-placemates {
+    --bg: #17110d;
+    --glow: rgb(232 131 74 / 0.3);
+    --ink: #f4ece3;
+    --soft: #bcae9f;
+    --accent: #ee8f57;
+    --line: rgb(244 236 227 / 0.16);
+    --shadow: rgb(0 0 0 / 0.55);
+  }
+  .case-korepetytor {
+    --bg: #f3eee7;
+    --glow: rgb(226 96 74 / 0.2);
+    --ink: #1c2333;
+    --soft: #545d70;
+    --accent: #b23d29;
+    --line: rgb(28 35 51 / 0.16);
+    --shadow: rgb(120 60 40 / 0.3);
+  }
+  .case-widget {
+    /* Tło identyczne z tłem zrzutów: elementy widżetu stoją na nim bez widocznych krawędzi. */
+    --bg: #0c0c0c;
+    --glow: rgb(227 162 26 / 0.16);
+    --ink: #efefef;
+    --soft: #a2a2a2;
+    --accent: #f0b030;
+    --line: rgb(255 255 255 / 0.13);
+    --shadow: rgb(0 0 0 / 0.6);
+  }
+  .case-claudius {
+    --bg: #2f45e0;
+    --glow: rgb(255 255 255 / 0.16);
+    --ink: #f4f6ff;
+    --soft: #d3d9ff;
+    --accent: #ffffff;
+    --line: rgb(255 255 255 / 0.28);
+    --shadow: rgb(10 20 90 / 0.5);
+  }
+
+  /* Karty sięgają prawie krawędzi okna, jak arkusze innych sekcji. */
+  .cases {
     display: grid;
-    gap: 1.25rem 3rem;
-    padding-block: 2.5rem 3rem;
-    border-top: 1px solid var(--rule);
+    gap: var(--sheet-gap);
+    max-width: 120rem;
+    margin: clamp(1.5rem, 4vw, 3rem) auto 0;
+    padding-inline: var(--sheet-gap);
+  }
+
+  .case {
+    --pad: clamp(1.25rem, 4.5vw, 4.5rem);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: grid;
+    grid-template-areas: 'head' 'stage' 'text';
+    gap: 1.75rem 3.5rem;
+    padding: var(--pad);
+    border-radius: 1.5rem;
+    background: var(--bg);
+    color: var(--ink);
+    box-shadow: 0 -0.5rem 2.5rem -0.75rem var(--shadow);
     scroll-margin-top: 1rem;
   }
-  .project:last-of-type {
-    border-bottom: 1px solid var(--rule);
+  /* Poświata w kolorze produktu za sceną. */
+  .case::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: radial-gradient(60% 70% at 70% 60%, var(--glow), transparent 70%);
+    pointer-events: none;
   }
-  .glyph {
-    width: 8.5rem;
-    aspect-ratio: 4 / 3;
+
+  /* Nagłówek karty */
+  .case-head {
+    grid-area: head;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .case-name {
+    /* Na telefonie najdłuższe słowo („korepetytora”) mieści się w karcie bez łamania. */
+    font-size: clamp(2rem, 8.4vw, 6rem);
+    font-weight: 800;
+    font-stretch: 112%;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .case-meta {
+    display: grid;
+    font-family: var(--display);
+    font-size: 0.95rem;
+    font-stretch: 95%;
+    color: var(--soft);
+  }
+  .status {
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* Scena: zrzuty w ramkach urządzeń */
+  .case-stage {
+    grid-area: stage;
+    position: relative;
+    min-height: 0;
     display: grid;
     place-items: center;
-    padding: 0.75rem;
-    background-size: 0.625rem 0.625rem;
   }
-  .name {
+  .case-placemates .case-stage,
+  .case-korepetytor .case-stage,
+  .case-widget .case-stage {
+    container-type: size;
+    aspect-ratio: 100 / 128;
+  }
+  .case-widget .case-stage {
+    aspect-ratio: 100 / 118;
+    place-items: end center;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Scena dopasowuje szerokość tak, by w całości zmieściła się w dostępnym miejscu. */
+  .rig {
+    --ratio: 1.6;
+    position: relative;
+    width: min(100cqw, 100cqh * var(--ratio));
+    aspect-ratio: var(--ratio);
+  }
+  .rig :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .screen {
+    overflow: hidden;
+    border-radius: 0.75rem;
+    box-shadow:
+      0 0 0 1px var(--line),
+      0 2rem 3.5rem -1.25rem var(--shadow);
+  }
+  .phone {
+    overflow: hidden;
+    border: max(0.3rem, 1.4cqw) solid #121212;
+    border-radius: max(1.1rem, 5.5cqw);
+    background: #121212;
+    box-shadow: 0 2rem 3.5rem -1rem var(--shadow);
+  }
+
+  /* Telefon: zrzut z laptopa u góry, telefon wyśrodkowany i nachodzący na niego. */
+  .rig-duo {
+    --ratio: 0.78;
+  }
+  .duo-desk {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .duo-phone {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 54%;
+    translate: -50% 0;
+  }
+
+  /* Widżet, telefon: panel po lewej, maskotka i sygnalizator po prawej, pasek przy dolnej krawędzi. */
+  .rig-widget {
+    --ratio: 0.85;
+  }
+  /* Ciemne tło zrzutów znika w tle karty (także na poświacie), zostają same elementy widżetu.
+     Mieszanie jest na całej scenie, bo animacja wejścia izoluje jej zawartość od tła. */
+  .rig-widget {
+    mix-blend-mode: lighten;
+  }
+  .rig-widget :global(img) {
+    position: absolute;
+  }
+  .rig-widget :global(.w-panel) { left: 7%; top: 3%; width: 36%; }
+  .rig-widget :global(.w-robot) { left: 57%; top: 10%; width: 28%; }
+  .rig-widget :global(.w-mini) { left: 70%; top: 45%; width: 13%; }
+  .rig-widget :global(.w-bar) { left: 0; bottom: 0; width: 100%; }
+
+  /* Tekst */
+  .case-text {
+    grid-area: text;
+    align-self: center;
+  }
+  .summary {
+    font-size: clamp(1.2rem, 2vw, var(--step-1));
+    line-height: 1.38;
+  }
+  .detail {
+    margin-top: 1rem;
+    color: var(--soft);
+    font-size: 1rem;
+  }
+  .states {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.45rem;
+  }
+  .states li {
+    display: grid;
+    grid-template-columns: 0.8rem auto 1fr;
+    align-items: baseline;
+    gap: 0 0.7rem;
+    color: var(--soft);
+  }
+  .states b {
+    font-family: var(--display);
+    font-weight: 600;
+    color: var(--ink);
+  }
+  /* Kolory świateł niosą realny stan produktu. */
+  .light {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    align-self: center;
+  }
+  .light-red { background: #e0483e; }
+  .light-amber { background: #e3a21a; }
+  .light-green { background: #2fa36b; }
+  .chips {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .chips li {
+    padding: 0.2rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: var(--display);
+    font-size: 0.85rem;
+    font-stretch: 92%;
+  }
+  .case-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.5rem;
+    font-family: var(--display);
+    font-weight: 600;
+  }
+  .case-links a {
+    color: var(--ink);
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+  }
+  .case-links a.primary {
+    color: var(--bg);
+    background: var(--ink);
+    padding: 0.6rem 1.15rem;
+    border-radius: 999px;
+    text-decoration: none;
+  }
+  .case-links a.primary:hover {
+    background: var(--accent);
+  }
+  .case-links a.primary:active {
+    transform: translateY(1px);
+  }
+  .case :focus-visible {
+    outline-color: var(--accent);
+  }
+
+  /* Wcześniej */
+  .earlier {
+    margin-top: clamp(4rem, 12vh, 8rem);
+    scroll-margin-top: 1rem;
+  }
+  .earlier-title {
+    font-size: var(--step-1);
+    font-stretch: 110%;
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--ink);
+    margin-bottom: 1.5rem;
+  }
+  .minor {
+    display: grid;
+    gap: 0.5rem 3rem;
+  }
+  .minor-head {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0.25rem 1rem;
-    font-size: var(--step-3);
-    overflow-wrap: anywhere;
+  }
+  .minor-name {
+    margin: 0;
+    font-family: var(--display);
+    font-size: var(--step-1);
+    font-weight: 700;
+    line-height: 1.15;
   }
   .year {
-    font-size: 1rem;
-    font-weight: 400;
+    font-family: var(--display);
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .minor-text {
     color: var(--ink-soft);
   }
-  .summary {
+  .minor-stack {
     margin-top: 1rem;
-    font-size: var(--step-1);
-    line-height: 1.4;
-    max-width: 26em;
-  }
-  .detail {
-    margin-top: 1rem;
-    color: var(--ink-soft);
-  }
-  .stack {
-    margin-top: 1.25rem;
     font-family: var(--display);
     font-stretch: 90%;
     font-size: 1rem;
   }
-  .links {
+  .minor-links {
     margin-top: 1rem;
-  }
-
-  .archive {
-    margin-top: 3.5rem;
-    scroll-margin-top: 1rem;
-  }
-  .archive-title {
-    font-size: var(--step-1);
-    font-stretch: 110%;
-    margin-bottom: 1rem;
   }
   .archive-list {
     list-style: none;
-    margin: 0;
+    margin: 2.5rem 0 0;
     padding: 0;
     display: grid;
-    gap: 0.4rem 2.5rem;
+    gap: 0.5rem;
   }
   .archive-list li {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0 0.75rem;
-  }
-  .archive-year {
-    color: var(--ink-soft);
-    font-variant-numeric: tabular-nums;
   }
   .archive-list a {
     font-family: var(--display);
@@ -131,23 +511,127 @@ import { archive, projects } from '../../data/projects';
     color: var(--ink-soft);
   }
 
+  /* Wejście karty: nazwa wyjeżdża spod linii, scena podjeżdża. Sterowane przewijaniem, bez skryptu. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .case-name {
+        animation: name-in linear both;
+        animation-timeline: view();
+        animation-range: entry 5% entry 80%;
+      }
+      .rig {
+        animation: stage-in linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 30%;
+      }
+    }
+  }
+  @keyframes name-in {
+    from {
+      clip-path: inset(0 0 100% 0);
+      transform: translateY(35%);
+    }
+    to {
+      clip-path: inset(0 0 -10% 0);
+      transform: none;
+    }
+  }
+  @keyframes stage-in {
+    from {
+      opacity: 0;
+      transform: translateY(2.5rem) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   @media (min-width: 48rem) {
-    .project {
-      grid-template-columns: 16rem 1fr;
+    .earlier {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      column-gap: 3rem;
     }
-    .glyph {
-      width: 100%;
-      padding: 1.5rem;
-      background-size: 0.75rem 0.75rem;
+    .earlier-title,
+    .minor {
+      grid-column: 1 / -1;
     }
-    .name {
-      font-stretch: 125%;
-    }
-    .archive {
-      margin-left: 19rem;
+    .minor {
+      grid-template-columns: subgrid;
     }
     .archive-list {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-column: 2;
+    }
+  }
+
+  /* Duże ekrany: nagłówek nad dwiema kolumnami, scena i tekst obok siebie, na przemian. */
+  @media (min-width: 64rem) {
+    .case {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-template-rows: auto minmax(0, 1fr);
+      grid-template-areas: 'head head' 'text stage';
+      border-radius: 2rem;
+    }
+    .case.flip {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      grid-template-areas: 'head head' 'stage text';
+    }
+    .case.flip::before {
+      background: radial-gradient(60% 70% at 30% 60%, var(--glow), transparent 70%);
+    }
+    .case-name {
+      font-size: min(6rem, 5.4vw);
+    }
+    .case-meta {
+      margin-left: auto;
+      justify-items: end;
+      text-align: right;
+    }
+    .case-placemates .case-stage,
+    .case-korepetytor .case-stage {
+      aspect-ratio: 100 / 66;
+    }
+    .case-widget .case-stage {
+      aspect-ratio: 100 / 76;
+    }
+
+    /* Laptop: ekran po lewej, telefon przy prawej krawędzi, opuszczony w dół. */
+    .rig-duo {
+      --ratio: 1.62;
+    }
+    .duo-desk {
+      width: 84%;
+    }
+    .duo-phone {
+      left: auto;
+      right: 0;
+      width: 25%;
+      translate: none;
+    }
+
+    /* Widżet, laptop: tryby rozłożone jak na pulpicie. */
+    .rig-widget {
+      --ratio: 1.37;
+    }
+    .rig-widget :global(.w-panel) { left: 5%; top: 3%; width: 23%; }
+    .rig-widget :global(.w-robot) { left: 46%; top: 18%; width: 14%; }
+    .rig-widget :global(.w-mini) { left: 86%; top: 25%; width: 9%; }
+    .rig-widget :global(.w-bar) { left: 32%; bottom: 0; width: 66%; }
+  }
+
+  /* Stos kart: tylko gdy karta mieści się w wysokości ekranu. */
+  @media (min-width: 64rem) and (min-height: 44rem) {
+    .cases {
+      gap: 14vh;
+    }
+    .case {
+      position: sticky;
+      top: calc(1rem + var(--i) * 0.85rem);
+      height: calc(100dvh - 2rem - 3 * 0.85rem);
+    }
+    .case-stage {
+      aspect-ratio: auto !important;
     }
   }
 </style>

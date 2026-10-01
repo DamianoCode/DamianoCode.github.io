@@ -3,13 +3,17 @@ import { interests } from '../../data/profile';
 ---
 
 <section class="wrap block" id="po-godzinach" aria-labelledby="po-godzinach-h">
-  <h2 id="po-godzinach-h" class="block-title">Po godzinach</h2>
+  <h2 id="po-godzinach-h" class="block-title kinetic" style="--fit: 11.19">Po godzinach</h2>
   <p class="block-intro">Kod to nie wszystko. Tym zajmuję się, kiedy laptop jest zamknięty.</p>
 
   <ul class="interests">
     {interests.map((item) => (
-      <li style={`--rest: ${item.stretch}%; --hover: ${item.hover}%`}>
-        <h3 class="word">{item.word}</h3>
+      <li>
+        <div class="word-box">
+          <h3 class="word" aria-label={item.word}>
+            {item.lines.map((line) => <span class="line" aria-hidden="true">{line}</span>)}
+          </h3>
+        </div>
         <p class="text">{item.text}</p>
       </li>
     ))}
@@ -32,13 +36,25 @@ import { interests } from '../../data/profile';
     border-bottom: 1px solid var(--rule);
   }
 
-  /* Każde słowo ma własną szerokość; po najechaniu zamienia ją na przeciwną. */
+  /* Wszystkie hasła są wąskie i mają ten sam rozmiar; najechany wiersz rozszerza się do pełnej szerokości.
+     Linie się nie zawijają, a rozmiar mieści szeroki stan w kolumnie, więc wiersz nie zmienia wysokości. */
+  .interests {
+    /* Najdłuższa linia („komiksy”) przy szerokości 150% i grubości 700, zmierzona w przeglądarce, w em. */
+    --fit: 6.74;
+  }
+  .word-box {
+    container-type: inline-size;
+    min-width: 0;
+  }
   .word {
-    font-size: clamp(2.4rem, 7vw, 5.5rem);
+    font-size: min(clamp(2.4rem, 7vw, 5.5rem), 100cqi / (var(--fit) * 1.03));
     font-weight: 700;
-    font-stretch: var(--rest);
+    font-stretch: 75%;
     line-height: 0.95;
-    overflow-wrap: anywhere;
+  }
+  .line {
+    display: block;
+    white-space: nowrap;
   }
   .text {
     color: var(--ink-soft);
@@ -51,7 +67,7 @@ import { interests } from '../../data/profile';
   }
   @media (hover: hover) {
     li:hover .word {
-      font-stretch: var(--hover);
+      font-stretch: 150%;
     }
   }
 
