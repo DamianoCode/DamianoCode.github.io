@@ -1,0 +1,120 @@
+---
+import { flowSteps } from '../data/ai';
+---
+
+<figure class="flow" data-flow>
+  <figcaption class="visually-hidden">Jak zmiana przechodzi przez Claudiusa</figcaption>
+  <ol class="track" role="list">
+    {flowSteps.map((step) => (
+      <li class="station" data-station>
+        <span class="rail" aria-hidden="true"></span>
+        <b class="name">{step.name}</b>
+        <span class="what">{step.text}</span>
+      </li>
+    ))}
+  </ol>
+</figure>
+
+<script>
+  import { initFlowTrack } from '../scripts/flow-track';
+
+  const flow = document.querySelector<HTMLElement>('[data-flow]');
+  if (flow) initFlowTrack(flow);
+</script>
+
+<style>
+  /* Kolory dziedziczy po karcie projektu (--ink, --soft, --line). */
+  .flow {
+    margin: 0;
+    width: 100%;
+  }
+  .track {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .station {
+    display: grid;
+    grid-template-columns: 0.2rem 1fr;
+    column-gap: 1.1rem;
+    padding-block: 0.15rem;
+    cursor: default;
+  }
+  .rail {
+    grid-row: span 2;
+    position: relative;
+    background: var(--line);
+  }
+  .rail::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform-origin: top;
+  }
+  .name {
+    font-family: var(--display);
+    font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+    font-weight: 700;
+    font-stretch: 112%;
+    line-height: 1.05;
+    white-space: nowrap;
+    padding-top: 0.35rem;
+  }
+  .what {
+    padding-bottom: 0.5rem;
+    color: var(--soft);
+    font-size: 0.95rem;
+  }
+
+  /* Stan bez skryptu: wszystkie kroki czytelne. Skrypt dokłada przebieg. */
+  .track.is-live .rail::after {
+    transform: scaleY(0);
+  }
+  .track.is-live .station.is-done .rail::after {
+    transform: none;
+  }
+  /* Szyna bieżącego kroku wypełnia się w rytmie kroku. */
+  .track.is-live .station.is-active .rail::after {
+    animation: fill var(--step, 1.5s) linear forwards;
+  }
+  .track.is-pinned .station.is-active .rail::after {
+    animation: none;
+    transform: none;
+  }
+  @keyframes fill {
+    to {
+      transform: none;
+    }
+  }
+  .track.is-live .name {
+    font-weight: 400;
+    font-stretch: 70%;
+    color: color-mix(in srgb, var(--ink) 55%, transparent);
+  }
+  .track.is-live .station.is-done .name {
+    color: color-mix(in srgb, var(--ink) 80%, transparent);
+  }
+  .track.is-live .station.is-active .name {
+    font-weight: 800;
+    font-stretch: 135%;
+    color: var(--ink);
+  }
+  .track.is-live .what {
+    color: color-mix(in srgb, var(--soft) 70%, transparent);
+  }
+  .track.is-live .station.is-active .what {
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .name,
+    .what {
+      transition:
+        font-stretch 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+        font-weight 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+        color 0.4s ease;
+    }
+  }
+</style>

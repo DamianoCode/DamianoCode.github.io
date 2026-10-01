@@ -55,7 +55,7 @@ const lines = [profile.name, profile.surname];
     display: grid;
     grid-template-rows: 1fr 1fr;
     row-gap: clamp(0.25rem, 1.5vh, 1rem);
-    height: clamp(11rem, min(calc(100svh - 20rem), 58vw), 48rem);
+    height: clamp(11rem, min(calc(100svh - 26rem), 58vw), 44rem);
     overflow-x: clip;
     /* Zmiany kształtu liter nie wpływają na układ reszty strony. */
     contain: layout;
@@ -122,7 +122,7 @@ const lines = [profile.name, profile.surname];
     font-family: var(--display);
     font-weight: 700;
     font-stretch: 112%;
-    font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
     line-height: 1.08;
   }
   .intro-text {
@@ -150,6 +150,9 @@ const lines = [profile.name, profile.surname];
   }
   .intro-actions a:first-child:hover {
     background: var(--cobalt);
+  }
+  .intro-actions a:first-child:active {
+    transform: translateY(1px);
   }
   .intro-actions a:last-child {
     padding-block: 0.6rem;
