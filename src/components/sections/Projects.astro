@@ -206,11 +206,12 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     --shadow: rgb(10 20 90 / 0.5);
   }
 
-  /* Karty sięgają prawie krawędzi okna, jak arkusze innych sekcji. */
+  /* Karty sięgają prawie krawędzi okna, jak arkusze innych sekcji; na bardzo szerokim ekranie
+     kończą się na szerokości arkusza, żeby ich treść stała w linii tytułu. */
   .cases {
     display: grid;
     gap: var(--sheet-gap);
-    max-width: 120rem;
+    max-width: calc(var(--sheet-max) + 2 * var(--sheet-gap));
     margin: clamp(1.5rem, 4vw, 3rem) auto 0;
     padding-inline: var(--sheet-gap);
   }
