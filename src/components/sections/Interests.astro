@@ -1,4 +1,5 @@
 ---
+import InterestArt from '../InterestArt.astro';
 import { interests } from '../../data/profile';
 ---
 
@@ -6,10 +7,12 @@ import { interests } from '../../data/profile';
   <h2 id="po-godzinach-h" class="block-title kinetic" style="--fit: 11.19">Po godzinach</h2>
   <p class="block-intro">Kod to nie wszystko. Tym zajmuję się, kiedy laptop jest zamknięty.</p>
 
+  <!-- Bento: każdy kafel ma własne kolory, a jego grafiką jest samo hasło; rysunek w rogu tylko je podpisuje. -->
   <ul class="interests">
     {interests.map((item) => (
-      <li>
-        <div class="word-box">
+      <li class={`tile tile-${item.id}`}>
+        <InterestArt id={item.id} />
+        <div class="word-box" style={`--fit: ${item.fit}`}>
           <h3 class="word" aria-label={item.word}>
             {item.lines.map((line) => <span class="line" aria-hidden="true">{line}</span>)}
           </h3>
@@ -25,29 +28,62 @@ import { interests } from '../../data/profile';
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-  li {
     display: grid;
-    gap: 0.5rem 3rem;
-    padding-block: 1.5rem 1.75rem;
-    border-top: 1px solid var(--rule);
-  }
-  li:last-child {
-    border-bottom: 1px solid var(--rule);
+    gap: 0.75rem;
   }
 
-  /* Wszystkie hasła są wąskie i mają ten sam rozmiar; najechany wiersz rozszerza się do pełnej szerokości.
-     Linie się nie zawijają, a rozmiar mieści szeroki stan w kolumnie, więc wiersz nie zmienia wysokości. */
-  .interests {
-    /* Najdłuższa linia („komiksy”) przy szerokości 150% i grubości 700, zmierzona w przeglądarce, w em. */
-    --fit: 6.74;
+  .tile {
+    position: relative;
+    /* `clip`, nie `hidden`: kafel nie może być kontenerem przewijania, bo animacje `view()` w środku
+       liczyłyby postęp względem niego zamiast względem okna. */
+    overflow: clip;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.5rem;
+    min-height: clamp(18rem, 34vw, 26rem);
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    border-radius: 1.25rem;
+    background: var(--bg);
+    color: var(--ink);
   }
+
+  /* Każdy kafel w kolorach swojego tematu. Kolory są stałe w obu motywach, jak karty projektów. */
+  .tile-rower {
+    --bg: #1d3a30;
+    --ink: #e8f1eb;
+    --soft: #b4cdbf;
+    --art: #8fd0ad;
+  }
+  .tile-gry {
+    --bg: #b9452c;
+    --ink: #fff4ee;
+    --soft: #ffd8ca;
+    --art: #ffd0bd;
+  }
+  .tile-gielda {
+    --bg: #0f1318;
+    --ink: #e6eaf0;
+    --soft: #9aa5b4;
+    --art: #4cc38a;
+    --art-down: #e5534b;
+  }
+  .tile-anime {
+    --bg: #f1f2f4;
+    --ink: #16223a;
+    --soft: #4e5b72;
+    --art: #16223a;
+  }
+
+  /* Hasła mają rozmiar dopasowany do kafla: linie się nie zawijają, a rozmiar mieści szeroki stan
+     z najechania, więc kafel nie zmienia wysokości. `--fit` przychodzi z danych. */
   .word-box {
     container-type: inline-size;
     min-width: 0;
   }
   .word {
-    font-size: min(clamp(2.4rem, 7vw, 5.5rem), 100cqi / (var(--fit) * 1.03));
+    font-size: min(9.5rem, 100cqi / (var(--fit) * 1.03));
     font-weight: 700;
     font-stretch: 75%;
     line-height: 0.95;
@@ -57,27 +93,207 @@ import { interests } from '../../data/profile';
     white-space: nowrap;
   }
   .text {
-    color: var(--ink-soft);
+    position: relative;
+    max-width: 26em;
+    color: var(--soft);
+  }
+
+  /* Drugi rząd jest lustrem pierwszego: treść przy prawej krawędzi, rysunki w lewych rogach.
+     Każdy rysunek trafia w róg, którego nie zajmuje treść kafla. */
+  .tile-gielda,
+  .tile-anime {
+    align-items: flex-end;
+  }
+  .tile-gielda .word-box,
+  .tile-anime .word-box {
+    align-self: stretch;
+    text-align: right;
+  }
+
+  /* Rysunek: cienka kreska w kolorze kafla, wychodzi poza krawędź i leży pod treścią. */
+  .tile :global(.art) {
+    position: absolute;
+    z-index: -1;
+    overflow: visible;
+    fill: none;
+    /* Kolor przygaszony w samej kresce, bez `opacity`: przezroczystość całej warstwy zostawia ślad prostokąta. */
+    stroke: color-mix(in srgb, var(--art) var(--art-strength, 60%), transparent);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  .tile :global(.art-rower) {
+    width: clamp(14rem, 24vw, 18rem);
+    right: -4%;
+    bottom: -2%;
+  }
+  /* Rower stoi kołami na dolnej krawędzi; tekst kończy się przed tylnym kołem. */
+  .tile-rower .text {
+    max-width: 23em;
+  }
+  .tile :global(.art-rower .wheel) {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .tile :global(.art-gry) {
+    width: clamp(13rem, 26vw, 19rem);
+    right: -12%;
+    top: -18%;
+  }
+  .tile :global(.art-gry .press) {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .tile :global(.art-gielda) {
+    width: clamp(13rem, 23vw, 18rem);
+    left: -3%;
+    /* Pas między hasłem a tekstem: rozszerzone hasło zajmuje całą górę kafla. */
+    top: 40%;
+  }
+  .tile :global(.art-gielda .down) {
+    stroke: color-mix(in srgb, var(--art-down) 60%, transparent);
+  }
+  .tile :global(.art-gielda .trend) {
+    stroke: color-mix(in srgb, var(--ink) 60%, transparent);
+    stroke-dasharray: 3 4;
+  }
+
+  .tile :global(.art-anime) {
+    --art-strength: 45%;
+    width: clamp(13rem, 22vw, 17rem);
+    left: -6%;
+    bottom: -12%;
+  }
+  .tile :global(.art-anime .tone) {
+    stroke: none;
+    fill: url(#screentone);
+  }
+  .tile :global(.art-anime .pop) {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .tile :global(.art-anime #screentone circle) {
+    fill: color-mix(in srgb, var(--art) 45%, transparent);
+    stroke: none;
+  }
+
+  /* Na wąskim kaflu treść zajmuje całą szerokość, więc rysunek dostaje własny pas przy swojej krawędzi. */
+  @media (max-width: 59.99rem) {
+    .tile-rower,
+    .tile-anime {
+      padding-bottom: 7.5rem;
+    }
+    .tile-gry,
+    .tile-gielda {
+      padding-top: 6.5rem;
+    }
+    .tile :global(.art) {
+      width: 11rem;
+    }
+    .tile :global(.art-rower) {
+      width: 13rem;
+      right: -2rem;
+      bottom: -1rem;
+    }
+    .tile :global(.art-gry) {
+      right: -2rem;
+      top: -2rem;
+    }
+    .tile :global(.art-gielda) {
+      left: -0.5rem;
+      top: -0.25rem;
+    }
+    .tile :global(.art-anime) {
+      left: -1.25rem;
+      bottom: -2.5rem;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .interests {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+    .tile-rower {
+      grid-column: 1 / 8;
+    }
+    .tile-gry {
+      grid-column: 8 / 13;
+    }
+    .tile-gielda {
+      grid-column: 1 / 6;
+    }
+    .tile-anime {
+      grid-column: 6 / 13;
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .word {
       transition: font-stretch 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
+    .tile :global(.art-rower .wheel) {
+      transition: rotate 1.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .tile :global(.art-gry .press) {
+      transition: scale 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 70ms);
+    }
+    .tile :global(.art-anime .pop) {
+      transition: scale 0.35s cubic-bezier(0.3, 1.6, 0.5, 1) calc(var(--i, 0) * 80ms);
+    }
+
+    /* Wjazd kafla na ekran rysuje kontury od zera, tym samym przewijaniem co tytuły sekcji. */
+    @supports (animation-timeline: view()) {
+      .tile :global([data-draw]) {
+        stroke-dasharray: 1;
+        animation: draw linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 45%;
+      }
+    }
+
+    /* Bez kursora hasło rozszerza się, gdy kafel dojeżdża do środka ekranu. */
+    @media (hover: none) {
+      @supports (animation-timeline: view()) {
+        .word {
+          transition: none;
+          animation: widen linear both;
+          animation-timeline: view();
+          animation-range: cover 25% cover 50%;
+        }
+      }
+    }
   }
-  @media (hover: hover) {
-    li:hover .word {
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes widen {
+    to {
       font-stretch: 150%;
     }
   }
 
-  @media (min-width: 60rem) {
-    li {
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      align-items: end;
+  /* Najechanie: hasło rozszerza się, a rysunek odpowiada ruchem swojego przedmiotu. */
+  @media (hover: hover) {
+    .tile:hover .word {
+      font-stretch: 150%;
     }
-    .text {
-      padding-bottom: 0.4rem;
+    .tile:hover :global(.art-rower .wheel) {
+      rotate: 120deg;
+    }
+    .tile:hover :global(.art-gry .press) {
+      scale: 0.82;
+    }
+    .tile:hover :global(.art-anime .pop) {
+      scale: 1.08;
     }
   }
 </style>

@@ -20,6 +20,9 @@
   --gutter: clamp(1rem, 4vw, 3.5rem);
   /* Odstęp arkuszy (karty projektów, sekcje na kolorowym tle) od krawędzi okna. */
   --sheet-gap: clamp(0.5rem, 1.2vw, 1rem);
+  /* Największa szerokość arkusza: kolumna treści (88rem) plus 1rem z każdej strony. Treść arkusza
+     (jego `.wrap` albo padding karty 4.5rem) zaczyna się wtedy w linii tytułów sekcji. */
+  --sheet-max: 90rem;
   --measure: 36em;
 
   color-scheme: light;
@@ -225,7 +228,7 @@ a:hover {
 /* Arkusz: sekcja na prawie całą szerokość okna, z zaokrąglonymi rogami, w tym samym systemie co karty projektów.
    Treść w środku trzyma zwykła kolumna `.wrap`. */
 .sheet {
-  margin-inline: var(--sheet-gap);
+  margin-inline: max(var(--sheet-gap), (100% - var(--sheet-max)) / 2);
   border-radius: 1.5rem;
   overflow: hidden;
 }

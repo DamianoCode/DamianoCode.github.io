@@ -4,36 +4,61 @@ import { profile } from '../data/profile';
 const lines = [profile.name, profile.surname];
 ---
 
-<section class="wrap hero" aria-labelledby="hero-title">
-  <h1 id="hero-title" class="hero-title">
-    <span class="visually-hidden">{profile.fullName}, {profile.role.toLowerCase()}</span>
-    <span class="type" aria-hidden="true" data-type>
-      {lines.map((word, i) => (
-        <span class={`line ${i === 0 ? 'line-start' : 'line-end'}`} data-line>
-          <span class="word">
-            {[...word].map((ch) => (
-              <span class="ch">{ch}</span>
+<section class="hero" aria-labelledby="hero-title">
+  <!-- Pierwszy arkusz strony: kobaltowy, na cały ekran, pod nagłówkiem. Przy przewijaniu odsuwa się w głąb,
+       a następna sekcja nasuwa się na niego jak kolejny arkusz na stos. Strona zamyka się arkuszem Kontakt w tym samym kolorze. -->
+  <div class="sheet hero-sheet">
+    <div class="wrap hero-inner">
+      <div class="stage">
+        <h1 id="hero-title" class="hero-title">
+          <span class="visually-hidden">{profile.fullName}, {profile.role.toLowerCase()}</span>
+          <span class="type" aria-hidden="true" data-type>
+            {lines.map((word, i) => (
+              <span class={`line ${i === 0 ? 'line-start' : 'line-end'}`} data-line>
+                <span class="word">
+                  {[...word].map((ch) => (
+                    <span class="ch">{ch}</span>
+                  ))}
+                </span>
+              </span>
             ))}
           </span>
-        </span>
-      ))}
-    </span>
-  </h1>
+        </h1>
 
-  <div class="intro">
-    <p class="role">
-      Fullstack developer.<br />Piszę kod razem z agentami AI.
-    </p>
-    <div class="intro-text">
-      <p>
-        Buduję aplikacje od bazy danych po interfejs: Next.js, TypeScript, PostgreSQL. Z Claude Code pracuję
-        jak z drugim programistą, a do tego piszę narzędzia, które tę pracę porządkują.
-      </p>
-      <p class="intro-meta">{profile.city}. Jestem otwarty na nowe projekty.</p>
-      <p class="intro-actions">
-        <a href="#projekty">Zobacz projekty</a>
-        <a href={`mailto:${profile.email}`}>Napisz do mnie</a>
-      </p>
+        <p class="role">
+          Fullstack developer.<br />Piszę kod razem z agentami AI.
+        </p>
+      </div>
+
+      <div class="intro">
+        <dl class="rail">
+          <div>
+            <dt>Miasto</dt>
+            <dd>{profile.city}</dd>
+          </div>
+          <div>
+            <dt class="visually-hidden">Status</dt>
+            <dd><span class="status-dot" aria-hidden="true"></span>Otwarty na nowe projekty</dd>
+          </div>
+          <div>
+            <dt>Soczewka</dt>
+            <dd class="axes">
+              wdth <span class="axis" data-axis="width">100</span>
+              wght <span class="axis" data-axis="weight">640</span>
+            </dd>
+          </div>
+        </dl>
+        <div class="intro-text">
+          <p>
+            Buduję aplikacje od bazy danych po interfejs: Next.js, TypeScript, PostgreSQL. Z Claude Code pracuję
+            jak z drugim programistą, a do tego piszę narzędzia, które tę pracę porządkują.
+          </p>
+          <p class="intro-actions">
+            <a href="#projekty">Zobacz projekty</a>
+            <a href={`mailto:${profile.email}`}>Napisz do mnie</a>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -43,19 +68,103 @@ const lines = [profile.name, profile.surname];
 
   const root = document.querySelector<HTMLElement>('[data-type]');
   const section = root?.closest('section');
-  if (root && section) initTypeLens(root, section);
+  const width = document.querySelector<HTMLElement>('[data-axis="width"]');
+  const weight = document.querySelector<HTMLElement>('[data-axis="weight"]');
+  if (root && section) {
+    initTypeLens(root, section, (w, g) => {
+      if (width) width.textContent = String(w);
+      if (weight) weight.textContent = String(g);
+    });
+  }
 </script>
 
 <style>
   .hero {
-    padding-block: clamp(0.5rem, 3vh, 2rem) clamp(3rem, 8vh, 6rem);
+    /* Kolory arkusza są stałe w obu motywach, jak w arkuszu Kontakt. */
+    --sheet-bg: #2f45e0;
+    --ink: #f4f6ff;
+    --ink-soft: #c9d0ff;
+    --cobalt: #f4f6ff;
+    /* Miejsce na nagłówek strony, który leży na arkuszu. */
+    --head-space: 4.5rem;
+    /* Szerokość kolumny z opisem roli; ta sama kolumna niesie plakietki pod kreską. */
+    --aside-ratio: 0.34;
+    --aside: calc(var(--aside-ratio) * 100%);
+    --aside-gap: 2rem;
+    --row-gap: clamp(0.25rem, 1.5vh, 1rem);
+    position: relative;
+    padding-block: var(--sheet-gap);
+    color: var(--ink);
+  }
+  @media (max-width: 40rem) {
+    .hero {
+      /* Nawigacja łamie się tu pod nazwiskiem w drugim wierszu. */
+      --head-space: 6.25rem;
+    }
+  }
+
+  /* Nagłówek strony leży na arkuszu, w jego kolorach. Dotyczy tylko strony głównej, bo tylko ona ma ten arkusz. */
+  :global(body:has(.hero) .site-head) {
+    position: absolute;
+    top: var(--sheet-gap);
+    left: 0;
+    right: 0;
+    z-index: 2;
+    /* Ta sama szerokość co treść arkusza: brzegi napisu i nagłówka leżą w jednej linii. */
+    max-width: none;
+    padding-inline: calc(var(--sheet-gap) + var(--gutter));
+    --ink: #f4f6ff;
+    --cobalt: #f4f6ff;
+  }
+
+  /* Arkusz ma zaokrąglenia pozostałych (klasa `.sheet`), ale nie ich największą szerokość: zajmuje całe okno
+     z małym odstępem od krawędzi i mieści się w pierwszym ekranie. Treść trzyma zwykła kolumna `.wrap`. */
+  .hero-sheet {
+    margin-inline: var(--sheet-gap);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: calc(100svh - 2 * var(--sheet-gap));
+    padding-block: var(--head-space) clamp(2rem, 6vh, 4rem);
+    background: var(--sheet-bg);
+  }
+  /* Treść hero rozciąga się na całą szerokość arkusza, a nie na kolumnę 88rem pozostałych sekcji:
+     na dużym monitorze napis wypełnia okno zamiast stać w wąskim pasie pośrodku. */
+  .hero-inner {
+    max-width: none;
+  }
+  .hero :focus-visible {
+    outline-color: var(--ink);
+  }
+
+  /* Następna sekcja to jasny arkusz, który przy przewijaniu nasuwa się na hero. Selektor pomija skrypt,
+     który Astro może wstawić zaraz za hero. */
+  :global(.hero ~ section:nth-of-type(2)) {
+    position: relative;
+    z-index: 1;
+    background: var(--paper);
+  }
+
+  /* Rama napisu. Opis roli liczy swoje położenie z tych samych wartości, z których skrypt wylicza rozmiar liter:
+     wysokości wiersza i szerokości linii (jednostki cqw ramy). */
+  .stage {
+    position: relative;
+    container-type: inline-size;
+    --type-height: clamp(11rem, min(calc(100svh - 28rem), 58vw), 56rem);
+    --row-height: calc((var(--type-height) - var(--row-gap)) / 2);
+    /* Odstęp od dolnej krawędzi linii (line-height 0.8) do linii pisma Anybody, w em; zmierzony w przeglądarce. */
+    --descent: 0.12;
+    --end-inset: 0px;
+    --size-end: min((100cqw - var(--end-inset)) / 2.25, var(--row-height) / 0.8);
+    --baseline-end: calc(var(--type-height) - var(--descent) * var(--size-end));
   }
 
   .type {
     display: grid;
     grid-template-rows: 1fr 1fr;
-    row-gap: clamp(0.25rem, 1.5vh, 1rem);
-    height: clamp(11rem, min(calc(100svh - 26rem), 58vw), 44rem);
+    row-gap: var(--row-gap);
+    height: var(--type-height);
     overflow-x: clip;
     /* Zmiany kształtu liter nie wpływają na układ reszty strony. */
     contain: layout;
@@ -111,27 +220,78 @@ const lines = [profile.name, profile.surname];
     transform-origin: left bottom;
   }
 
-  .intro {
-    display: grid;
-    gap: 1.5rem 4rem;
-    margin-top: clamp(1.25rem, 3vh, 2.5rem);
-    padding-top: 1.5rem;
-    border-top: 2px solid var(--ink);
-  }
   .role {
+    margin-top: clamp(1.25rem, 3vh, 2rem);
     font-family: var(--display);
     font-weight: 700;
     font-stretch: 112%;
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-size: clamp(1.5rem, 2.4vw, 2.4rem);
     line-height: 1.08;
   }
+
+  .intro {
+    display: grid;
+    gap: 1.5rem var(--aside-gap);
+    margin-top: clamp(1.25rem, 3vh, 2.5rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+  }
+
+  /* Metadane jako plakietki, tak jak technologie na kartach projektów. */
+  .rail {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    gap: 0.5rem;
+    margin: 0;
+    font-family: var(--display);
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+  .rail div {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+    border-radius: 999px;
+  }
+  .rail dt {
+    color: var(--ink-soft);
+    font-stretch: 90%;
+  }
+  .rail dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  .status-dot {
+    display: inline-block;
+    width: 0.55rem;
+    height: 0.55rem;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+    background: #5fe3a1;
+    vertical-align: 0.05em;
+    box-shadow: 0 0 0 0 color-mix(in srgb, #5fe3a1 60%, transparent);
+  }
+  /* Liczby osi zmieniają się w trakcie ruchu soczewki; stała szerokość cyfr trzyma plakietkę w miejscu. */
+  .axes {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .axis {
+    display: inline-block;
+    min-width: 3ch;
+    margin-right: 0.4rem;
+  }
+  .axis:last-child {
+    margin-right: 0;
+  }
+
   .intro-text {
     display: grid;
     gap: 1rem;
     align-content: start;
-  }
-  .intro-meta {
-    color: var(--ink-soft);
   }
   .intro-actions {
     display: flex;
@@ -142,25 +302,159 @@ const lines = [profile.name, profile.surname];
     font-size: 1.05rem;
   }
   .intro-actions a:first-child {
-    color: var(--paper);
+    color: var(--sheet-bg);
     background: var(--ink);
     padding: 0.6rem 1.1rem;
     border-radius: 999px;
     text-decoration: none;
   }
   .intro-actions a:first-child:hover {
-    background: var(--cobalt);
+    background: #ffffff;
   }
   .intro-actions a:first-child:active {
     transform: translateY(1px);
   }
   .intro-actions a:last-child {
     padding-block: 0.6rem;
+    color: var(--ink);
+    text-decoration-thickness: 2px;
   }
 
   @media (min-width: 60rem) {
     .intro {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: var(--aside) minmax(0, 1fr);
+    }
+  }
+
+  /* Na szerokim i dość wysokim ekranie opis roli zajmuje pustą kolumnę obok drugiej linii napisu,
+     a druga linia kończy się na prawej krawędzi kolumny obok. Niższy ekran nie zmieściłby opisu w wierszu. */
+  @media (min-width: 64rem) and (min-height: 46rem) {
+    .stage {
+      display: grid;
+      --end-inset: calc(var(--aside-ratio) * 100cqw + var(--aside-gap));
+    }
+    .hero-title,
+    .role {
+      grid-area: 1 / 1;
+    }
+    /* Opis stoi na drugiej linii pisma: jego własna linia pisma leży 0.26em nad dolną krawędzią wiersza. */
+    .role {
+      align-self: end;
+      width: calc(var(--aside-ratio) * 100cqw);
+      margin-top: 0;
+      margin-bottom: calc(var(--type-height) - var(--baseline-end) - 0.26em);
+    }
+    .line-end {
+      margin-inline-start: var(--end-inset);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .status-dot {
+      animation: pulse 2.4s ease-out infinite;
+    }
+
+    /* Stos arkuszy: hero zostaje przypięty pod spodem, maleje i ciemnieje, a następna sekcja wjeżdża na niego
+       jak kolejny arkusz, z zaokrąglonymi rogami i miękkim cieniem. Animowane są tylko transform i opacity,
+       więc przewijanie zostaje płynne. Bez wsparcia animacji przewijania hero po prostu odjeżdża w górę. */
+    @supports (animation-timeline: scroll()) {
+      .hero {
+        position: sticky;
+        top: 0;
+        /* Zakryty arkusz znika, żeby nie prześwitywał pod przezroczystymi sekcjami niżej. */
+        animation: hero-gone linear both;
+        animation-timeline: scroll(root);
+        animation-range: 100vh 125vh;
+      }
+      /* Tło pod arkuszem gaśnie razem z nim, więc wjeżdżająca jasna sekcja ma wyraźną krawędź i widoczne rogi
+         także w ciemnym motywie, gdzie tło strony i sekcji jest tego samego koloru. */
+      .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: #060915;
+        opacity: 0;
+        pointer-events: none;
+        animation: backdrop linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+      .hero-sheet {
+        animation: recede linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+      .hero-sheet::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: #0b1233;
+        pointer-events: none;
+        opacity: 0;
+        animation: dim linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+      :global(body:has(.hero) .site-head) {
+        animation: head-out linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 30vh;
+      }
+      :global(.hero ~ section:nth-of-type(2)) {
+        border-radius: 1.5rem 1.5rem 0 0;
+        box-shadow: 0 -1.25rem 3rem -1.5rem rgb(0 0 0 / 0.45);
+      }
+      /* Fokus klawiatury w hero przywraca go do zwykłego układu, żeby przeglądarka mogła go przewinąć do widoku.
+         Kliknięcie myszą nie liczy się tu jako fokus, więc „Zobacz projekty” nie wyłącza efektu. */
+      .hero:has(:focus-visible) {
+        position: relative;
+      }
+      .hero:has(:focus-visible),
+      .hero:has(:focus-visible)::before,
+      .hero:has(:focus-visible) .hero-sheet,
+      .hero:has(:focus-visible) .hero-sheet::after {
+        animation: none;
+      }
+    }
+    @media (min-width: 64rem) {
+      @supports (animation-timeline: scroll()) {
+        :global(.hero ~ section:nth-of-type(2)) {
+          border-radius: 2rem 2rem 0 0;
+        }
+      }
+    }
+  }
+  @keyframes recede {
+    to {
+      transform: scale(0.92);
+    }
+  }
+  @keyframes dim {
+    to {
+      opacity: 0.22;
+    }
+  }
+  @keyframes backdrop {
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes hero-gone {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes head-out {
+    to {
+      opacity: 0;
+      transform: translateY(-1.5rem);
+    }
+  }
+  @keyframes pulse {
+    70%,
+    100% {
+      box-shadow: 0 0 0 0.45rem color-mix(in srgb, #5fe3a1 0%, transparent);
     }
   }
 </style>
