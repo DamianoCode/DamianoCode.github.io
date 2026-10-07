@@ -42,8 +42,8 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
   </div>
 
   <!--
-    Każdy projekt to karta w barwach własnego produktu. Na dużych ekranach karty przyklejają się do góry
-    i nachodzą na siebie przy przewijaniu; na telefonie leżą jedna pod drugą.
+    Każdy projekt to karta w barwach własnego produktu. Przy przewijaniu karty przyklejają się i następna
+    nasuwa się na poprzednią: na dużych ekranach u góry, na telefonie (karta wyższa niż ekran) dolną krawędzią.
   -->
   <div class="cases">
     {cases.map(({ project: p, i, flip }) => {
@@ -162,6 +162,22 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     </ul>
   </div>
 </section>
+
+<script>
+  // Na telefonie i w niskim oknie karta jest wyższa niż ekran, więc przykleja się dopiero, gdy jej dolna krawędź
+  // dojdzie do dołu ekranu. CSS liczy to z wysokości karty, którą podaje tu skrypt; bez skryptu karty leżą
+  // jedna pod drugą.
+  const cases = document.querySelector<HTMLElement>('.cases');
+  if (cases) {
+    const heights = new ResizeObserver((entries) => {
+      for (const { target } of entries) {
+        (target as HTMLElement).style.setProperty('--h', `${(target as HTMLElement).offsetHeight}px`);
+      }
+    });
+    cases.querySelectorAll<HTMLElement>('.case').forEach((card) => heights.observe(card));
+    cases.classList.add('is-stacked');
+  }
+</script>
 
 <style>
   /*
@@ -621,7 +637,19 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     .rig-widget :global(.w-bar) { left: 32%; bottom: 0; width: 66%; }
   }
 
-  /* Stos kart: tylko gdy karta mieści się w wysokości ekranu. */
+  /* Stos kart na telefonie i w niskim oknie: karta przykleja się dolną krawędzią do dołu ekranu
+     (albo górną, jeśli jest niższa niż ekran), a następna wjeżdża na nią. */
+  @media not ((min-width: 64rem) and (min-height: 44rem)) {
+    .cases:global(.is-stacked) {
+      gap: 2rem;
+    }
+    .cases:global(.is-stacked) .case {
+      position: sticky;
+      top: min(calc(0.5rem + var(--i) * 0.5rem), calc(100svh - var(--h, 100svh) - 0.5rem));
+    }
+  }
+
+  /* Stos kart na dużym ekranie: karty mają wysokość ekranu i przyklejają się do góry. */
   @media (min-width: 64rem) and (min-height: 44rem) {
     .cases {
       gap: 14vh;
