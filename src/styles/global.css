@@ -6,6 +6,12 @@
   --cobalt: #2f45e0;
   --rule: #b3bdca;
 
+  /* Kolory marki: znak i obrazki udostępniania mają je w obu motywach. Jasny kobalt to tylny arkusz znaku
+     i zarazem akcent trybu ciemnego. */
+  --brand-cobalt: #2f45e0;
+  --brand-cobalt-light: #8d9cff;
+  --brand-snow: #f4f6ff;
+
   --display: 'Anybody Variable', 'Arial Narrow', sans-serif;
   --text: 'Literata Variable', Georgia, serif;
 
