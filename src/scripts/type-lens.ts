@@ -1,6 +1,7 @@
 /**
- * Soczewka typograficzna w hero: litery blisko kursora (albo miejsca przewinięcia na ekranach dotykowych)
- * robią się szerokie i grube, dalsze wąskie i lekkie.
+ * Soczewka typograficzna w hero: litery blisko kursora robią się szerokie i grube, dalsze wąskie i lekkie.
+ * Na ekranach dotykowych soczewka tylko raz przejeżdża przez napis po wczytaniu: zmiana kształtu wielkich
+ * liter w każdej klatce przewijania zacinałaby przewijanie na słabszych telefonach.
  *
  * Wydajność:
  * - Każda litera ma jeden parametr `u` (0 = wąsko i lekko, 1 = szeroko i grubo), z którego wynikają obie osie
@@ -188,8 +189,6 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
 
   let rootTop = 0;
   let rootHeight = 1;
-  let sectionTop = 0;
-  let sectionHeight = 1;
   let visible = true;
 
   // Pozycja soczewki: x w pikselach okna, y jako 0–1 wysokości napisu. null = spoczynek.
@@ -243,23 +242,22 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
     line.visualLeft = line.boxLeft + offset;
   };
 
-  /** Odczyt geometrii tylko przy starcie i zmianie rozmiaru. */
+  /**
+   * Odczyt geometrii tylko przy starcie i zmianie rozmiaru. Wymiary pochodzą z układu (offset*), nie z
+   * prostokąta na ekranie: arkusz hero bywa w tej chwili pomniejszony przez animację przewijania.
+   */
   const measureGeometry = () => {
     const rootRect = root.getBoundingClientRect();
-    const sectionRect = section.getBoundingClientRect();
     rootTop = rootRect.top + scrollY;
-    rootHeight = Math.max(rootRect.height, 1);
-    sectionTop = sectionRect.top + scrollY;
-    sectionHeight = Math.max(sectionRect.height, 1);
+    rootHeight = Math.max(root.offsetHeight, 1);
 
     for (const line of lines) {
-      const rect = line.box.getBoundingClientRect();
-      line.boxLeft = rect.left;
-      line.boxWidth = rect.width;
-      line.boxHeight = rect.height;
+      line.boxLeft = line.box.getBoundingClientRect().left;
+      line.boxWidth = line.box.offsetWidth;
+      line.boxHeight = line.box.offsetHeight;
       // Rozmiar bazowy dopasowany do stanu spoczynku; ruch soczewki zmienia już tylko skalę.
       line.restWidth ||= measureRestWidth(line);
-      line.fontSize = Math.round(Math.min((rect.width / line.restWidth) * 100, rect.height / LINE_HEIGHT));
+      line.fontSize = Math.round(Math.min((line.boxWidth / line.restWidth) * 100, line.boxHeight / LINE_HEIGHT));
       line.word.style.fontSize = `${line.fontSize}px`;
       if (line.fontSize !== line.preparedSize) {
         line.preparedSize = line.fontSize;
@@ -334,17 +332,6 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
     wake();
   };
 
-  // Na ekranach dotykowych soczewkę przesuwa przewijanie przez hero.
-  const onScroll = () => {
-    const progress = (scrollY - sectionTop) / (sectionHeight * 0.6);
-    if (progress <= 0.02 || progress >= 1) return release();
-    const first = lines[0];
-    sweepStart = 0;
-    lensX = first.boxLeft + first.boxWidth * (-0.1 + 1.2 * progress);
-    lensY = progress;
-    wake();
-  };
-
   const settle = () => {
     lensX = null;
     sweepStart = 0;
@@ -361,13 +348,10 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
   const bind = () => {
     section.removeEventListener('pointermove', onPointerMove);
     section.removeEventListener('pointerleave', release);
-    removeEventListener('scroll', onScroll);
     if (reduce.matches) return settle();
     if (finePointer.matches) {
       section.addEventListener('pointermove', onPointerMove, { passive: true });
       section.addEventListener('pointerleave', release, { passive: true });
-    } else {
-      addEventListener('scroll', onScroll, { passive: true });
     }
   };
 

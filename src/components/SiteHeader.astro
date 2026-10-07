@@ -1,0 +1,72 @@
+---
+import { profile } from '../data/profile';
+
+/**
+ * Nagłówek strony. Zwykle renderuje go Base; strona główna wstawia go do arkusza hero,
+ * żeby poruszał się razem z nim.
+ */
+const path = Astro.url.pathname;
+
+const nav = [
+  { href: '/#projekty', label: 'Projekty' },
+  { href: '/#ai', label: 'AI' },
+  { href: '/#umiejetnosci', label: 'Umiejętności' },
+  { href: '/blog', label: 'Blog', current: path.startsWith('/blog') },
+  { href: '/cv', label: 'CV', current: path.startsWith('/cv') },
+  { href: '/#kontakt', label: 'Kontakt' },
+];
+---
+
+<header class="wrap site-head">
+  <a class="home" href="/">{profile.fullName}</a>
+  <nav aria-label="Główna">
+    {nav.map((item) => (
+      <a href={item.href} aria-current={item.current ? 'page' : undefined}>
+        {item.label}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  .site-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 1.25rem;
+  }
+  .home {
+    font-family: var(--display);
+    font-weight: 800;
+    font-stretch: 115%;
+    font-size: 1.15rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    font-family: var(--display);
+    font-size: 1rem;
+    font-stretch: 90%;
+  }
+  nav a {
+    color: var(--ink);
+    text-decoration: none;
+    padding-block: 0.25rem;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover,
+  nav a[aria-current='page'] {
+    border-color: var(--cobalt);
+  }
+  @media (max-width: 30rem) {
+    nav {
+      gap: 0.25rem 0.8rem;
+      font-stretch: 78%;
+    }
+  }
+</style>
