@@ -4,6 +4,7 @@ import '@fontsource-variable/literata/opsz.css';
 import '../styles/global.css';
 import anybodyLatin from '@fontsource-variable/anybody/files/anybody-latin-standard-normal.woff2?url';
 import anybodyLatinExt from '@fontsource-variable/anybody/files/anybody-latin-ext-standard-normal.woff2?url';
+import SiteHeader from '../components/SiteHeader.astro';
 import { profile, seo } from '../data/profile';
 
 interface Props {
@@ -15,6 +16,8 @@ interface Props {
   noindex?: boolean;
   /** Dodatkowe dane strukturalne schema.org dla tej strony. */
   jsonLd?: Record<string, unknown>[];
+  /** Strona sama wstawia nagłówek (strona główna: w arkuszu hero). */
+  ownHeader?: boolean;
 }
 
 const {
@@ -24,6 +27,7 @@ const {
   type = 'website',
   noindex = false,
   jsonLd = [],
+  ownHeader = false,
 } = Astro.props;
 
 const site = Astro.site!;
@@ -34,7 +38,6 @@ const cleanPath =
     .replace(/(.)\/$/, '$1') || '/';
 const canonical = new URL(cleanPath, site).href;
 const imageUrl = new URL(image, site).href;
-const path = Astro.url.pathname;
 
 const person = {
   '@context': 'https://schema.org',
@@ -62,14 +65,6 @@ const website = {
   author: { '@id': person['@id'] },
 };
 
-const nav = [
-  { href: '/#projekty', label: 'Projekty' },
-  { href: '/#ai', label: 'AI' },
-  { href: '/#umiejetnosci', label: 'Umiejętności' },
-  { href: '/blog', label: 'Blog', current: path.startsWith('/blog') },
-  { href: '/cv', label: 'CV', current: path.startsWith('/cv') },
-  { href: '/#kontakt', label: 'Kontakt' },
-];
 ---
 
 <!doctype html>
@@ -111,16 +106,7 @@ const nav = [
   </head>
   <body>
     <a class="skip" href="#tresc">Przejdź do treści</a>
-    <header class="wrap site-head">
-      <a class="home" href="/">{profile.fullName}</a>
-      <nav aria-label="Główna">
-        {nav.map((item) => (
-          <a href={item.href} aria-current={item.current ? 'page' : undefined}>
-            {item.label}
-          </a>
-        ))}
-      </nav>
-    </header>
+    {!ownHeader && <SiteHeader />}
     <main id="tresc">
       <slot />
     </main>
@@ -136,46 +122,6 @@ const nav = [
 </html>
 
 <style>
-  .site-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.5rem 2rem;
-    padding-block: 1.25rem;
-  }
-  .home {
-    font-family: var(--display);
-    font-weight: 800;
-    font-stretch: 115%;
-    font-size: 1.15rem;
-    color: var(--ink);
-    text-decoration: none;
-  }
-  nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.25rem;
-    font-family: var(--display);
-    font-size: 1rem;
-    font-stretch: 90%;
-  }
-  nav a {
-    color: var(--ink);
-    text-decoration: none;
-    padding-block: 0.25rem;
-    border-bottom: 2px solid transparent;
-  }
-  nav a:hover,
-  nav a[aria-current='page'] {
-    border-color: var(--cobalt);
-  }
-  @media (max-width: 30rem) {
-    nav {
-      gap: 0.25rem 0.8rem;
-      font-stretch: 78%;
-    }
-  }
   .site-foot {
     display: flex;
     flex-wrap: wrap;

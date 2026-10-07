@@ -43,7 +43,8 @@ import { interests } from '../../data/profile';
     justify-content: space-between;
     gap: 2.5rem;
     min-height: clamp(18rem, 34vw, 26rem);
-    padding: clamp(1.25rem, 3vw, 2.25rem);
+    --pad: clamp(1.25rem, 3vw, 2.25rem);
+    padding: var(--pad);
     border-radius: 1.25rem;
     background: var(--bg);
     color: var(--ink);
@@ -138,10 +139,36 @@ import { interests } from '../../data/profile';
     transform-origin: center;
   }
 
+  /* Cały pad, lekko przechylony, w prawym dolnym rogu, obok tekstu. Górę kafla zostawia hasłu, które
+     po najechaniu rozszerza się na całą szerokość. */
+  .tile-gry {
+    --art-width: clamp(10rem, 16vw, 13rem);
+    container: gry / inline-size;
+  }
   .tile :global(.art-gry) {
-    width: clamp(13rem, 26vw, 19rem);
-    right: -12%;
-    top: -18%;
+    width: var(--art-width);
+    right: clamp(1rem, 2vw, 1.75rem);
+    bottom: clamp(1.25rem, 2.5vw, 2rem);
+    rotate: -8deg;
+  }
+  .tile-gry .text {
+    max-width: min(26em, 100% - var(--art-width) - 1rem);
+  }
+  /* W wąskim kaflu obok pada zmieściłby się tylko wąski słupek tekstu: pad dostaje własny pas nad hasłem. */
+  @container gry (max-width: 28rem) {
+    /* Zapytanie nie może zmienić samego kafla, więc pas robi odstęp nad hasłem. */
+    .tile-gry .word-box {
+      margin-top: calc(7.5rem - var(--pad));
+    }
+    .tile-gry :global(.art.art-gry) {
+      width: 9rem;
+      top: 1rem;
+      right: 1rem;
+      bottom: auto;
+    }
+    .tile-gry .text {
+      max-width: 26em;
+    }
   }
   .tile :global(.art-gry .press) {
     transform-box: fill-box;
@@ -187,7 +214,6 @@ import { interests } from '../../data/profile';
     .tile-anime {
       padding-bottom: 7.5rem;
     }
-    .tile-gry,
     .tile-gielda {
       padding-top: 6.5rem;
     }
@@ -198,10 +224,6 @@ import { interests } from '../../data/profile';
       width: 13rem;
       right: -2rem;
       bottom: -1rem;
-    }
-    .tile :global(.art-gry) {
-      right: -2rem;
-      top: -2rem;
     }
     .tile :global(.art-gielda) {
       left: -0.5rem;

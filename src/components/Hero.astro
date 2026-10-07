@@ -1,13 +1,17 @@
 ---
+import SiteHeader from './SiteHeader.astro';
 import { profile } from '../data/profile';
 
 const lines = [profile.name, profile.surname];
 ---
 
 <section class="hero" aria-labelledby="hero-title">
-  <!-- Pierwszy arkusz strony: kobaltowy, na cały ekran, pod nagłówkiem. Przy przewijaniu odsuwa się w głąb,
-       a następna sekcja nasuwa się na niego jak kolejny arkusz na stos. Strona zamyka się arkuszem Kontakt w tym samym kolorze. -->
+  <!-- Pierwszy arkusz strony: kobaltowy, z nagłówkiem strony w środku. Na komputerze przy przewijaniu zostaje
+       przypięty i odsuwa się w głąb, a następna sekcja nasuwa się na niego jak kolejny arkusz na stos.
+       Strona zamyka się arkuszem Kontakt w tym samym kolorze. -->
+  <div class="hero-pin">
   <div class="sheet hero-sheet">
+    <SiteHeader />
     <div class="wrap hero-inner">
       <div class="stage">
         <h1 id="hero-title" class="hero-title">
@@ -61,6 +65,7 @@ const lines = [profile.name, profile.surname];
       </div>
     </div>
   </div>
+  </div>
 </section>
 
 <script>
@@ -76,6 +81,16 @@ const lines = [profile.name, profile.surname];
       if (weight) weight.textContent = String(g);
     });
   }
+
+  // Przypięty arkusz po przewinięciu jest pod następną sekcją. Fokus klawiatury w nim przewija stronę na górę,
+  // gdzie hero jest w pełni widoczne.
+  const pin = document.querySelector<HTMLElement>('.hero-pin');
+  section?.addEventListener('focusin', (e) => {
+    const target = e.target as HTMLElement;
+    if (pin && scrollY > 0 && target.matches(':focus-visible') && getComputedStyle(pin).position === 'sticky') {
+      scrollTo({ top: 0 });
+    }
+  });
 </script>
 
 <style>
@@ -85,61 +100,44 @@ const lines = [profile.name, profile.surname];
     --ink: #f4f6ff;
     --ink-soft: #c9d0ff;
     --cobalt: #f4f6ff;
-    /* Miejsce na nagłówek strony, który leży na arkuszu. */
-    --head-space: 4.5rem;
     /* Szerokość kolumny z opisem roli; ta sama kolumna niesie plakietki pod kreską. */
     --aside-ratio: 0.34;
     --aside: calc(var(--aside-ratio) * 100%);
     --aside-gap: 2rem;
     --row-gap: clamp(0.25rem, 1.5vh, 1rem);
     position: relative;
-    padding-block: var(--sheet-gap);
     color: var(--ink);
   }
-  @media (max-width: 40rem) {
-    .hero {
-      /* Nawigacja łamie się tu pod nazwiskiem w drugim wierszu. */
-      --head-space: 6.25rem;
-    }
-  }
-
-  /* Nagłówek strony leży na arkuszu, w jego kolorach. Dotyczy tylko strony głównej, bo tylko ona ma ten arkusz. */
-  :global(body:has(.hero) .site-head) {
-    position: absolute;
-    top: var(--sheet-gap);
-    left: 0;
-    right: 0;
-    z-index: 2;
-    /* Ta sama szerokość co treść arkusza: brzegi napisu i nagłówka leżą w jednej linii. */
-    max-width: none;
-    padding-inline: calc(var(--sheet-gap) + var(--gutter));
-    --ink: #f4f6ff;
-    --cobalt: #f4f6ff;
+  .hero-pin {
+    padding-block: var(--sheet-gap);
   }
 
   /* Arkusz ma zaokrąglenia pozostałych (klasa `.sheet`), ale nie ich największą szerokość: zajmuje całe okno
-     z małym odstępem od krawędzi i mieści się w pierwszym ekranie. Treść trzyma zwykła kolumna `.wrap`. */
+     z małym odstępem od krawędzi i mieści się w pierwszym ekranie. Nagłówek u góry, treść przy dolnej krawędzi. */
   .hero-sheet {
     margin-inline: var(--sheet-gap);
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
     min-height: calc(100svh - 2 * var(--sheet-gap));
-    padding-block: var(--head-space) clamp(2rem, 6vh, 4rem);
+    padding-bottom: clamp(2rem, 6vh, 4rem);
     background: var(--sheet-bg);
   }
-  /* Treść hero rozciąga się na całą szerokość arkusza, a nie na kolumnę 88rem pozostałych sekcji:
+  /* Nagłówek i treść hero rozciągają się na całą szerokość arkusza, a nie na kolumnę 88rem pozostałych sekcji:
      na dużym monitorze napis wypełnia okno zamiast stać w wąskim pasie pośrodku. */
+  .hero-sheet :global(.site-head) {
+    max-width: none;
+  }
   .hero-inner {
     max-width: none;
+    margin-top: auto;
   }
   .hero :focus-visible {
     outline-color: var(--ink);
   }
 
-  /* Następna sekcja to jasny arkusz, który przy przewijaniu nasuwa się na hero. Selektor pomija skrypt,
-     który Astro może wstawić zaraz za hero. */
+  /* Następna sekcja jest nieprzezroczysta i leży nad hero: przy przewijaniu nasuwa się na arkusz. Selektor
+     pomija skrypt, który Astro może wstawić zaraz za hero. */
   :global(.hero ~ section:nth-of-type(2)) {
     position: relative;
     z-index: 1;
@@ -256,6 +254,12 @@ const lines = [profile.name, profile.surname];
     border: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
     border-radius: 999px;
   }
+  /* Bez kursora soczewka nie reaguje, więc jej odczyt nic by nie mówił. */
+  @media (hover: none) {
+    .rail div:last-child {
+      display: none;
+    }
+  }
   .rail dt {
     color: var(--ink-soft);
     font-stretch: 90%;
@@ -354,21 +358,37 @@ const lines = [profile.name, profile.surname];
       animation: pulse 2.4s ease-out infinite;
     }
 
-    /* Stos arkuszy: hero zostaje przypięty pod spodem, maleje i ciemnieje, a następna sekcja wjeżdża na niego
-       jak kolejny arkusz, z zaokrąglonymi rogami i miękkim cieniem. Animowane są tylko transform i opacity,
-       więc przewijanie zostaje płynne. Bez wsparcia animacji przewijania hero po prostu odjeżdża w górę. */
+    /* Telefon i niskie okno: hero przewija się normalnie, a wychodząc z ekranu lekko maleje. */
+    @supports (animation-timeline: view()) {
+      .hero {
+        view-timeline: --hero;
+      }
+      .hero-sheet {
+        transform-origin: 50% 100%;
+        animation: leave linear both;
+        animation-timeline: --hero;
+        animation-range: exit 0% exit 100%;
+      }
+    }
+  }
+
+  /* Komputer: stos arkuszy. Sekcja hero jest torem o wysokość ekranu dłuższym od arkusza; arkusz jest w nim
+     przypięty, maleje i ciemnieje, a następna sekcja (podciągnięta o tę samą wysokość) nasuwa się na niego
+     z zaokrąglonymi rogami i cieniem. Arkusz nie wychodzi poza swój tor, więc nigdy nie prześwituje pod
+     dalszymi sekcjami. Animowane są tylko transform i opacity. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 64rem) and (min-height: 44rem) {
     @supports (animation-timeline: scroll()) {
       .hero {
+        --travel: 100svh;
+        height: calc(100svh + var(--travel));
+      }
+      .hero-pin {
         position: sticky;
         top: 0;
-        /* Zakryty arkusz znika, żeby nie prześwitywał pod przezroczystymi sekcjami niżej. */
-        animation: hero-gone linear both;
-        animation-timeline: scroll(root);
-        animation-range: 100vh 125vh;
+        height: 100svh;
       }
-      /* Tło pod arkuszem gaśnie razem z nim, więc wjeżdżająca jasna sekcja ma wyraźną krawędź i widoczne rogi
-         także w ciemnym motywie, gdzie tło strony i sekcji jest tego samego koloru. */
-      .hero::before {
+      /* Tło pod arkuszem gaśnie razem z nim, więc krawędź i rogi wjeżdżającej sekcji są wyraźne w obu motywach. */
+      .hero-pin::before {
         content: '';
         position: absolute;
         inset: 0;
@@ -376,53 +396,38 @@ const lines = [profile.name, profile.surname];
         background: #060915;
         opacity: 0;
         pointer-events: none;
-        animation: backdrop linear both;
+        animation: fade-in linear both;
         animation-timeline: scroll(root);
-        animation-range: 0 100vh;
+        animation-range: 0 var(--travel);
       }
       .hero-sheet {
+        transform-origin: 50% 50%;
         animation: recede linear both;
         animation-timeline: scroll(root);
-        animation-range: 0 100vh;
+        animation-range: 0 var(--travel);
       }
       .hero-sheet::after {
         content: '';
         position: absolute;
         inset: 0;
+        border-radius: inherit;
         background: #0b1233;
         pointer-events: none;
         opacity: 0;
         animation: dim linear both;
         animation-timeline: scroll(root);
-        animation-range: 0 100vh;
-      }
-      :global(body:has(.hero) .site-head) {
-        animation: head-out linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0 30vh;
+        animation-range: 0 var(--travel);
       }
       :global(.hero ~ section:nth-of-type(2)) {
-        border-radius: 1.5rem 1.5rem 0 0;
+        margin-top: calc(-1 * var(--travel, 100svh));
+        border-radius: 2rem 2rem 0 0;
         box-shadow: 0 -1.25rem 3rem -1.5rem rgb(0 0 0 / 0.45);
       }
-      /* Fokus klawiatury w hero przywraca go do zwykłego układu, żeby przeglądarka mogła go przewinąć do widoku.
-         Kliknięcie myszą nie liczy się tu jako fokus, więc „Zobacz projekty” nie wyłącza efektu. */
-      .hero:has(:focus-visible) {
-        position: relative;
-      }
-      .hero:has(:focus-visible),
-      .hero:has(:focus-visible)::before,
-      .hero:has(:focus-visible) .hero-sheet,
-      .hero:has(:focus-visible) .hero-sheet::after {
-        animation: none;
-      }
     }
-    @media (min-width: 64rem) {
-      @supports (animation-timeline: scroll()) {
-        :global(.hero ~ section:nth-of-type(2)) {
-          border-radius: 2rem 2rem 0 0;
-        }
-      }
+  }
+  @keyframes leave {
+    to {
+      transform: scale(0.94);
     }
   }
   @keyframes recede {
@@ -435,20 +440,9 @@ const lines = [profile.name, profile.surname];
       opacity: 0.22;
     }
   }
-  @keyframes backdrop {
+  @keyframes fade-in {
     to {
       opacity: 1;
-    }
-  }
-  @keyframes hero-gone {
-    to {
-      opacity: 0;
-    }
-  }
-  @keyframes head-out {
-    to {
-      opacity: 0;
-      transform: translateY(-1.5rem);
     }
   }
   @keyframes pulse {
