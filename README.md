@@ -16,6 +16,19 @@ npm run images   # renderuje public/og.png i apple-touch-icon.png (wymaga Chrome
 - **CV:** uzupełnij `src/data/cv.ts` (doświadczenie, edukacja, opcjonalnie PDF w `public/`). Dopóki jest puste, `/cv` pokazuje komunikat i ma `noindex`.
   Gdy CV będzie gotowe, usuń filtr `/cv` z `astro.config.mjs`, żeby trafiło do sitemapy.
 
+## Logo
+
+Znak to dwa arkusze z literą D (jak stos sekcji na stronie głównej), logotyp to „Damian / Ułaś” z soczewką z hero.
+Oba są zbudowane z konturów kroju Anybody przez `scripts/brand/logo.py` (wymaga `pip install fonttools brotli`):
+
+```bash
+python scripts/brand/logo.py   # public/favicon.svg, public/brand/*.svg, src/data/brand.ts
+npm run images                 # potem odśwież og.png i apple-touch-icon.png
+```
+
+Pliki do użycia poza stroną (GitHub, CV, prezentacje) leżą w `public/brand/`: znak w kolorze, odwrócony (na kobalt),
+jednokolorowy, logotyp z soczewką (granat i biały) oraz znak z napisem.
+
 ## Publikacja
 
 Każdy push na `main` buduje stronę i publikuje ją na https://damianocode.github.io (`.github/workflows/deploy.yml`).

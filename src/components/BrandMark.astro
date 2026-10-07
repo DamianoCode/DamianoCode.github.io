@@ -1,0 +1,49 @@
+---
+import { brandMark } from '../data/brand';
+
+/**
+ * Znak strony: dwa arkusze z literą D, jak stos sekcji na stronie głównej. Kolory biorą się ze zmiennych
+ * `--mark-back`, `--mark-front`, `--mark-letter`, więc na kobaltowym arkuszu hero znak może się odwrócić.
+ * Geometria pochodzi z scripts/brand/logo.py.
+ */
+const { back, front, letter, viewBox } = brandMark;
+---
+
+<svg class="brand-mark" viewBox={viewBox} aria-hidden="true" focusable="false">
+  <rect class="back" {...back} />
+  <rect class="front" {...front} />
+  <path class="letter" d={letter} />
+</svg>
+
+<style>
+  .brand-mark {
+    display: block;
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    overflow: visible;
+  }
+  .back {
+    fill: var(--mark-back, var(--brand-cobalt-light));
+  }
+  .front {
+    fill: var(--mark-front, var(--brand-cobalt));
+  }
+  .letter {
+    fill: var(--mark-letter, var(--brand-snow));
+  }
+
+  /* Po wczytaniu tylny arkusz raz odsuwa się w głąb, tak jak arkusz hero przy przewijaniu. */
+  @media (prefers-reduced-motion: no-preference) {
+    .back {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: recede 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+    }
+  }
+  @keyframes recede {
+    from {
+      transform: translateY(16%) scale(1.12, 1);
+    }
+  }
+</style>
