@@ -63,11 +63,13 @@ type Line = {
   visualWidth: number;
 };
 
+/** Wartości osi kroju (szerokość, grubość) dla parametru `u`. */
+const axesOf = (u: number) =>
+  [W_RANGE[0] + (W_RANGE[1] - W_RANGE[0]) * u, G_RANGE[0] + (G_RANGE[1] - G_RANGE[0]) * u ** G_CURVE] as const;
+
 const REST_LEVEL = Math.round(U_REST * LEVELS);
 const VARIATIONS = Array.from({ length: LEVELS + 1 }, (_, level) => {
-  const u = level / LEVELS;
-  const w = W_RANGE[0] + (W_RANGE[1] - W_RANGE[0]) * u;
-  const g = G_RANGE[0] + (G_RANGE[1] - G_RANGE[0]) * u ** G_CURVE;
+  const [w, g] = axesOf(level / LEVELS);
   return `'wdth' ${w.toFixed(1)}, 'wght' ${g.toFixed(0)}`;
 });
 
@@ -152,7 +154,10 @@ async function prepareVariants(line: Line, fontSize: number) {
   }
 }
 
-export function initTypeLens(root: HTMLElement, section: HTMLElement) {
+/** Odczyt soczewki: osie najszerszej litery, w całych jednostkach. */
+export type AxesListener = (width: number, weight: number) => void;
+
+export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: AxesListener) {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 
@@ -192,6 +197,17 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
   let lensY = 0.5;
   let sweepStart = 0;
   let frame = 0;
+  let reported = '';
+
+  /** Zgłasza osie litery pod soczewką, tylko gdy zmieniły się widoczne wartości. */
+  const report = (u: number) => {
+    if (!onAxes) return;
+    const [w, g] = axesOf(u).map(Math.round);
+    const key = `${w} ${g}`;
+    if (key === reported) return;
+    reported = key;
+    onAxes(w, g);
+  };
 
   const show = (line: Line, c: Char) => {
     const level = line.nearest[levelOf(c.u)];
@@ -275,6 +291,7 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
     }
 
     let moving = sweepStart !== 0;
+    let peak = 0;
 
     lines.forEach((line, li) => {
       const lineY = (li + 0.5) / lines.length;
@@ -289,11 +306,13 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
         c.u += (target - c.u) * EASE;
         if (Math.abs(target - c.u) > 0.004) moving = true;
         else c.u = target;
+        peak = Math.max(peak, c.u);
         show(line, c);
       });
 
       place(line);
     });
+    report(peak);
 
     if (moving && visible) frame = requestAnimationFrame(tick);
   };
@@ -336,6 +355,7 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement) {
       }
       place(line);
     }
+    report(U_REST);
   };
 
   const bind = () => {
