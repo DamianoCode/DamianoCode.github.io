@@ -68,18 +68,23 @@ const burst = Array.from({ length: 24 }, (_, i) => polar(50, 140, i % 2 ? 19 : 3
 )}
 
 {id === 'gry' && (
-  <svg class="art art-gry" viewBox="0 0 240 240" aria-hidden="true">
-    <path data-draw pathLength="1" d="M30 230C8 140 30 70 96 62h70c50 0 74 40 74 96" />
+  <svg class="art art-gry" viewBox="0 0 260 170" aria-hidden="true">
     <path
       data-draw
       pathLength="1"
-      d="M84 112h18v-18h18v18h18v18h-18v18h-18v-18h-18z"
-      class="press"
+      d="M70 30H190C222 30 240 46 246 76L256 128C260 150 248 166 230 166C216 166 206 156 198 140L188 120H72L62 140C54 156 44 166 30 166C12 166 0 150 4 128L14 76C20 46 38 30 70 30Z"
     />
-    <circle class="press" style="--i: 1" cx="186" cy="104" r="10" />
-    <circle class="press" style="--i: 2" cx="208" cy="126" r="10" />
-    <circle class="press" style="--i: 3" cx="186" cy="148" r="10" />
-    <circle class="press" style="--i: 4" cx="164" cy="126" r="10" />
+    <path class="press" d="M64 62h12v12h12v12h-12v12h-12v-12h-12v-12h12z" />
+    <circle class="press" style="--i: 1" cx="190" cy="64" r="7" />
+    <circle class="press" style="--i: 2" cx="206" cy="80" r="7" />
+    <circle class="press" style="--i: 3" cx="190" cy="96" r="7" />
+    <circle class="press" style="--i: 4" cx="174" cy="80" r="7" />
+    <rect x="110" y="60" width="14" height="6" rx="3" />
+    <rect x="136" y="60" width="14" height="6" rx="3" />
+    <circle cx="100" cy="104" r="12" />
+    <circle cx="100" cy="104" r="5" />
+    <circle cx="160" cy="104" r="12" />
+    <circle cx="160" cy="104" r="5" />
   </svg>
 )}
 
