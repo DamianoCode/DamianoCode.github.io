@@ -392,12 +392,24 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     display: grid;
     gap: 0.45rem;
   }
+  /* Wąska karta: opis stanu pod etykietą. Szersza: w jednym wierszu. */
   .states li {
     display: grid;
-    grid-template-columns: 0.8rem auto 1fr;
+    grid-template-columns: 0.8rem 1fr;
     align-items: baseline;
     gap: 0 0.7rem;
     color: var(--soft);
+  }
+  .states li > span:last-child {
+    grid-column: 2;
+  }
+  @media (min-width: 30rem) {
+    .states li {
+      grid-template-columns: 0.8rem auto 1fr;
+    }
+    .states li > span:last-child {
+      grid-column: auto;
+    }
   }
   .states b {
     font-family: var(--display);
@@ -450,6 +462,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     padding: 0.6rem 1.15rem;
     border-radius: 999px;
     text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
   }
   .case-links a.primary:hover {
     background: var(--accent);

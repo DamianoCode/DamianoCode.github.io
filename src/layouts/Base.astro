@@ -6,6 +6,7 @@ import anybodyLatin from '@fontsource-variable/anybody/files/anybody-latin-stand
 import anybodyLatinExt from '@fontsource-variable/anybody/files/anybody-latin-ext-standard-normal.woff2?url';
 import SiteHeader from '../components/SiteHeader.astro';
 import { profile, seo } from '../data/profile';
+import { getPublishedPosts } from '../lib/posts';
 
 interface Props {
   title?: string;
@@ -31,6 +32,8 @@ const {
 } = Astro.props;
 
 const site = Astro.site!;
+// Pusty kanał RSS nie jest reklamowany ani w nagłówku, ani w stopce.
+const hasPosts = (await getPublishedPosts()).length > 0;
 // Przy build.format 'file' ścieżki kończą się na .html; adres kanoniczny ich nie zawiera.
 const cleanPath =
   Astro.url.pathname
@@ -95,7 +98,9 @@ const website = {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="alternate" type="application/rss+xml" title={`Blog, ${profile.fullName}`} href="/rss.xml" />
+    {hasPosts && (
+      <link rel="alternate" type="application/rss+xml" title={`Blog, ${profile.fullName}`} href="/rss.xml" />
+    )}
 
     <link rel="preload" href={anybodyLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={anybodyLatinExt} as="font" type="font/woff2" crossorigin />
@@ -106,8 +111,17 @@ const website = {
   </head>
   <body>
     <a class="skip" href="#tresc">Przejdź do treści</a>
-    {!ownHeader && <SiteHeader />}
     <main id="tresc">
+      {!ownHeader && (
+        <div class="sheet masthead">
+          <SiteHeader />
+          {Astro.slots.has('masthead') && (
+            <div class="wrap masthead-inner">
+              <slot name="masthead" />
+            </div>
+          )}
+        </div>
+      )}
       <slot />
     </main>
     <footer class="wrap site-foot">
@@ -115,16 +129,35 @@ const website = {
       <p class="foot-links">
         <a href={profile.github} rel="me">GitHub</a>
         <a href={profile.linkedin} rel="me">LinkedIn</a>
-        <a href="/rss.xml">RSS</a>
+        {hasPosts && <a href="/rss.xml">RSS</a>}
       </p>
     </footer>
   </body>
 </html>
 
 <style>
+  /* Podstrony zaczynają się kobaltowym arkuszem, jak strona główna: nagłówek i tytuł strony w środku. */
+  .masthead {
+    --ink: #f4f6ff;
+    --ink-soft: #c9d0ff;
+    --cobalt: #f4f6ff;
+    --mark-front: var(--brand-snow);
+    --mark-letter: var(--brand-cobalt);
+    margin-top: var(--sheet-gap);
+    background: var(--brand-cobalt);
+    color: var(--ink);
+  }
+  .masthead :focus-visible {
+    outline-color: var(--ink);
+  }
+  .masthead-inner {
+    padding-block: clamp(1.5rem, 6vh, 4rem) clamp(2rem, 6vh, 3.5rem);
+  }
+
   .site-foot {
     display: flex;
     flex-wrap: wrap;
+    align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
     padding-block: 3rem 2.5rem;
@@ -134,6 +167,8 @@ const website = {
   .foot-links {
     display: flex;
     gap: 1.25rem;
+    font-family: var(--display);
+    font-weight: 600;
   }
   .foot-links a {
     padding-block: 0.6rem;

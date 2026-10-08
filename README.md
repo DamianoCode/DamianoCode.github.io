@@ -15,6 +15,8 @@ npm run images   # renderuje public/og.png i apple-touch-icon.png (wymaga Chrome
 - **Blog:** plik `.md` w `src/content/blog/` = wpis (wzór: `jak-pisac-wpisy.md`, ma `draft: true`). Wpisy trafiają do `/rss.xml` i sitemapy.
 - **CV:** uzupełnij `src/data/cv.ts` (doświadczenie, edukacja, opcjonalnie PDF w `public/`). Dopóki jest puste, `/cv` pokazuje komunikat i ma `noindex`.
   Gdy CV będzie gotowe, usuń filtr `/cv` z `astro.config.mjs`, żeby trafiło do sitemapy.
+- **Menu i stopka:** „Blog” i RSS pokazują się dopiero po pierwszym opublikowanym wpisie, a „CV” dopiero, gdy `cv.ts` ma treść.
+- **Typografia:** `src/middleware.ts` przy budowaniu wstawia twardą spację po jednoliterowych słowach (a, i, o, u, w, z), więc nie zostają na końcu wiersza. W tekstach nie trzeba wpisywać `&nbsp;`.
 
 ## Logo
 

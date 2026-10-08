@@ -78,6 +78,13 @@ body {
   line-height: 1.6;
   font-optical-sizing: auto;
   overflow-x: hidden;
+  /* Stopka zawsze przy dolnej krawędzi okna, także na krótkich podstronach. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+main {
+  flex: 1;
 }
 
 h1, h2, h3 {
@@ -159,24 +166,20 @@ a:hover {
   }
 }
 
-/* Podstrony: blog, CV */
+/* Podstrony: blog, CV. Tytuł stoi w kobaltowym arkuszu (Base), treść pod nim. */
 .page {
   padding-block: clamp(2rem, 8vh, 5rem);
-  min-height: 60vh;
 }
 .page-title {
   font-size: clamp(4rem, 16vw, 11rem);
   font-weight: 300;
   font-stretch: 150%;
   line-height: 0.9;
-  margin-bottom: 2.5rem;
 }
 .empty-state {
   display: grid;
   gap: 1.25rem;
   justify-items: start;
-  padding-top: 1.5rem;
-  border-top: 2px solid var(--ink);
 }
 
 /* Linki-akcje w kroju nagłówkowym */
