@@ -1,21 +1,25 @@
 ---
 import BrandMark from './BrandMark.astro';
+import { cvReady } from '../data/cv';
 import { profile } from '../data/profile';
+import { getPublishedPosts } from '../lib/posts';
 
 /**
  * Nagłówek strony. Zwykle renderuje go Base; strona główna wstawia go do arkusza hero,
  * żeby poruszał się razem z nim.
  */
 const path = Astro.url.pathname;
+const hasPosts = (await getPublishedPosts()).length > 0;
 
+// Blog i CV trafiają do menu dopiero wtedy, gdy mają treść: link do pustej strony to ślepy zaułek.
 const nav = [
   { href: '/#projekty', label: 'Projekty' },
   { href: '/#ai', label: 'AI' },
   { href: '/#umiejetnosci', label: 'Umiejętności' },
-  { href: '/blog', label: 'Blog', current: path.startsWith('/blog') },
-  { href: '/cv', label: 'CV', current: path.startsWith('/cv') },
+  { href: '/blog', label: 'Blog', current: path.startsWith('/blog'), hidden: !hasPosts },
+  { href: '/cv', label: 'CV', current: path.startsWith('/cv'), hidden: !cvReady },
   { href: '/#kontakt', label: 'Kontakt' },
-];
+].filter((item) => !item.hidden);
 ---
 
 <header class="wrap site-head">
@@ -62,6 +66,7 @@ const nav = [
     text-decoration: none;
     padding-block: 0.25rem;
     border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease;
   }
   nav a:hover,
   nav a[aria-current='page'] {

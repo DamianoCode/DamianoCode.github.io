@@ -1,5 +1,7 @@
 // Projekty z publicznych repozytoriów github.com/DamianoCode.
 
+import { profile } from './profile';
+
 export type ProjectId = 'placemates' | 'korepetytor' | 'widget' | 'claudius' | 'ecommerce';
 
 /**
@@ -56,7 +58,13 @@ export const projects: Project[] = [
     detail:
       'Stałe terminy same tworzą lekcje na 8 tygodni do przodu, a lekcję przenosi się przeciągnięciem w widoku tygodnia. Notatka po lekcji zajmuje pół minuty: niezrobione punkty planu przechodzą na kolejne zajęcia. Sprawdzian jednym kliknięciem wstawia powtórkę na początek planu i oznacza tematy na mapie. Działa w przeglądarce i jako PWA na telefonie. Repozytorium jest prywatne, a aplikację rozwijam dalej.',
     stack: ['Next.js 16', 'React 19', 'PostgreSQL', 'Drizzle', 'Better Auth', 'dnd-kit', 'Zod', 'Vitest', 'Tailwind'],
-    links: [],
+    // Repozytorium jest prywatne, więc zamiast kodu: prośba o pokaz.
+    links: [
+      {
+        href: `mailto:${profile.email}?subject=${encodeURIComponent('Asystent korepetytora: pokaz')}`,
+        label: 'Poproś o pokaz',
+      },
+    ],
   },
   {
     id: 'widget',
