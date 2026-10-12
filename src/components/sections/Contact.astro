@@ -85,12 +85,12 @@ const [emailUser, emailDomain] = profile.email.split('@');
 
 <style>
   .contact {
-    --ink: #f4f6ff;
+    --ink: var(--brand-snow);
     --soft: #d3d9ff;
-    --select-bg: #f4f6ff;
-    --select-ink: #2f45e0;
+    --select-bg: var(--brand-snow);
+    --select-ink: var(--brand-cobalt);
     margin-top: clamp(3rem, 8vh, 6rem);
-    background: #2f45e0;
+    background: var(--brand-cobalt);
     color: var(--ink);
   }
   .contact :focus-visible {
@@ -180,7 +180,7 @@ const [emailUser, emailDomain] = profile.email.split('@');
     transition: background-color 0.2s ease, transform 0.1s ease;
   }
   .copy:hover {
-    color: #2f45e0;
+    color: var(--brand-cobalt);
     background: var(--ink);
   }
   /* Obie etykiety leżą w jednej komórce, więc zmiana napisu nie zmienia szerokości przycisku. */
@@ -263,7 +263,7 @@ const [emailUser, emailDomain] = profile.email.split('@');
     padding: 0.6rem 1.15rem;
     border-radius: 999px;
     background: var(--ink);
-    color: #2f45e0;
+    color: var(--brand-cobalt);
     font-family: var(--display);
     font-weight: 600;
     text-decoration: none;

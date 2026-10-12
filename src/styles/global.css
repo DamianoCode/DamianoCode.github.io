@@ -58,7 +58,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
+  :root {
     --paper: #131c2e;
     --paper-deep: #1f2a40;
     --ink: #dce2e8;
@@ -67,15 +67,6 @@
     --rule: #33405a;
     color-scheme: dark;
   }
-}
-:root[data-theme='dark'] {
-  --paper: #131c2e;
-  --paper-deep: #1f2a40;
-  --ink: #dce2e8;
-  --ink-soft: #97a3b7;
-  --cobalt: #8d9cff;
-  --rule: #33405a;
-  color-scheme: dark;
 }
 
 *,

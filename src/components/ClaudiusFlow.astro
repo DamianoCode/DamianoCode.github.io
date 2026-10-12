@@ -139,8 +139,8 @@ import { flowSteps } from '../data/ai';
       transition-duration: 0.5s, 0.5s, 0.4s;
       transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1), ease;
     }
-    /* Nazwy przechodzą na stałe co półtorej sekundy, więc mają własne warstwy na czas działania toru. */
-    .track.is-live .name > span {
+    /* Nazwy przechodzą co półtorej sekundy, więc mają własne warstwy, ale tylko póki tor jest na ekranie. */
+    .track.is-running .name > span {
       will-change: opacity, transform;
     }
     .what {

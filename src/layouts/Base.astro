@@ -17,7 +17,7 @@ interface Props {
   noindex?: boolean;
   /** Dodatkowe dane strukturalne schema.org dla tej strony. */
   jsonLd?: Record<string, unknown>[];
-  /** Strona sama wstawia nagłówek (strona główna: w arkuszu hero). */
+  /** Strona sama wstawia nagłówek w slocie `banner` (strona główna: arkusz hero). */
   ownHeader?: boolean;
 }
 
@@ -32,6 +32,7 @@ const {
 } = Astro.props;
 
 const site = Astro.site!;
+const hasTitle = Astro.slots.has('masthead');
 // Pusty kanał RSS nie jest reklamowany ani w nagłówku, ani w stopce.
 const hasPosts = (await getPublishedPosts()).length > 0;
 // Przy build.format 'file' ścieżki kończą się na .html; adres kanoniczny ich nie zawiera.
@@ -111,15 +112,21 @@ const website = {
   </head>
   <body>
     <a class="skip" href="#tresc">Przejdź do treści</a>
+    {/* Kobaltowy arkusz podstrony to jeden kształt z dwóch elementów: górna część z menu jest nagłówkiem strony
+        (banner), dolna z tytułem otwiera <main>, żeby tytuł był pierwszą rzeczą w treści. */}
+    {ownHeader ? (
+      <slot name="banner" />
+    ) : (
+      <header class:list={['sheet masthead', { 'masthead-top': hasTitle }]}>
+        <SiteHeader />
+      </header>
+    )}
     <main id="tresc">
-      {!ownHeader && (
-        <div class="sheet masthead">
-          <SiteHeader />
-          {Astro.slots.has('masthead') && (
-            <div class="wrap masthead-inner">
-              <slot name="masthead" />
-            </div>
-          )}
+      {!ownHeader && hasTitle && (
+        <div class="sheet masthead masthead-title">
+          <div class="wrap masthead-inner">
+            <slot name="masthead" />
+          </div>
         </div>
       )}
       <slot />
@@ -151,16 +158,25 @@ const website = {
 <style>
   /* Podstrony zaczynają się kobaltowym arkuszem, jak strona główna: nagłówek i tytuł strony w środku. */
   .masthead {
-    --ink: #f4f6ff;
+    --ink: var(--brand-snow);
     --ink-soft: #c9d0ff;
-    --cobalt: #f4f6ff;
-    --select-bg: #f4f6ff;
-    --select-ink: #2f45e0;
+    --cobalt: var(--brand-snow);
+    --select-bg: var(--brand-snow);
+    --select-ink: var(--brand-cobalt);
     --mark-front: var(--brand-snow);
     --mark-letter: var(--brand-cobalt);
     margin-top: var(--sheet-gap);
     background: var(--brand-cobalt);
     color: var(--ink);
+  }
+  .masthead-top {
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+  .masthead-title {
+    margin-top: 0;
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
   }
   .masthead :focus-visible {
     outline-color: var(--ink);
