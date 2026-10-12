@@ -89,7 +89,7 @@ const sections = [
     margin-top: 0.5rem;
     font-family: var(--display);
     font-stretch: 90%;
-    font-size: 1rem;
+    font-size: var(--label);
     color: var(--ink-soft);
   }
   .download {
@@ -114,15 +114,21 @@ const sections = [
     padding-block: 1.25rem;
     border-top: 1px solid var(--rule);
   }
-  .period {
+  /* Okres i miejsce to metadane: Anybody jak `.case-meta` na stronie głównej, nie drugi akapit w Literacie. */
+  .period,
+  .place {
+    font-family: var(--display);
+    font-size: var(--label);
+    font-stretch: 95%;
     color: var(--ink-soft);
+  }
+  .period {
     font-variant-numeric: tabular-nums;
   }
   .cv-section h3 {
     font-size: var(--step-1);
   }
   .place {
-    color: var(--ink-soft);
     margin-bottom: 0.5rem;
   }
   @media (min-width: 48rem) {
