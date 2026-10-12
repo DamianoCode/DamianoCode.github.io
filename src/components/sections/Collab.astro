@@ -1,4 +1,5 @@
 ---
+import { cvReady } from '../../data/cv';
 import { mailto, profile, subjects } from '../../data/profile';
 ---
 
@@ -25,7 +26,7 @@ import { mailto, profile, subjects } from '../../data/profile';
       <h3 class="team-title">Szukasz developera do zespołu?</h3>
       <p>B2B albo etat, {profile.remote}.</p>
       <p class="actions team-actions">
-        <a href="/cv">Zobacz CV</a>
+        {cvReady ? <a href="/cv">Zobacz CV</a> : <a href={mailto(subjects.cv)}>Poproś o CV</a>}
         <a href={mailto(subjects.job)}>Napisz w sprawie pracy</a>
       </p>
     </div>
@@ -88,8 +89,10 @@ import { mailto, profile, subjects } from '../../data/profile';
     padding-top: 1.5rem;
     border-top: 1px solid var(--rule);
   }
+  /* Głębszy papier arkusza zjada kontrast: zwykły --ink-soft dawał tu 4.46:1. Domieszka atramentu podnosi go
+     do 5.3:1 w jasnym motywie i do 6.5:1 w ciemnym. */
   .team p:not(.actions) {
-    color: var(--ink-soft);
+    color: color-mix(in srgb, var(--ink-soft) 80%, var(--ink));
   }
   .team-title {
     font-size: var(--step-1);

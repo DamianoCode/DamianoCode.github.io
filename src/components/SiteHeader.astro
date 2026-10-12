@@ -5,8 +5,8 @@ import { profile } from '../data/profile';
 import { getPublishedPosts } from '../lib/posts';
 
 /**
- * Nagłówek strony. Zwykle renderuje go Base; strona główna wstawia go do arkusza hero,
- * żeby poruszał się razem z nim.
+ * Pasek nagłówka: znak i menu. Zwykle renderuje go Base; strona główna wstawia go do arkusza hero,
+ * żeby poruszał się razem z nim. Element <header> (landmark banner) daje arkusz, w którym pasek leży.
  */
 const path = Astro.url.pathname;
 const hasPosts = (await getPublishedPosts()).length > 0;
@@ -22,7 +22,7 @@ const nav = [
 ].filter((item) => !item.hidden);
 ---
 
-<header class="wrap site-head" id="top">
+<div class="wrap site-head" id="top">
   <a class="home" href="/"><BrandMark />{profile.fullName}</a>
   <nav aria-label="Główna">
     {nav.map((item) => (
@@ -31,7 +31,7 @@ const nav = [
       </a>
     ))}
   </nav>
-</header>
+</div>
 
 <style>
   .site-head {

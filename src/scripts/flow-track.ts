@@ -70,6 +70,7 @@ export function initFlowTrack(flow: HTMLElement) {
   new IntersectionObserver(
     ([entry]) => {
       visible = entry.isIntersecting;
+      track.classList.toggle('is-running', visible);
       if (visible && !started) {
         started = true;
         set(0);

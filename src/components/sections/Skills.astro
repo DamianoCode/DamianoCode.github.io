@@ -24,7 +24,7 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
   </p>
 
   <!-- Szerokie ekrany: tabela. Wąskie: lista z nazwami projektów. -->
-  <table class="matrix">
+  <table class="matrix" aria-labelledby="umiejetnosci-h">
     <thead>
       <tr>
         <td></td>
@@ -100,14 +100,18 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
     background: var(--paper);
   }
   thead th {
-    padding: 1rem 0.5rem;
+    padding: 0.25rem 0.5rem 1rem;
     vertical-align: bottom;
     font-family: var(--display);
     font-weight: 600;
     font-stretch: 85%;
     font-size: var(--label-l);
   }
+  /* Nagłówek kolumny prowadzi do karty projektu, więc ma cel dotyku 44 px; kreska zostaje tuż pod napisem. */
   thead a {
+    display: inline-flex;
+    align-items: flex-end;
+    min-height: 2.75rem;
     color: var(--ink);
     text-decoration: none;
     border-bottom: 3px solid var(--c);

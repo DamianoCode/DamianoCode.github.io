@@ -118,7 +118,10 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
             {p.links.length > 0 && (
               <p class="case-links">
                 {p.links.map((l, k) => (
-                  <a href={l.href} class:list={{ primary: k === 0 }}>{l.label}</a>
+                  <a href={l.href} class:list={{ primary: k === 0 }}>
+                    {l.label}
+                    {l.label === 'Kod' && <span class="visually-hidden"> projektu {p.name}</span>}
+                  </a>
                 ))}
               </p>
             )}
@@ -145,7 +148,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
           </p>
           {codeLink(p) && (
             <p class="actions minor-links">
-              <a href={codeLink(p)!.href}>Kod</a>
+              <a href={codeLink(p)!.href}>Kod<span class="visually-hidden"> projektu {p.name}</span></a>
             </p>
           )}
         </div>
@@ -170,8 +173,8 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
 
 <script>
   // Na telefonie i w niskim oknie karta jest wyższa niż ekran, więc przykleja się dopiero, gdy jej dolna krawędź
-  // dojdzie do dołu ekranu. CSS liczy to z wysokości karty, którą podaje tu skrypt; bez skryptu karty leżą
-  // jedna pod drugą.
+  // dojdzie do dołu ekranu (na dużym ekranie tak samo karta, której treść nie mieści się w wysokości ekranu).
+  // CSS liczy to z wysokości karty, którą podaje tu skrypt; bez skryptu karty leżą jedna pod drugą.
   const cases = document.querySelector<HTMLElement>('.cases');
   if (cases) {
     const heights = new ResizeObserver((entries) => {
@@ -218,11 +221,11 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     --shadow: rgb(0 0 0 / 0.6);
   }
   .case-claudius {
-    --bg: #2f45e0;
-    --select-bg: #f4f6ff;
-    --select-ink: #2f45e0;
+    --bg: var(--brand-cobalt);
+    --select-bg: var(--brand-snow);
+    --select-ink: var(--brand-cobalt);
     --glow: rgb(255 255 255 / 0.16);
-    --ink: #f4f6ff;
+    --ink: var(--brand-snow);
     --soft: #d3d9ff;
     --accent: #ffffff;
     --line: rgb(255 255 255 / 0.28);
@@ -712,15 +715,18 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     }
   }
 
-  /* Stos kart na dużym ekranie: karty mają wysokość ekranu i przyklejają się do góry. */
+  /* Stos kart na dużym ekranie: karty mają wysokość ekranu i przyklejają się do góry. Karta, której treść
+     się nie mieści (wąskie okno, większy tekst), rośnie zamiast ją ucinać i przykleja się dolną krawędzią,
+     jak na telefonie: `--h` to jej wysokość ze skryptu. Karta wysokości ekranu stoi tak samo jak dotąd,
+     bo wtedy drugi wyraz min() jest równy pierwszemu albo większy. */
   @media (min-width: 64rem) and (min-height: 44rem) {
     .cases {
       gap: 14vh;
     }
     .case {
       position: sticky;
-      top: calc(1rem + var(--i) * 0.85rem);
-      height: calc(100dvh - 2rem - 3 * 0.85rem);
+      top: min(calc(1rem + var(--i) * 0.85rem), calc(100dvh - var(--h, 0px) - 1rem));
+      min-height: calc(100dvh - 2rem - 3 * 0.85rem);
     }
     .case-stage {
       aspect-ratio: auto !important;

@@ -5,10 +5,11 @@ import { profile } from '../data/profile';
 const lines = [profile.name, profile.surname];
 ---
 
-<section class="hero" aria-labelledby="hero-title">
+<header class="hero" aria-labelledby="hero-title">
   <!-- Pierwszy arkusz strony: kobaltowy, z nagłówkiem strony w środku. Na komputerze przy przewijaniu zostaje
        przypięty i odsuwa się w głąb, a następna sekcja nasuwa się na niego jak kolejny arkusz na stos.
-       Strona zamyka się arkuszem Kontakt w tym samym kolorze. -->
+       Strona zamyka się arkuszem Kontakt w tym samym kolorze. Cały arkusz jest nagłówkiem strony (banner), więc stoi
+       przed <main>, a skok do treści prowadzi od razu do projektów. -->
   <div class="hero-pin">
   <div class="sheet hero-sheet">
     <SiteHeader />
@@ -59,13 +60,13 @@ const lines = [profile.name, profile.surname];
     </div>
   </div>
   </div>
-</section>
+</header>
 
 <script>
   import { initTypeLens } from '../scripts/type-lens';
 
   const root = document.querySelector<HTMLElement>('[data-type]');
-  const section = root?.closest('section');
+  const section = root?.closest<HTMLElement>('.hero');
   if (root && section) initTypeLens(root, section);
 
   // Przypięty arkusz po przewinięciu jest pod następną sekcją. Fokus klawiatury w nim przewija stronę na górę,
@@ -82,12 +83,12 @@ const lines = [profile.name, profile.surname];
 <style>
   .hero {
     /* Kolory arkusza są stałe w obu motywach, jak w arkuszu Kontakt. */
-    --sheet-bg: #2f45e0;
-    --select-bg: #f4f6ff;
-    --select-ink: #2f45e0;
-    --ink: #f4f6ff;
+    --sheet-bg: var(--brand-cobalt);
+    --select-bg: var(--brand-snow);
+    --select-ink: var(--brand-cobalt);
+    --ink: var(--brand-snow);
     --ink-soft: #c9d0ff;
-    --cobalt: #f4f6ff;
+    --cobalt: var(--brand-snow);
     /* Na kobaltowym arkuszu znak się odwraca: jasny arkusz z przodu, kobaltowa litera. */
     --mark-front: var(--brand-snow);
     --mark-letter: var(--brand-cobalt);
@@ -127,9 +128,8 @@ const lines = [profile.name, profile.surname];
     outline-color: var(--ink);
   }
 
-  /* Następna sekcja jest nieprzezroczysta i leży nad hero: przy przewijaniu nasuwa się na arkusz. Selektor
-     pomija skrypt, który Astro może wstawić zaraz za hero. */
-  :global(.hero ~ section:nth-of-type(2)) {
+  /* Pierwsza sekcja treści jest nieprzezroczysta i leży nad hero: przy przewijaniu nasuwa się na arkusz. */
+  :global(.hero ~ main > section:first-of-type) {
     position: relative;
     z-index: 1;
     background: var(--paper);
@@ -244,12 +244,6 @@ const lines = [profile.name, profile.surname];
     padding: 0.35rem 0.85rem;
     border: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
     border-radius: 999px;
-  }
-  /* Bez kursora soczewka nie reaguje, więc jej odczyt nic by nie mówił. */
-  @media (hover: none) {
-    .rail div:last-child {
-      display: none;
-    }
   }
   .rail dt {
     color: var(--ink-soft);
@@ -402,7 +396,12 @@ const lines = [profile.name, profile.surname];
         animation-timeline: scroll(root);
         animation-range: 0 var(--travel);
       }
-      :global(.hero ~ section:nth-of-type(2)) {
+      /* <main> zaczyna się pod torem hero, ale pierwsza sekcja wystaje z niego w górę o długość toru;
+         skok do treści ma się zatrzymać na niej, a nie ekran niżej. */
+      :global(.hero ~ main) {
+        scroll-margin-top: 100svh;
+      }
+      :global(.hero ~ main > section:first-of-type) {
         margin-top: calc(-1 * var(--travel, 100svh));
         border-radius: 2rem 2rem 0 0;
         box-shadow: 0 -1.25rem 3rem -1.5rem rgb(0 0 0 / 0.45);
