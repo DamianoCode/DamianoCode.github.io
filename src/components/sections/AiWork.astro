@@ -2,20 +2,32 @@
 import { Image } from 'astro:assets';
 import widgetBar from '../../assets/projects/widget-bar.png';
 import { aiWork } from '../../data/ai';
+import { mailto, subjects } from '../../data/profile';
 
-const [sessions, process, models] = aiWork.points;
+const { repo, pilot, review } = aiWork.offers;
 ---
 
-<!-- Arkusz w odwróconych kolorach; w środku bento z trzema kaflami o różnych tłach. -->
+<!-- Arkusz w odwróconych kolorach. Bento to trzy oferty dla zespołu; każda kończy się dowodem z mojej pracy. -->
 <section class="sheet ai" id="ai" aria-labelledby="ai-h">
   <div class="wrap block">
     <h2 id="ai-h" class="block-title kinetic" style="--fit: 7.82">Agenci AI</h2>
     <p class="lead">{aiWork.lead}</p>
 
     <div class="bento">
-      <article class="tile tile-sessions">
-        <h3>{sessions.title}</h3>
-        <p>{sessions.text}</p>
+      <article class="tile tile-repo">
+        <h3>{repo.title}</h3>
+        <div class="tile-body">
+          <p>{repo.text}</p>
+          <p class="outcome">{repo.outcome}</p>
+          <p class="proof">{repo.proof}</p>
+        </div>
+      </article>
+
+      <article class="tile tile-pilot">
+        <h3>{pilot.title}</h3>
+        <p>{pilot.text}</p>
+        <p class="outcome">{pilot.outcome}</p>
+        <p class="proof">{pilot.proof}</p>
         <a class="tile-link" href="#widget">Zobacz widżet</a>
         <Image
           class="tile-bar"
@@ -25,17 +37,18 @@ const [sessions, process, models] = aiWork.points;
         />
       </article>
 
-      <article class="tile tile-process">
-        <h3>{process.title}</h3>
-        <p>{process.text}</p>
+      <article class="tile tile-review">
+        <h3>{review.title}</h3>
+        <p>{review.text}</p>
+        <p class="outcome">{review.outcome}</p>
+        <p class="proof">{review.proof}</p>
         <a class="tile-link" href="#claudius">Zobacz Claudiusa</a>
       </article>
-
-      <article class="tile tile-models plate">
-        <h3>{models.title}</h3>
-        <p>{models.text}</p>
-      </article>
     </div>
+
+    <p class="ai-cta">
+      <a href={mailto(subjects.project)}>Napisz o wdrożeniu</a>
+    </p>
   </div>
 </section>
 
@@ -77,6 +90,9 @@ const [sessions, process, models] = aiWork.points;
     max-width: 34em;
   }
   .tile-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
     margin-top: auto;
     align-self: flex-start;
     font-family: var(--display);
@@ -85,19 +101,31 @@ const [sessions, process, models] = aiWork.points;
     text-decoration-thickness: 2px;
   }
 
-  /* Sesje: tło zrzutów widżetu, pasek zadokowany przy dolnej krawędzi kafla jak przy krawędzi ekranu. */
-  .tile-sessions {
+  /* Co zostaje w zespole: zdanie w kroju nagłówkowym, odróżnione od opisu i od dowodu pod nim. */
+  .tile p.outcome {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.35;
+    color: inherit;
+  }
+  .proof {
+    font-size: 1rem;
+  }
+
+  /* Pilot: tło zrzutów widżetu, pasek zadokowany przy dolnej krawędzi kafla jak przy krawędzi ekranu. */
+  .tile-pilot {
     background: #0c0c0c;
     color: #efefef;
     padding-bottom: 0;
   }
-  .tile-sessions p {
+  .tile-pilot p {
     color: #b4b4b4;
   }
-  .tile-sessions .tile-link {
+  .tile-pilot .tile-link {
     text-decoration-color: #f0b030;
   }
-  .tile-sessions :global(.tile-bar) {
+  .tile-pilot :global(.tile-bar) {
     display: block;
     width: min(100%, 34rem);
     height: auto;
@@ -105,26 +133,57 @@ const [sessions, process, models] = aiWork.points;
     align-self: center;
   }
 
-  .tile-process {
+  .tile-review {
     background: #2f45e0;
     color: #f4f6ff;
   }
-  .tile-process p {
+  .tile-review p {
     color: #d3d9ff;
   }
 
-  .tile-models {
-    color: var(--paper);
+  /* Konfiguracja repozytorium: kafel na tle arkusza, oddzielony samą kreską. */
+  .tile-repo {
+    border: 1px solid var(--rule);
   }
-  .tile-models p {
+  .tile-repo p {
     color: color-mix(in srgb, var(--paper) 78%, var(--ink));
+  }
+  .tile-body {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .ai-cta {
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .ai-cta a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .ai-cta a:hover {
+    background: color-mix(in srgb, var(--paper) 85%, var(--cobalt));
+  }
+  .ai-cta a:active {
+    transform: translateY(1px);
+  }
+  .ai :focus-visible {
+    outline-color: var(--paper);
   }
 
   @media (min-width: 60rem) {
     .bento {
       grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     }
-    .tile-models {
+    .tile-repo {
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
