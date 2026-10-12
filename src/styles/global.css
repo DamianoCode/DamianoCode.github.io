@@ -115,6 +115,11 @@ a:hover {
   outline-offset: 3px;
   border-radius: 2px;
 }
+/* Sekcja, do której przewinęła kotwica, dostaje fokus tylko jako punkt startowy klawiatury; ramka wokół
+   całego arkusza nic tu nie mówi. */
+[tabindex='-1']:focus {
+  outline: none;
+}
 
 .wrap {
   width: 100%;

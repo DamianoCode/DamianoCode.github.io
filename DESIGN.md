@@ -246,7 +246,10 @@ Right after Projects, a sheet in Morning Haze Paper Deep (it stands apart from t
 The hero name, every letter absolutely positioned and moved by transform, reacts to the cursor or scroll: letters near the focus go wide and heavy, far ones narrow and light, quantised to 100 pre-measured levels so nothing shifts layout. The axis values are shown live in a hero chip.
 
 ### Claudius track (signature)
-A vertical rail of process steps; the active step's rail fills over time while its name goes from width 70% / weight 400 to width 135% / weight 800. Without script every step is plainly readable.
+A vertical rail of process steps; the active step's rail fills over time while its name goes from width 70% / weight 400 to width 135% / weight 800. The name is not interpolated per frame: both cuts are set in the same cell, and the narrow one stretches out (scaleX 2.6, the measured ratio) and fades while the wide one grows from scaleX 0.385 and appears, so only opacity and transform run on the compositor. After the last step all rails drain upward together (0.7s) before the next pass. A mouse hover pins a step; touch never does, because a finger lands on the rail while scrolling. Without script every step is plainly readable.
+
+### Anchor scroll
+In-page links (menu, dock, CTAs) glide instead of jumping: duration grows with distance (about 0.5s for one screen, capped at 1.1s), ease in-out cubic, and a trip longer than four screens is shortened to its last four so the card stack does not flicker past. Any wheel, touch or key stops it. The URL updates without a second native jump, and keyboard activation moves focus to the target. The skip link and reduced motion keep the plain jump.
 
 ### Interest tile (signature)
 A themed tile with a fitted condensed word (width 75%) that widens to 150% on hover (or at mid-screen on touch) and a thin line drawing that draws itself on entry and moves its subject on hover (wheels turn, buttons press, panels pop).

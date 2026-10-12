@@ -8,7 +8,10 @@ import { flowSteps } from '../data/ai';
     {flowSteps.map((step) => (
       <li class="station" data-station>
         <span class="rail" aria-hidden="true"></span>
-        <b class="name">{step.name}</b>
+        <b class="name">
+          <span class="name-rest">{step.name}</span>
+          <span class="name-on" aria-hidden="true">{step.name}</span>
+        </b>
         <span class="what">{step.text}</span>
       </li>
     ))}
@@ -36,7 +39,7 @@ import { flowSteps } from '../data/ai';
   }
   .station {
     display: grid;
-    grid-template-columns: 0.2rem 1fr;
+    grid-template-columns: 0.2rem minmax(0, 1fr);
     column-gap: 1.1rem;
     padding-block: 0.15rem;
     cursor: default;
@@ -54,6 +57,8 @@ import { flowSteps } from '../data/ai';
     transform-origin: top;
   }
   .name {
+    display: grid;
+    justify-items: start;
     font-family: var(--display);
     font-size: clamp(1.5rem, 3.2vw, 2.4rem);
     font-weight: 700;
@@ -61,6 +66,13 @@ import { flowSteps } from '../data/ai';
     line-height: 1.05;
     white-space: nowrap;
     padding-top: 0.35rem;
+  }
+  .name > span {
+    grid-area: 1 / 1;
+    transform-origin: left center;
+  }
+  .name-on {
+    display: none;
   }
   .what {
     padding-bottom: 0.5rem;
@@ -72,48 +84,78 @@ import { flowSteps } from '../data/ai';
   .track.is-live .rail::after {
     transform: scaleY(0);
   }
-  .track.is-live .station.is-done .rail::after {
-    transform: none;
-  }
-  /* Szyna bieżącego kroku wypełnia się w rytmie kroku. */
+  .track.is-live .station.is-done .rail::after,
   .track.is-live .station.is-active .rail::after {
-    animation: fill var(--step, 1.5s) linear forwards;
-  }
-  .track.is-pinned .station.is-active .rail::after {
-    animation: none;
     transform: none;
   }
-  @keyframes fill {
-    to {
-      transform: none;
-    }
-  }
-  /* Przygaszenie ma dolny próg: nazwy kroków (duży tekst) trzymają kontrast co najmniej 3:1 na kobalcie,
-     a opisy (zwykły tekst) zostają w pełnym --soft. */
-  .track.is-live .name {
+
+  /*
+    Krok, na którym jest zmiana, robi się szeroki i ciężki (oś szerokości to głos tej strony). Żeby telefon
+    nie przeliczał tekstu w każdej klatce, oba warianty nazwy są gotowe i nałożone na siebie: przy zmianie
+    wąski się rozciąga i gaśnie, a szeroki wychodzi ze ściśnięcia i się pojawia. Animują się tylko
+    przezroczystość i transformacja.
+    Przygaszenie ma dolny próg: nazwy kroków (duży tekst) trzymają kontrast co najmniej 3:1 na kobalcie,
+    a opisy (zwykły tekst) zostają w pełnym --soft.
+  */
+  .track.is-live .name-rest {
     font-weight: 400;
     font-stretch: 70%;
     color: color-mix(in srgb, var(--ink) 64%, transparent);
   }
-  .track.is-live .station.is-done .name {
-    color: color-mix(in srgb, var(--ink) 80%, transparent);
-  }
-  .track.is-live .station.is-active .name {
+  .track.is-live .name-on {
+    display: block;
     font-weight: 800;
     font-stretch: 135%;
     color: var(--ink);
+    opacity: 0;
+    /* Szeroki wariant jest ok. 2,6 raza szerszy od wąskiego (zmierzone dla wszystkich nazw) i startuje
+       ściśnięty do jego szerokości. */
+    transform: scaleX(0.385);
+    user-select: none;
+  }
+  .track.is-live .station.is-done .name-rest {
+    color: color-mix(in srgb, var(--ink) 80%, transparent);
+  }
+  .track.is-live .station.is-active .name-rest {
+    opacity: 0;
+    transform: scaleX(2.6);
+  }
+  .track.is-live .station.is-active .name-on {
+    opacity: 1;
+    transform: none;
   }
   .track.is-live .station.is-active .what {
     color: var(--ink);
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .name,
-    .what {
+    .name > span {
       transition:
-        font-stretch 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
-        font-weight 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+        opacity 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
         color 0.4s ease;
+    }
+    .track.is-live .station.is-active .name > span {
+      transition-duration: 0.5s, 0.5s, 0.4s;
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1), ease;
+    }
+    /* Nazwy przechodzą na stałe co półtorej sekundy, więc mają własne warstwy na czas działania toru. */
+    .track.is-live .name > span {
+      will-change: opacity, transform;
+    }
+    .what {
+      transition: color 0.4s ease;
+    }
+    /* Szyna bieżącego kroku wypełnia się w rytmie kroku. Po ostatnim kroku pełne szyny opróżniają się razem
+       ku górze; przy przypięciu kursorem wypełnienie jest od razu. */
+    .track.is-live .rail::after {
+      transition: transform var(--drain, 0.7s) cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .track.is-live .station.is-active .rail::after {
+      transition: transform var(--step, 1.5s) linear;
+    }
+    .track.is-pinned .station.is-active .rail::after {
+      transition: none;
     }
   }
 </style>
