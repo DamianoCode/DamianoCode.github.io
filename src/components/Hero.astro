@@ -405,6 +405,9 @@ const lines = [profile.name, profile.surname];
         margin-top: calc(-1 * var(--travel, 100svh));
         border-radius: 2rem 2rem 0 0;
         box-shadow: 0 -1.25rem 3rem -1.5rem rgb(0 0 0 / 0.45);
+        /* Rozmycie cienia sięga kilka pikseli poniżej sekcji i rysowało blady pas pod archiwum;
+           cień ma padać tylko w górę, na hero. */
+        clip-path: inset(-6rem -6rem 0 -6rem);
       }
     }
   }
