@@ -88,10 +88,12 @@ import { flowSteps } from '../data/ai';
       transform: none;
     }
   }
+  /* Przygaszenie ma dolny próg: nazwy kroków (duży tekst) trzymają kontrast co najmniej 3:1 na kobalcie,
+     a opisy (zwykły tekst) zostają w pełnym --soft. */
   .track.is-live .name {
     font-weight: 400;
     font-stretch: 70%;
-    color: color-mix(in srgb, var(--ink) 55%, transparent);
+    color: color-mix(in srgb, var(--ink) 64%, transparent);
   }
   .track.is-live .station.is-done .name {
     color: color-mix(in srgb, var(--ink) 80%, transparent);
@@ -100,9 +102,6 @@ import { flowSteps } from '../data/ai';
     font-weight: 800;
     font-stretch: 135%;
     color: var(--ink);
-  }
-  .track.is-live .what {
-    color: color-mix(in srgb, var(--soft) 70%, transparent);
   }
   .track.is-live .station.is-active .what {
     color: var(--ink);

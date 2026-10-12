@@ -42,7 +42,7 @@ import { interests } from '../../data/profile';
     flex-direction: column;
     justify-content: space-between;
     gap: 2.5rem;
-    min-height: clamp(18rem, 34vw, 26rem);
+    min-height: clamp(16rem, 26vw, 21rem);
     padding: clamp(1.25rem, 3vw, 2.25rem);
     border-radius: 1.25rem;
     background: var(--bg);
@@ -56,8 +56,9 @@ import { interests } from '../../data/profile';
     --soft: #b4cdbf;
     --art: #8fd0ad;
   }
+  /* Tło o ton ciemniejsze od cegły z gier: opis w --soft trzyma kontrast AA (4.7:1). */
   .tile-gry {
-    --bg: #b9452c;
+    --bg: #a93c25;
     --ink: #fff4ee;
     --soft: #ffd8ca;
     --art: #ffd0bd;
@@ -138,10 +139,11 @@ import { interests } from '../../data/profile';
     transform-origin: center;
   }
 
+  /* Pad jest cały, z chwytami: leży w prawym górnym rogu w całości, nie wychodzi poza kafel jak pozostałe rysunki. */
   .tile :global(.art-gry) {
-    width: clamp(13rem, 26vw, 19rem);
-    right: -12%;
-    top: -18%;
+    width: clamp(11rem, 19vw, 15rem);
+    right: clamp(1rem, 2.5vw, 2rem);
+    top: clamp(1rem, 2.5vw, 2rem);
   }
   .tile :global(.art-gry .press) {
     transform-box: fill-box;
@@ -200,8 +202,9 @@ import { interests } from '../../data/profile';
       bottom: -1rem;
     }
     .tile :global(.art-gry) {
-      right: -2rem;
-      top: -2rem;
+      width: 8.5rem;
+      right: 1rem;
+      top: 0.75rem;
     }
     .tile :global(.art-gielda) {
       left: -0.5rem;
