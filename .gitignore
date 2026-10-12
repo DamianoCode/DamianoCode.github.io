@@ -5,3 +5,7 @@ dist/
 .env.*
 .DS_Store
 npm-debug.log*
+.playwright-mcp/
+.impeccable/hook.cache.json
+.impeccable/critique/
+.impeccable/live/
