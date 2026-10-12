@@ -39,6 +39,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
 <section class="block" id="projekty" aria-labelledby="projekty-h">
   <div class="wrap">
     <h2 id="projekty-h" class="block-title kinetic" style="--fit: 7.39">Projekty</h2>
+    <p class="block-intro">Od najnowszych: dwie aplikacje webowe i dwa narzędzia do pracy z agentami AI.</p>
   </div>
 
   <!--
@@ -121,6 +122,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
                 ))}
               </p>
             )}
+            {p.linksNote && <p class="case-links links-note">{p.linksNote}</p>}
           </div>
         </article>
       );
@@ -151,15 +153,19 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
       </article>
     ))}
 
-    <ul class="archive-list">
-      {archive.map((a) => (
-        <li>
-          <span class="year">{a.year}</span>
-          <a href={a.href}>{a.name}</a>
-          <span class="archive-what">{a.what}</span>
-        </li>
-      ))}
-    </ul>
+    {/* Starsze repozytoria są pod ręką dla ciekawych, ale nie rozwadniają kart projektów. */}
+    <details class="archive">
+      <summary>Starsze repozytoria, 2021–2022 ({archive.length})</summary>
+      <ul class="archive-list">
+        {archive.map((a) => (
+          <li>
+            <span class="year">{a.year}</span>
+            <a href={a.href}>{a.name}</a>
+            <span class="archive-what">{a.what}</span>
+          </li>
+        ))}
+      </ul>
+    </details>
   </div>
 </section>
 
@@ -424,6 +430,9 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     font-weight: 600;
   }
   .case-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
     color: var(--ink);
     text-decoration-color: var(--accent);
     text-decoration-thickness: 2px;
@@ -491,12 +500,51 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
   .minor-links {
     margin-top: 1rem;
   }
+  .links-note {
+    color: var(--soft);
+  }
+  .archive {
+    margin-top: 2.5rem;
+  }
+  .archive summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    font-family: var(--display);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+  .archive summary::-webkit-details-marker {
+    display: none;
+  }
+  /* Strzałka rysowana kreską, obraca się po rozwinięciu. */
+  .archive summary::before {
+    content: '';
+    width: 0.5em;
+    height: 0.5em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    rotate: -45deg;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .archive summary::before {
+      transition: rotate 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+  }
+  .archive[open] summary::before {
+    rotate: 45deg;
+  }
+  .archive summary:hover {
+    color: var(--cobalt);
+  }
   .archive-list {
     list-style: none;
-    margin: 2.5rem 0 0;
+    margin: 1rem 0 0;
     padding: 0;
     display: grid;
-    gap: 0.5rem;
+    gap: 0;
   }
   .archive-list li {
     display: flex;
@@ -505,6 +553,9 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     gap: 0 0.75rem;
   }
   .archive-list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
     font-family: var(--display);
     font-weight: 600;
   }
@@ -561,7 +612,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     .minor {
       grid-template-columns: subgrid;
     }
-    .archive-list {
+    .archive {
       grid-column: 2;
     }
   }
@@ -621,8 +672,9 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     .rig-widget :global(.w-bar) { left: 32%; bottom: 0; width: 66%; }
   }
 
-  /* Stos kart: tylko gdy karta mieści się w wysokości ekranu. */
-  @media (min-width: 64rem) and (min-height: 44rem) {
+  /* Stos kart: tylko gdy karta mieści się w wysokości ekranu. Próg 37.5rem (600 px) obejmuje typowy laptop
+     z paskami przeglądarki; karta i tak dopasowuje wysokość do ekranu. */
+  @media (min-width: 64rem) and (min-height: 37.5rem) {
     .cases {
       gap: 14vh;
     }
@@ -633,6 +685,33 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     }
     .case-stage {
       aspect-ratio: auto !important;
+    }
+  }
+  /* Niski ekran (np. laptop z paskami przeglądarki): ta sama karta w gęstszej wersji, żeby tekst zmieścił się
+     w wysokości ekranu. Dłuższy opis chowa się do jednego akapitu skrótu, a mniejsza nazwa zostawia miejsce scenie. */
+  @media (min-width: 64rem) and (min-height: 37.5rem) and (max-height: 49.99rem) {
+    .case {
+      --pad: clamp(1.25rem, 2.5vw, 2.5rem);
+      gap: 1rem 3rem;
+    }
+    .case-head {
+      padding-bottom: 0.75rem;
+    }
+    .case-name {
+      font-size: min(3.75rem, 4.2vw);
+    }
+    .summary {
+      font-size: 1.15rem;
+    }
+    .detail {
+      display: none;
+    }
+    .states,
+    .chips {
+      margin-top: 0.85rem;
+    }
+    .case-links {
+      margin-top: 1rem;
     }
   }
 </style>

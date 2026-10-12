@@ -23,6 +23,8 @@ export interface Project {
   detail: string;
   stack: string[];
   links: { href: string; label: string }[];
+  /** Informacja w miejscu linków, gdy projekt ich nie ma (np. prywatne repozytorium). */
+  linksNote?: string;
   /** Stany produktu pokazane jako legenda (widżet: światła sygnalizatora). */
   states?: { tone: 'red' | 'amber' | 'green'; label: string; text: string }[];
 }
@@ -54,9 +56,10 @@ export const projects: Project[] = [
     status: 'w budowie',
     summary: 'Aplikacja, która zastępuje korepetytorowi angielskiego segregator: uczniowie, terminarz, plany lekcji i sprawdziany.',
     detail:
-      'Stałe terminy same tworzą lekcje na 8 tygodni do przodu, a lekcję przenosi się przeciągnięciem w widoku tygodnia. Notatka po lekcji zajmuje pół minuty: niezrobione punkty planu przechodzą na kolejne zajęcia. Sprawdzian jednym kliknięciem wstawia powtórkę na początek planu i oznacza tematy na mapie. Działa w przeglądarce i jako PWA na telefonie. Repozytorium jest prywatne, a aplikację rozwijam dalej.',
+      'Stałe terminy same tworzą lekcje na 8 tygodni do przodu, a lekcję przenosi się przeciągnięciem w widoku tygodnia. Notatka po lekcji zajmuje pół minuty: niezrobione punkty planu przechodzą na kolejne zajęcia. Sprawdzian jednym kliknięciem wstawia powtórkę na początek planu i oznacza tematy na mapie. Działa w przeglądarce i jako PWA na telefonie, a aplikację rozwijam dalej.',
     stack: ['Next.js 16', 'React 19', 'PostgreSQL', 'Drizzle', 'Better Auth', 'dnd-kit', 'Zod', 'Vitest', 'Tailwind'],
     links: [],
+    linksNote: 'Repozytorium jest prywatne',
   },
   {
     id: 'widget',
@@ -88,7 +91,7 @@ export const projects: Project[] = [
     kind: 'Wtyczka do Claude Code',
     summary: 'Wtyczka do Claude Code, która dobiera sposób pracy do ryzyka zmiany.',
     detail:
-      'Drobną poprawkę wprowadza od razu. Większą zmianę najpierw klasyfikuje, zamraża kontrakt i rozdziela między czterech podagentów na różnych modelach, a na końcu zleca niezależny przegląd. Chroni przed poprawnym zbudowaniem złej rzeczy i przed naprawianiem błędu, którego nikt nie zlokalizował.',
+      'Drobną poprawkę wprowadza od razu. Większą zmianę najpierw klasyfikuje, spisuje, co ma powstać, i rozdziela pracę między czterech agentów na różnych modelach, a na końcu zleca niezależny przegląd. Chroni przed poprawnym zbudowaniem złej rzeczy i przed naprawianiem błędu, którego nikt nie zlokalizował.',
     stack: ['Claude Code', 'podagenci', 'hooki', 'Node.js'],
     links: [{ href: 'https://github.com/DamianoCode/claudius', label: 'Kod' }],
   },
