@@ -2,8 +2,8 @@
   Pływające skróty w prawym dolnym rogu (w zasięgu kciuka), widoczne po zejściu z hero:
   - „Napisz do mnie” prowadzi do arkusza Kontakt i chowa się, gdy Kontakt jest już na ekranie;
   - strzałka wraca na górę strony i zostaje do samego końca, bo tam jest najbardziej potrzebna.
-  Na telefonie oba chowają się przy przewijaniu w dół, żeby nie zasłaniać czytanego tekstu, i wracają przy
-  przewijaniu w górę. Bez skryptu się nie pokazują: zostaje menu i sam arkusz Kontakt.
+  Oba chowają się przy przewijaniu w dół, żeby nie zasłaniać czytanego tekstu, i wracają przy przewijaniu
+  w górę, gdy ktoś szuka drogi dalej. Bez skryptu się nie pokazują: zostaje menu i sam arkusz Kontakt.
 -->
 <div class="dock" data-dock hidden>
   <a class="dock-up" href="#top" aria-label="Wróć na górę strony">
@@ -18,14 +18,13 @@
   const contact = document.querySelector('#kontakt');
   if (dock && write && contact) {
     dock.hidden = false;
-    const narrow = window.matchMedia('(max-width: 47.99rem)');
     // Hero jest przyklejony pod kolejnymi arkuszami, więc dla obserwatora przecięć stale „widoczny”.
     // Dlatego o hero decyduje przewinięcie: skróty pojawiają się po zejściu o 80% wysokości ekranu.
     let pastHero = false;
     let goingDown = false;
     let lastY = window.scrollY;
     const update = () => {
-      dock.toggleAttribute('data-shown', pastHero && !(narrow.matches && goingDown));
+      dock.toggleAttribute('data-shown', pastHero && !goingDown);
     };
     let frame = 0;
     const onScroll = () => {
@@ -43,7 +42,6 @@
       });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
-    narrow.addEventListener('change', update);
     onScroll();
     new IntersectionObserver(([entry]) => {
       write.toggleAttribute('data-off', entry.isIntersecting);
