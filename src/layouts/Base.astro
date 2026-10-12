@@ -4,7 +4,7 @@ import '@fontsource-variable/literata/opsz.css';
 import '../styles/global.css';
 import anybodyLatin from '@fontsource-variable/anybody/files/anybody-latin-standard-normal.woff2?url';
 import anybodyLatinExt from '@fontsource-variable/anybody/files/anybody-latin-ext-standard-normal.woff2?url';
-import { cvReady } from '../data/cv';
+import SiteHeader from '../components/SiteHeader.astro';
 import { profile, seo } from '../data/profile';
 import { getPublishedPosts } from '../lib/posts';
 
@@ -17,6 +17,8 @@ interface Props {
   noindex?: boolean;
   /** Dodatkowe dane strukturalne schema.org dla tej strony. */
   jsonLd?: Record<string, unknown>[];
+  /** Strona sama wstawia nagłówek (strona główna: w arkuszu hero). */
+  ownHeader?: boolean;
 }
 
 const {
@@ -26,9 +28,12 @@ const {
   type = 'website',
   noindex = false,
   jsonLd = [],
+  ownHeader = false,
 } = Astro.props;
 
 const site = Astro.site!;
+// Pusty kanał RSS nie jest reklamowany ani w nagłówku, ani w stopce.
+const hasPosts = (await getPublishedPosts()).length > 0;
 // Przy build.format 'file' ścieżki kończą się na .html; adres kanoniczny ich nie zawiera.
 const cleanPath =
   Astro.url.pathname
@@ -36,7 +41,6 @@ const cleanPath =
     .replace(/(.)\/$/, '$1') || '/';
 const canonical = new URL(cleanPath, site).href;
 const imageUrl = new URL(image, site).href;
-const path = Astro.url.pathname;
 
 const person = {
   '@context': 'https://schema.org',
@@ -64,19 +68,6 @@ const website = {
   author: { '@id': person['@id'] },
 };
 
-// Blog i CV trafiają do menu dopiero, gdy mają treść: link do pustej strony to ślepa uliczka.
-// Na samej podstronie link zostaje, żeby menu pokazywało, gdzie jesteś.
-const onBlog = path.startsWith('/blog');
-const onCv = path.startsWith('/cv');
-const hasPosts = (await getPublishedPosts()).length > 0;
-const nav = [
-  { href: '/#projekty', label: 'Projekty' },
-  { href: '/#ai', label: 'Agenci AI' },
-  { href: '/#umiejetnosci', label: 'Umiejętności' },
-  ...(hasPosts || onBlog ? [{ href: '/blog', label: 'Blog', current: onBlog }] : []),
-  ...(cvReady || onCv ? [{ href: '/cv', label: 'CV', current: onCv }] : []),
-  { href: '/#kontakt', label: 'Kontakt' },
-];
 ---
 
 <!doctype html>
@@ -107,7 +98,9 @@ const nav = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="alternate" type="application/rss+xml" title={`Blog, ${profile.fullName}`} href="/rss.xml" />
+    {hasPosts && (
+      <link rel="alternate" type="application/rss+xml" title={`Blog, ${profile.fullName}`} href="/rss.xml" />
+    )}
 
     <link rel="preload" href={anybodyLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={anybodyLatinExt} as="font" type="font/woff2" crossorigin />
@@ -118,17 +111,17 @@ const nav = [
   </head>
   <body>
     <a class="skip" href="#tresc">Przejdź do treści</a>
-    <header class="wrap site-head" id="top">
-      <a class="home" href="/">{profile.fullName}</a>
-      <nav aria-label="Główna">
-        {nav.map((item) => (
-          <a href={item.href} aria-current={item.current ? 'page' : undefined}>
-            {item.label}
-          </a>
-        ))}
-      </nav>
-    </header>
     <main id="tresc">
+      {!ownHeader && (
+        <div class="sheet masthead">
+          <SiteHeader />
+          {Astro.slots.has('masthead') && (
+            <div class="wrap masthead-inner">
+              <slot name="masthead" />
+            </div>
+          )}
+        </div>
+      )}
       <slot />
     </main>
     <footer class="wrap site-foot">
@@ -136,62 +129,35 @@ const nav = [
       <p class="foot-links">
         <a href={profile.github} rel="me">GitHub</a>
         <a href={profile.linkedin} rel="me">LinkedIn</a>
-        <a href="/rss.xml">RSS</a>
+        {hasPosts && <a href="/rss.xml">RSS</a>}
       </p>
     </footer>
   </body>
 </html>
 
 <style>
-  .site-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0 2rem;
-    padding-block: 0.5rem;
-  }
-  .home {
-    font-family: var(--display);
-    font-weight: 800;
-    font-stretch: 115%;
-    font-size: 1.15rem;
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.75rem;
+  /* Podstrony zaczynają się kobaltowym arkuszem, jak strona główna: nagłówek i tytuł strony w środku. */
+  .masthead {
+    --ink: #f4f6ff;
+    --ink-soft: #c9d0ff;
+    --cobalt: #f4f6ff;
+    --mark-front: var(--brand-snow);
+    --mark-letter: var(--brand-cobalt);
+    margin-top: var(--sheet-gap);
+    background: var(--brand-cobalt);
     color: var(--ink);
-    text-decoration: none;
   }
-  nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.25rem;
-    font-family: var(--display);
-    font-size: 1rem;
-    font-stretch: 90%;
+  .masthead :focus-visible {
+    outline-color: var(--ink);
   }
-  /* Cel dotyku ma co najmniej 44 px wysokości; kreska aktywnego linku leży tuż pod napisem. */
-  nav a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.75rem;
-    color: var(--ink);
-    text-decoration: none;
-    background: linear-gradient(transparent, transparent) no-repeat 0 calc(50% + 0.85em) / 100% 2px;
+  .masthead-inner {
+    padding-block: clamp(1.5rem, 6vh, 4rem) clamp(2rem, 6vh, 3.5rem);
   }
-  nav a:hover,
-  nav a[aria-current='page'] {
-    background-image: linear-gradient(var(--cobalt), var(--cobalt));
-  }
-  @media (max-width: 30rem) {
-    nav {
-      gap: 0 0.8rem;
-      font-stretch: 78%;
-    }
-  }
+
   .site-foot {
     display: flex;
     flex-wrap: wrap;
+    align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
     padding-block: 3rem 2.5rem;
@@ -201,6 +167,8 @@ const nav = [
   .foot-links {
     display: flex;
     gap: 1.25rem;
+    font-family: var(--display);
+    font-weight: 600;
   }
   .foot-links a {
     display: inline-flex;

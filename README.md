@@ -15,6 +15,21 @@ npm run images   # renderuje public/og.png i apple-touch-icon.png (wymaga Chrome
 - **Blog:** plik `.md` w `src/content/blog/` = wpis (wzór: `jak-pisac-wpisy.md`, ma `draft: true`). Wpisy trafiają do `/rss.xml` i sitemapy.
 - **CV:** uzupełnij `src/data/cv.ts` (doświadczenie, edukacja, opcjonalnie PDF w `public/`). Dopóki jest puste, `/cv` pokazuje komunikat i ma `noindex`.
   Gdy CV będzie gotowe, usuń filtr `/cv` z `astro.config.mjs`, żeby trafiło do sitemapy.
+- **Menu i stopka:** „Blog” i RSS pokazują się dopiero po pierwszym opublikowanym wpisie, a „CV” dopiero, gdy `cv.ts` ma treść.
+- **Typografia:** `src/middleware.ts` przy budowaniu wstawia twardą spację po jednoliterowych słowach (a, i, o, u, w, z), więc nie zostają na końcu wiersza. W tekstach nie trzeba wpisywać `&nbsp;`.
+
+## Logo
+
+Znak to dwa arkusze z literą D (jak stos sekcji na stronie głównej), logotyp to „Damian / Ułaś” z soczewką z hero.
+Oba są zbudowane z konturów kroju Anybody przez `scripts/brand/logo.py` (wymaga `pip install fonttools brotli`):
+
+```bash
+python scripts/brand/logo.py   # public/favicon.svg, public/brand/*.svg, src/data/brand.ts
+npm run images                 # potem odśwież og.png i apple-touch-icon.png
+```
+
+Pliki do użycia poza stroną (GitHub, CV, prezentacje) leżą w `public/brand/`: znak w kolorze, odwrócony (na kobalt),
+jednokolorowy, logotyp z soczewką (granat i biały) oraz znak z napisem.
 
 ## Publikacja
 

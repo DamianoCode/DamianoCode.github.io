@@ -6,22 +6,25 @@
   @font-face { font-family: A; src: url(../node_modules/@fontsource-variable/anybody/files/anybody-latin-standard-normal.woff2); font-weight: 100 900; font-stretch: 50% 150%; }
   @font-face { font-family: A; src: url(../node_modules/@fontsource-variable/anybody/files/anybody-latin-ext-standard-normal.woff2); font-weight: 100 900; font-stretch: 50% 150%; unicode-range: U+0100-024F; }
   html, body { margin: 0; }
-  body { width: 1200px; height: 630px; background: #dce2e8; color: #16223a; font-family: A; overflow: hidden; }
-  .og { position: relative; width: 1200px; height: 630px; box-sizing: border-box; padding: 56px 64px; display: grid; grid-template-rows: 1fr 1fr auto; }
-  .line { display: flex; align-items: flex-end; font-size: 250px; line-height: 0.8; white-space: nowrap; }
+  body { width: 1200px; height: 630px; background: #dce2e8; font-family: A; overflow: hidden; }
+  /* Obrazek udostępniania powtarza hero: kobaltowy arkusz, znak w nagłówku i logotyp z soczewką (osie jak w scripts/brand/logo.py). */
+  .sheet { position: absolute; inset: 14px; border-radius: 36px; background: #2f45e0; color: #f4f6ff; box-sizing: border-box; padding: 34px 52px 40px; display: grid; grid-template-rows: auto 1fr 1fr auto; }
+  .head { display: flex; justify-content: space-between; align-items: center; font-size: 26px; font-variation-settings: 'wdth' 115, 'wght' 800; }
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand img { width: 52px; height: 52px; }
+  .head span:last-child { font-variation-settings: 'wdth' 90, 'wght' 450; color: #c9d0ff; }
+  .line { display: flex; align-items: flex-end; font-size: 215px; line-height: 0.8; white-space: nowrap; }
   .end { justify-content: flex-end; }
   .line span { display: inline-block; }
-  .foot { display: flex; justify-content: space-between; align-items: baseline; border-top: 3px solid #16223a; margin-top: 28px; padding-top: 18px; font-size: 30px; white-space: nowrap; font-variation-settings: 'wdth' 115, 'wght' 700; }
-  .foot span:last-child { font-variation-settings: 'wdth' 90, 'wght' 450; color: #4e5b72; }
-  .icon { width: 180px; height: 180px; background: #16223a; color: #dce2e8; display: grid; place-items: center; font-size: 132px; line-height: 1; }
-  .icon span { font-variation-settings: 'wdth' 60, 'wght' 800; }
+  .foot { margin-top: 26px; padding-top: 18px; border-top: 2px solid rgb(244 246 255 / 0.35); font-size: 28px; font-variation-settings: 'wdth' 112, 'wght' 700; }
 </style>
 </head>
 <body>
-<div class="og" id="og">
-  <div class="line"><span style="font-variation-settings:'wdth' 52,'wght' 300">D</span><span style="font-variation-settings:'wdth' 70,'wght' 380">a</span><span style="font-variation-settings:'wdth' 120,'wght' 700">m</span><span style="font-variation-settings:'wdth' 150,'wght' 860">i</span><span style="font-variation-settings:'wdth' 118,'wght' 690">a</span><span style="font-variation-settings:'wdth' 68,'wght' 370">n</span></div>
-  <div class="line end"><span style="font-variation-settings:'wdth' 60,'wght' 330">U</span><span style="font-variation-settings:'wdth' 96,'wght' 560">ł</span><span style="font-variation-settings:'wdth' 150,'wght' 860">a</span><span style="font-variation-settings:'wdth' 110,'wght' 650">ś</span></div>
-  <div class="foot"><span>Fullstack developer i agenci AI</span><span>Next.js, TypeScript, Claude Code</span></div>
+<div class="sheet">
+  <div class="head"><span class="brand"><img src="../public/brand/mark-inverse.svg" alt="" />Damian Ułaś</span><span>Next.js, TypeScript, Claude Code</span></div>
+  <div class="line"><span style="font-variation-settings:'wdth' 78,'wght' 620">D</span><span style="font-variation-settings:'wdth' 86,'wght' 660">a</span><span style="font-variation-settings:'wdth' 124,'wght' 780">m</span><span style="font-variation-settings:'wdth' 150,'wght' 860">i</span><span style="font-variation-settings:'wdth' 122,'wght' 770">a</span><span style="font-variation-settings:'wdth' 84,'wght' 650">n</span></div>
+  <div class="line end"><span style="font-variation-settings:'wdth' 80,'wght' 640">U</span><span style="font-variation-settings:'wdth' 104,'wght' 720">ł</span><span style="font-variation-settings:'wdth' 150,'wght' 860">a</span><span style="font-variation-settings:'wdth' 116,'wght' 760">ś</span></div>
+  <div class="foot">Fullstack developer. Piszę kod razem z agentami AI.</div>
 </div>
 </body>
 </html>

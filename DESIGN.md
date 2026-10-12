@@ -201,7 +201,7 @@ Depth is physical: sheets lie on top of each other. Shadows are soft and directi
 
 ## Shapes
 
-One family of soft rectangles, scaled by size: sheets and cards 1.5rem (2rem from 64rem), bento tiles 1.25rem, screenshots 0.75rem, matrix bars 0.4rem, tiny legend swatches 0.2rem, and everything interactive and small (buttons, chips, hero metadata) a full pill. Phones are drawn as real devices with a thick near-black bezel. Line drawings in interest tiles use a 0.9 stroke with round caps and sit under the text; most bleed off the tile edge as a fragment, but the gamepad is drawn whole (grips, triggers, d-pad, sticks, buttons) and sits inside its corner, because a cropped pad stops reading as a pad. Diagrams sit on a "plate": a faint 0.75rem technical grid with a hairline border, all derived from `currentColor`.
+One family of soft rectangles, scaled by size: sheets and cards 1.5rem (2rem from 64rem), bento tiles 1.25rem, screenshots 0.75rem, matrix bars 0.4rem, tiny legend swatches 0.2rem, and everything interactive and small (buttons, chips, hero metadata) a full pill. Phones are drawn as real devices with a thick near-black bezel. Line drawings in interest tiles use a 0.9 stroke with round caps and sit under the text; most bleed off the tile edge as a fragment, but the gamepad is drawn whole (grips, d-pad, sticks, buttons), tilted slightly in the bottom-right corner beside the text, because a cropped pad stops reading as a pad. Diagrams sit on a "plate": a faint 0.75rem technical grid with a hairline border, all derived from `currentColor`.
 
 **The Pill Means Press Rule.** Full pill shape is reserved for small interactive or metadata elements; large surfaces never go pill, and buttons never go square.
 

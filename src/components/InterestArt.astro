@@ -2,8 +2,7 @@
 import type { InterestId } from '../data/profile';
 
 /**
- * Rysunek w rogu kafla „Po godzinach”, cienką kreską: zwykle fragment przedmiotu wychodzący poza krawędź,
- * a pad do gier w całości, bo bez chwytów nie wygląda jak pad.
+ * Rysunek w rogu kafla „Po godzinach”: fragment przedmiotu wychodzący poza krawędź, cienką kreską.
  * Elementy z `pathLength="1"` rysują się przy wjeździe kafla na ekran (style w Interests.astro).
  */
 interface Props {
@@ -69,30 +68,23 @@ const burst = Array.from({ length: 24 }, (_, i) => polar(50, 140, i % 2 ? 19 : 3
 )}
 
 {id === 'gry' && (
-  <svg class="art art-gry" viewBox="0 0 240 170" aria-hidden="true">
-    <!-- Cały pad: korpus z chwytami, spusty, krzyżak, dwie gałki i cztery przyciski. -->
+  <svg class="art art-gry" viewBox="0 0 260 170" aria-hidden="true">
     <path
       data-draw
       pathLength="1"
-      d="M78 36H162C190 36 206 46 214 68L232 126C238 148 228 162 212 162C198 162 190 152 182 138L172 120H68L58 138C50 152 42 162 28 162C12 162 2 148 8 126L26 68C34 46 50 36 78 36Z"
+      d="M70 30H190C222 30 240 46 246 76L256 128C260 150 248 166 230 166C216 166 206 156 198 140L188 120H72L62 140C54 156 44 166 30 166C12 166 0 150 4 128L14 76C20 46 38 30 70 30Z"
     />
-    <path data-draw pathLength="1" d="M42 38C50 26 64 20 84 22" />
-    <path data-draw pathLength="1" d="M198 38C190 26 176 20 156 22" />
-    <path
-      data-draw
-      pathLength="1"
-      d="M60 60h12v10h10v12h-10v10h-12v-10h-10v-12h10z"
-      class="press"
-    />
-    <circle data-draw pathLength="1" cx="96" cy="100" r="12" />
-    <circle cx="96" cy="100" r="5" />
-    <circle data-draw pathLength="1" cx="144" cy="100" r="12" />
-    <circle cx="144" cy="100" r="5" />
-    <path d="M106 66h8M126 66h8" />
-    <circle class="press" style="--i: 1" cx="174" cy="62" r="7" />
-    <circle class="press" style="--i: 2" cx="188" cy="76" r="7" />
-    <circle class="press" style="--i: 3" cx="174" cy="90" r="7" />
-    <circle class="press" style="--i: 4" cx="160" cy="76" r="7" />
+    <path class="press" d="M64 62h12v12h12v12h-12v12h-12v-12h-12v-12h12z" />
+    <circle class="press" style="--i: 1" cx="190" cy="64" r="7" />
+    <circle class="press" style="--i: 2" cx="206" cy="80" r="7" />
+    <circle class="press" style="--i: 3" cx="190" cy="96" r="7" />
+    <circle class="press" style="--i: 4" cx="174" cy="80" r="7" />
+    <rect x="110" y="60" width="14" height="6" rx="3" />
+    <rect x="136" y="60" width="14" height="6" rx="3" />
+    <circle cx="100" cy="104" r="12" />
+    <circle cx="100" cy="104" r="5" />
+    <circle cx="160" cy="104" r="12" />
+    <circle cx="160" cy="104" r="5" />
   </svg>
 )}
 

@@ -1,0 +1,84 @@
+---
+import BrandMark from './BrandMark.astro';
+import { cvReady } from '../data/cv';
+import { profile } from '../data/profile';
+import { getPublishedPosts } from '../lib/posts';
+
+/**
+ * Nagłówek strony. Zwykle renderuje go Base; strona główna wstawia go do arkusza hero,
+ * żeby poruszał się razem z nim.
+ */
+const path = Astro.url.pathname;
+const hasPosts = (await getPublishedPosts()).length > 0;
+
+// Blog i CV trafiają do menu dopiero wtedy, gdy mają treść: link do pustej strony to ślepy zaułek.
+const nav = [
+  { href: '/#projekty', label: 'Projekty' },
+  { href: '/#ai', label: 'Agenci AI' },
+  { href: '/#umiejetnosci', label: 'Umiejętności' },
+  { href: '/blog', label: 'Blog', current: path.startsWith('/blog'), hidden: !hasPosts },
+  { href: '/cv', label: 'CV', current: path.startsWith('/cv'), hidden: !cvReady },
+  { href: '/#kontakt', label: 'Kontakt' },
+].filter((item) => !item.hidden);
+---
+
+<header class="wrap site-head" id="top">
+  <a class="home" href="/"><BrandMark />{profile.fullName}</a>
+  <nav aria-label="Główna">
+    {nav.map((item) => (
+      <a href={item.href} aria-current={item.current ? 'page' : undefined}>
+        {item.label}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  .site-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 2rem;
+    padding-block: 0.5rem;
+  }
+  .home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--display);
+    font-weight: 800;
+    font-stretch: 115%;
+    font-size: 1.15rem;
+    min-height: 2.75rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    font-family: var(--display);
+    font-size: 1rem;
+    font-stretch: 90%;
+  }
+  /* Cel dotyku ma co najmniej 44 px wysokości; kreska aktywnego linku leży tuż pod napisem. */
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--ink);
+    text-decoration: none;
+    background: linear-gradient(transparent, transparent) no-repeat 0 calc(50% + 0.85em) / 100% 2px;
+  }
+  nav a:hover,
+  nav a[aria-current='page'] {
+    background-image: linear-gradient(var(--cobalt), var(--cobalt));
+  }
+  @media (max-width: 30rem) {
+    nav {
+      gap: 0 0.8rem;
+      font-stretch: 78%;
+    }
+  }
+</style>

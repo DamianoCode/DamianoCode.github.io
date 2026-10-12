@@ -43,8 +43,8 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
   </div>
 
   <!--
-    Każdy projekt to karta w barwach własnego produktu. Na dużych ekranach karty przyklejają się do góry
-    i nachodzą na siebie przy przewijaniu; na telefonie leżą jedna pod drugą.
+    Każdy projekt to karta w barwach własnego produktu. Przy przewijaniu karty przyklejają się i następna
+    nasuwa się na poprzednią: na dużych ekranach u góry, na telefonie (karta wyższa niż ekran) dolną krawędzią.
   -->
   <div class="cases">
     {cases.map(({ project: p, i, flip }) => {
@@ -122,7 +122,6 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
                 ))}
               </p>
             )}
-            {p.linksNote && <p class="case-links links-note">{p.linksNote}</p>}
           </div>
         </article>
       );
@@ -168,6 +167,22 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     </details>
   </div>
 </section>
+
+<script>
+  // Na telefonie i w niskim oknie karta jest wyższa niż ekran, więc przykleja się dopiero, gdy jej dolna krawędź
+  // dojdzie do dołu ekranu. CSS liczy to z wysokości karty, którą podaje tu skrypt; bez skryptu karty leżą
+  // jedna pod drugą.
+  const cases = document.querySelector<HTMLElement>('.cases');
+  if (cases) {
+    const heights = new ResizeObserver((entries) => {
+      for (const { target } of entries) {
+        (target as HTMLElement).style.setProperty('--h', `${(target as HTMLElement).offsetHeight}px`);
+      }
+    });
+    cases.querySelectorAll<HTMLElement>('.case').forEach((card) => heights.observe(card));
+    cases.classList.add('is-stacked');
+  }
+</script>
 
 <style>
   /*
@@ -382,12 +397,24 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     display: grid;
     gap: 0.45rem;
   }
+  /* Wąska karta: opis stanu pod etykietą. Szersza: w jednym wierszu. */
   .states li {
     display: grid;
-    grid-template-columns: 0.8rem auto 1fr;
+    grid-template-columns: 0.8rem 1fr;
     align-items: baseline;
     gap: 0 0.7rem;
     color: var(--soft);
+  }
+  .states li > span:last-child {
+    grid-column: 2;
+  }
+  @media (min-width: 30rem) {
+    .states li {
+      grid-template-columns: 0.8rem auto 1fr;
+    }
+    .states li > span:last-child {
+      grid-column: auto;
+    }
   }
   .states b {
     font-family: var(--display);
@@ -443,6 +470,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     padding: 0.6rem 1.15rem;
     border-radius: 999px;
     text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
   }
   .case-links a.primary:hover {
     background: var(--accent);
@@ -499,9 +527,6 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
   }
   .minor-links {
     margin-top: 1rem;
-  }
-  .links-note {
-    color: var(--soft);
   }
   .archive {
     margin-top: 2.5rem;
@@ -672,9 +697,20 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     .rig-widget :global(.w-bar) { left: 32%; bottom: 0; width: 66%; }
   }
 
-  /* Stos kart: tylko gdy karta mieści się w wysokości ekranu. Próg 37.5rem (600 px) obejmuje typowy laptop
-     z paskami przeglądarki; karta i tak dopasowuje wysokość do ekranu. */
-  @media (min-width: 64rem) and (min-height: 37.5rem) {
+  /* Stos kart na telefonie i w niskim oknie: karta przykleja się dolną krawędzią do dołu ekranu
+     (albo górną, jeśli jest niższa niż ekran), a następna wjeżdża na nią. */
+  @media not ((min-width: 64rem) and (min-height: 44rem)) {
+    .cases:global(.is-stacked) {
+      gap: 2rem;
+    }
+    .cases:global(.is-stacked) .case {
+      position: sticky;
+      top: min(calc(0.5rem + var(--i) * 0.5rem), calc(100svh - var(--h, 100svh) - 0.5rem));
+    }
+  }
+
+  /* Stos kart na dużym ekranie: karty mają wysokość ekranu i przyklejają się do góry. */
+  @media (min-width: 64rem) and (min-height: 44rem) {
     .cases {
       gap: 14vh;
     }
@@ -687,9 +723,9 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
       aspect-ratio: auto !important;
     }
   }
-  /* Niski ekran (np. laptop z paskami przeglądarki): ta sama karta w gęstszej wersji, żeby tekst zmieścił się
-     w wysokości ekranu. Dłuższy opis chowa się do jednego akapitu skrótu, a mniejsza nazwa zostawia miejsce scenie. */
-  @media (min-width: 64rem) and (min-height: 37.5rem) and (max-height: 49.99rem) {
+  /* Karta wysokości ekranu w niższym oknie (704–800 px): gęstsza wersja, żeby tekst nie wchodził na nagłówek.
+     Dłuższy opis się chowa, a mniejsza nazwa zostawia miejsce scenie. */
+  @media (min-width: 64rem) and (min-height: 44rem) and (max-height: 49.99rem) {
     .case {
       --pad: clamp(1.25rem, 2.5vw, 2.5rem);
       gap: 1rem 3rem;
