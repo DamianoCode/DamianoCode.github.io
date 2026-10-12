@@ -1,0 +1,112 @@
+---
+import { mailto, profile, subjects } from '../../data/profile';
+---
+
+<!--
+  Przystanek zaraz po projektach: co z tych dowodów wynika dla odwiedzającego. Na pierwszym planie klient
+  z pomysłem na aplikację, bo projekty są tym, czego szukam; obok, mniejszy, rekruter szukający kogoś do zespołu.
+  Klient, który chce wdrożyć agentów AI, ma swój przystanek w następnej sekcji.
+-->
+<section class="sheet collab" id="wspolpraca" aria-labelledby="wspolpraca-h">
+  <div class="wrap collab-inner">
+    <div class="pitch">
+      <h2 id="wspolpraca-h" class="pitch-title">Masz pomysł na aplikację?</h2>
+      <p class="pitch-text">
+        Zbuduję ją od bazy danych po interfejs: Next.js, TypeScript i PostgreSQL, z wersją na telefon jako PWA.
+        Tak powstało PlaceMates, które działa na placemates.pl.
+      </p>
+      <p class="actions pitch-actions">
+        <a class="primary" href={mailto(subjects.project)}>Napisz o projekcie</a>
+        <a href="#placemates">Zobacz PlaceMates</a>
+      </p>
+    </div>
+
+    <div class="team">
+      <h3 class="team-title">Szukasz developera do zespołu?</h3>
+      <p>B2B albo etat, {profile.remote}.</p>
+      <p class="actions team-actions">
+        <a href="/cv">Zobacz CV</a>
+        <a href={mailto(subjects.job)}>Napisz w sprawie pracy</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Arkusz w głębszym odcieniu papieru: odcina się od tła jak pozostałe arkusze, ale nie konkuruje
+     z kobaltowym hero i Kontaktem, które zamykają stronę z obu stron. */
+  .collab {
+    margin-top: clamp(4rem, 12vh, 8rem);
+    /* Następny arkusz (Agenci AI) leży tuż obok, jak kolejna kartka na stosie. */
+    margin-bottom: var(--sheet-gap);
+    background: var(--paper-deep);
+    color: var(--ink);
+  }
+  .collab-inner {
+    display: grid;
+    gap: 2.5rem 4rem;
+    padding-block: clamp(2.5rem, 7vh, 5rem);
+  }
+  .pitch {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+  .pitch-title {
+    font-size: var(--step-4);
+    font-weight: 800;
+    font-stretch: 115%;
+    line-height: 0.98;
+  }
+  .pitch-text {
+    font-size: var(--step-1);
+    line-height: 1.38;
+    max-width: 30em;
+  }
+  .actions a {
+    color: var(--ink);
+    text-decoration-color: var(--cobalt);
+    text-decoration-thickness: 2px;
+  }
+  .actions a.primary {
+    padding: 0.6rem 1.15rem;
+    border-radius: 999px;
+    background: var(--cobalt);
+    color: var(--paper);
+    text-decoration: none;
+  }
+  .actions a.primary:hover {
+    background: var(--ink);
+  }
+  .actions a.primary:active {
+    transform: translateY(1px);
+  }
+  .team {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+  .team p:not(.actions) {
+    color: var(--ink-soft);
+  }
+  .team-title {
+    font-size: var(--step-1);
+    font-weight: 700;
+    font-stretch: 112%;
+    line-height: 1.1;
+  }
+  @media (min-width: 60rem) {
+    .collab-inner {
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+      align-items: end;
+    }
+    .team {
+      padding-top: 0;
+      padding-left: 2rem;
+      border-top: 0;
+      border-left: 1px solid var(--rule);
+    }
+  }
+</style>

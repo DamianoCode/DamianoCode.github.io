@@ -1,8 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
+import Collab from '../components/sections/Collab.astro';
 import AiWork from '../components/sections/AiWork.astro';
 import Contact from '../components/sections/Contact.astro';
+import ContactDock from '../components/ContactDock.astro';
 import Interests from '../components/sections/Interests.astro';
 import LatestPosts from '../components/sections/LatestPosts.astro';
 import Projects from '../components/sections/Projects.astro';
@@ -43,9 +45,11 @@ const profilePage = {
 <Base jsonLd={[profilePage, projectList]}>
   <Hero />
   <Projects />
+  <Collab />
   <AiWork />
   <Skills />
   <LatestPosts />
   <Interests />
   <Contact />
+  <ContactDock />
 </Base>

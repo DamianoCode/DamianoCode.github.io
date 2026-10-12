@@ -9,7 +9,20 @@ export const profile = {
   email: 'damianulas@gmail.com',
   github: 'https://github.com/DamianoCode',
   linkedin: 'https://www.linkedin.com/in/damian-ulas/',
+  /** Formy współpracy, pokazywane w hero i w Kontakcie. */
+  availability: 'projekty, B2B albo etat',
+  remote: 'zdalnie',
 };
+
+/** Tematy maili, wspólne dla wszystkich przycisków na stronie: odbiorca od razu wie, w jakiej sprawie piszesz. */
+export const subjects = {
+  job: 'Praca: fullstack developer',
+  project: 'Projekt albo wdrożenie agentów AI',
+  cv: 'Prośba o CV',
+};
+
+export const mailto = (subject?: string) =>
+  `mailto:${profile.email}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`;
 
 export const seo = {
   title: 'Damian Ułaś, fullstack developer: Next.js i agenci AI',

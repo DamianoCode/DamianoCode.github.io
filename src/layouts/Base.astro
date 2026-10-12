@@ -4,7 +4,9 @@ import '@fontsource-variable/literata/opsz.css';
 import '../styles/global.css';
 import anybodyLatin from '@fontsource-variable/anybody/files/anybody-latin-standard-normal.woff2?url';
 import anybodyLatinExt from '@fontsource-variable/anybody/files/anybody-latin-ext-standard-normal.woff2?url';
+import { cvReady } from '../data/cv';
 import { profile, seo } from '../data/profile';
+import { getPublishedPosts } from '../lib/posts';
 
 interface Props {
   title?: string;
@@ -62,12 +64,17 @@ const website = {
   author: { '@id': person['@id'] },
 };
 
+// Blog i CV trafiają do menu dopiero, gdy mają treść: link do pustej strony to ślepa uliczka.
+// Na samej podstronie link zostaje, żeby menu pokazywało, gdzie jesteś.
+const onBlog = path.startsWith('/blog');
+const onCv = path.startsWith('/cv');
+const hasPosts = (await getPublishedPosts()).length > 0;
 const nav = [
   { href: '/#projekty', label: 'Projekty' },
-  { href: '/#ai', label: 'AI' },
+  { href: '/#ai', label: 'Agenci AI' },
   { href: '/#umiejetnosci', label: 'Umiejętności' },
-  { href: '/blog', label: 'Blog', current: path.startsWith('/blog') },
-  { href: '/cv', label: 'CV', current: path.startsWith('/cv') },
+  ...(hasPosts || onBlog ? [{ href: '/blog', label: 'Blog', current: onBlog }] : []),
+  ...(cvReady || onCv ? [{ href: '/cv', label: 'CV', current: onCv }] : []),
   { href: '/#kontakt', label: 'Kontakt' },
 ];
 ---
@@ -111,7 +118,7 @@ const nav = [
   </head>
   <body>
     <a class="skip" href="#tresc">Przejdź do treści</a>
-    <header class="wrap site-head">
+    <header class="wrap site-head" id="top">
       <a class="home" href="/">{profile.fullName}</a>
       <nav aria-label="Główna">
         {nav.map((item) => (
@@ -141,14 +148,17 @@ const nav = [
     flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.5rem 2rem;
-    padding-block: 1.25rem;
+    gap: 0 2rem;
+    padding-block: 0.5rem;
   }
   .home {
     font-family: var(--display);
     font-weight: 800;
     font-stretch: 115%;
     font-size: 1.15rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
     color: var(--ink);
     text-decoration: none;
   }
@@ -160,19 +170,22 @@ const nav = [
     font-size: 1rem;
     font-stretch: 90%;
   }
+  /* Cel dotyku ma co najmniej 44 px wysokości; kreska aktywnego linku leży tuż pod napisem. */
   nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
     color: var(--ink);
     text-decoration: none;
-    padding-block: 0.25rem;
-    border-bottom: 2px solid transparent;
+    background: linear-gradient(transparent, transparent) no-repeat 0 calc(50% + 0.85em) / 100% 2px;
   }
   nav a:hover,
   nav a[aria-current='page'] {
-    border-color: var(--cobalt);
+    background-image: linear-gradient(var(--cobalt), var(--cobalt));
   }
   @media (max-width: 30rem) {
     nav {
-      gap: 0.25rem 0.8rem;
+      gap: 0 0.8rem;
       font-stretch: 78%;
     }
   }
@@ -190,6 +203,8 @@ const nav = [
     gap: 1.25rem;
   }
   .foot-links a {
-    padding-block: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
   }
 </style>

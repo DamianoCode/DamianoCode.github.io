@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import { cv, cvReady } from '../data/cv';
-import { profile } from '../data/profile';
+import { mailto, profile, subjects } from '../data/profile';
+import { projects } from '../data/projects';
 
 const sections = [
   { title: 'Doświadczenie', entries: cv.experience },
@@ -18,16 +19,35 @@ const sections = [
     <h1 class="page-title">CV</h1>
 
     {!cvReady ? (
-      <div class="empty-state">
-        <p>
-          Pełne CV jest w przygotowaniu. Do tego czasu projekty i umiejętności znajdziesz na stronie głównej,
-          a szczegóły doświadczenia podam w mailu.
-        </p>
-        <p class="actions">
-          <a href="/#projekty">Zobacz projekty</a>
-          <a href={`mailto:${profile.email}?subject=CV`}>Poproś o CV</a>
-        </p>
-      </div>
+      <>
+        <div class="empty-state">
+          <p>
+            Pełne CV jest w przygotowaniu. Szczegóły doświadczenia podam w mailu, a poniżej jest skrót tego,
+            co zbudowałem.
+          </p>
+          <p class="actions">
+            <a href={mailto(subjects.cv)}>Poproś o CV</a>
+            <a href="/#projekty">Zobacz projekty</a>
+          </p>
+        </div>
+        {/* Oś czasu z projektów: zanim powstanie CV, strona i tak odpowiada na pytanie „co robił”. */}
+        <section class="cv-section">
+          <h2>Projekty w skrócie</h2>
+          <ol>
+            {projects.map((p) => (
+              <li>
+                <span class="period">{p.year}</span>
+                <div>
+                  <h3><a href={`/#${p.id}`}>{p.name}</a></h3>
+                  <p class="place">{p.kind}{p.status && `, ${p.status}`}</p>
+                  <p>{p.summary}</p>
+                  <p class="stack">{p.stack.join(', ')}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      </>
     ) : (
       <>
         {cv.pdf && (
@@ -58,6 +78,20 @@ const sections = [
 </Base>
 
 <style>
+  .empty-state + .cv-section {
+    margin-top: 4rem;
+  }
+  .cv-section h3 a {
+    color: inherit;
+    text-decoration-color: var(--cobalt);
+  }
+  .stack {
+    margin-top: 0.5rem;
+    font-family: var(--display);
+    font-stretch: 90%;
+    font-size: 1rem;
+    color: var(--ink-soft);
+  }
   .download {
     margin-bottom: 3rem;
   }

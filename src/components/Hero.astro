@@ -33,19 +33,12 @@ const lines = [profile.name, profile.surname];
       <div class="intro">
         <dl class="rail">
           <div>
+            <dt class="visually-hidden">Dostępność</dt>
+            <dd><span class="status-dot" aria-hidden="true"></span>Otwarty: {profile.availability}</dd>
+          </div>
+          <div>
             <dt>Miasto</dt>
-            <dd>{profile.city}</dd>
-          </div>
-          <div>
-            <dt class="visually-hidden">Status</dt>
-            <dd><span class="status-dot" aria-hidden="true"></span>Otwarty na nowe projekty</dd>
-          </div>
-          <div>
-            <dt>Soczewka</dt>
-            <dd class="axes">
-              wdth <span class="axis" data-axis="width">100</span>
-              wght <span class="axis" data-axis="weight">640</span>
-            </dd>
+            <dd>{profile.city}, {profile.remote}</dd>
           </div>
         </dl>
         <div class="intro-text">
@@ -55,7 +48,7 @@ const lines = [profile.name, profile.surname];
           </p>
           <p class="intro-actions">
             <a href="#projekty">Zobacz projekty</a>
-            <a href={`mailto:${profile.email}`}>Napisz do mnie</a>
+            <a href="#kontakt">Napisz do mnie</a>
           </p>
         </div>
       </div>
@@ -68,14 +61,7 @@ const lines = [profile.name, profile.surname];
 
   const root = document.querySelector<HTMLElement>('[data-type]');
   const section = root?.closest('section');
-  const width = document.querySelector<HTMLElement>('[data-axis="width"]');
-  const weight = document.querySelector<HTMLElement>('[data-axis="weight"]');
-  if (root && section) {
-    initTypeLens(root, section, (w, g) => {
-      if (width) width.textContent = String(w);
-      if (weight) weight.textContent = String(g);
-    });
-  }
+  if (root && section) initTypeLens(root, section);
 </script>
 
 <style>
@@ -274,19 +260,6 @@ const lines = [profile.name, profile.surname];
     vertical-align: 0.05em;
     box-shadow: 0 0 0 0 color-mix(in srgb, #5fe3a1 60%, transparent);
   }
-  /* Liczby osi zmieniają się w trakcie ruchu soczewki; stała szerokość cyfr trzyma plakietkę w miejscu. */
-  .axes {
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-  .axis {
-    display: inline-block;
-    min-width: 3ch;
-    margin-right: 0.4rem;
-  }
-  .axis:last-child {
-    margin-right: 0;
-  }
 
   .intro-text {
     display: grid;
@@ -300,6 +273,11 @@ const lines = [profile.name, profile.surname];
     font-family: var(--display);
     font-weight: 600;
     font-size: 1.05rem;
+  }
+  .intro-actions a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
   }
   .intro-actions a:first-child {
     color: var(--sheet-bg);
