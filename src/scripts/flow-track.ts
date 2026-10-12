@@ -1,15 +1,18 @@
 /**
  * Tor kroków Claudiusa w karcie projektu. Zmiana „przechodzi” przez kolejne kroki sama: bieżący krok robi się
  * szeroki i jasny, a jego szyna wypełnia się w rytmie kroku. Po ostatnim kroku chwila przerwy i od nowa.
- * Kursor nad krokiem zatrzymuje przebieg na tym kroku.
+ * Kursor myszy nad krokiem zatrzymuje przebieg na tym kroku; dotyk go nie zatrzymuje, bo na telefonie palec
+ * ląduje na torze przy zwykłym przewijaniu.
  *
  * Działa tylko, gdy tor jest na ekranie. Przy ograniczonym ruchu skrypt nic nie robi: wszystkie kroki są czytelne.
  */
 
 /** Czas jednego kroku; ta sama wartość steruje wypełnieniem szyny w CSS (`--step`). */
 const STEP_MS = 1500;
-/** Przerwa po ostatnim kroku, zanim przebieg zacznie się od nowa. */
+/** Przerwa po ostatnim kroku, zanim szyny się opróżnią. */
 const HOLD_MS = 2800;
+/** Chwila na opróżnienie szyn przed kolejnym przebiegiem; zgrana z przejściem `--drain` w CSS. */
+const DRAIN_MS = 700;
 
 export function initFlowTrack(flow: HTMLElement) {
   const track = flow.querySelector<HTMLElement>('.track');
@@ -21,6 +24,7 @@ export function initFlowTrack(flow: HTMLElement) {
   let timer = 0;
   let visible = false;
   let pinned = false;
+  let started = false;
 
   const set = (index: number) => {
     active = index;
@@ -34,19 +38,20 @@ export function initFlowTrack(flow: HTMLElement) {
     clearTimeout(timer);
     if (!visible || pinned) return;
     const last = active === stations.length - 1;
-    timer = window.setTimeout(
-      () => {
-        set(last ? 0 : active + 1);
-        schedule();
-      },
-      last ? HOLD_MS : STEP_MS,
-    );
+    // Po ostatnim kroku wszystkie szyny wracają razem do zera, zanim zmiana ruszy od pierwszego kroku.
+    const delay = last ? HOLD_MS : active < 0 ? DRAIN_MS : STEP_MS;
+    timer = window.setTimeout(() => {
+      set(last ? -1 : active + 1);
+      schedule();
+    }, delay);
   };
 
   track.style.setProperty('--step', `${STEP_MS}ms`);
+  track.style.setProperty('--drain', `${DRAIN_MS}ms`);
   track.classList.add('is-live');
 
   track.addEventListener('pointerover', (event) => {
+    if (event.pointerType !== 'mouse') return;
     const station = (event.target as HTMLElement).closest<HTMLElement>('[data-station]');
     const index = station ? stations.indexOf(station) : -1;
     if (index < 0 || (pinned && index === active)) return;
@@ -55,7 +60,8 @@ export function initFlowTrack(flow: HTMLElement) {
     track.classList.add('is-pinned');
     set(index);
   });
-  track.addEventListener('pointerleave', () => {
+  track.addEventListener('pointerleave', (event) => {
+    if (event.pointerType !== 'mouse' || !pinned) return;
     pinned = false;
     track.classList.remove('is-pinned');
     schedule();
@@ -64,7 +70,10 @@ export function initFlowTrack(flow: HTMLElement) {
   new IntersectionObserver(
     ([entry]) => {
       visible = entry.isIntersecting;
-      if (visible && active < 0) set(0);
+      if (visible && !started) {
+        started = true;
+        set(0);
+      }
       if (visible) schedule();
       else clearTimeout(timer);
     },
