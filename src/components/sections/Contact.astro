@@ -99,7 +99,8 @@ const [emailUser, emailDomain] = profile.email.split('@');
   .intro {
     margin-top: 1rem;
     color: var(--soft);
-    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+    font-size: var(--lead);
+    line-height: var(--lead-lh);
   }
 
   /* Adres wypełnia szerokość: na telefonie w dwóch liniach (łamanie po „@”), na szerszych ekranach w jednej.
@@ -246,6 +247,8 @@ const [emailUser, emailDomain] = profile.email.split('@');
     color: var(--soft);
   }
   .path-q {
+    hyphens: auto;
+    overflow-wrap: break-word;
     font-weight: 700;
     font-stretch: 112%;
     font-size: var(--step-1);
