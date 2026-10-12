@@ -105,7 +105,7 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
     font-family: var(--display);
     font-weight: 600;
     font-stretch: 85%;
-    font-size: 1rem;
+    font-size: var(--label-l);
   }
   thead a {
     color: var(--ink);
@@ -120,9 +120,12 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
     padding: 1.25rem 0 0.25rem;
     text-align: left;
     font-family: var(--display);
-    font-size: 0.95rem;
+    font-size: var(--label-s);
     font-weight: 600;
-    font-stretch: 85%;
+    font-stretch: 100%;
+    /* Nagłówek grupy różni się od nazw projektów nad kolumnami wersalikami, nie tylko rozmiarem. */
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--ink-soft);
   }
   tbody tr:not(.group):hover {
@@ -168,7 +171,7 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
   .note {
     display: block;
     color: var(--ink-soft);
-    font-size: 0.95rem;
+    font-size: var(--step-small);
   }
 
   .list {
@@ -177,9 +180,12 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
     border-top: 1px solid var(--rule);
   }
   .group-title {
-    font-size: 0.95rem;
+    font-size: var(--label-s);
     font-weight: 600;
-    font-stretch: 85%;
+    font-stretch: 100%;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--ink-soft);
     margin-bottom: 0.25rem;
   }
@@ -198,7 +204,7 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
     margin-top: 0.35rem;
     font-family: var(--display);
     font-stretch: 85%;
-    font-size: 0.95rem;
+    font-size: var(--label);
   }
   .where-item {
     display: inline-flex;

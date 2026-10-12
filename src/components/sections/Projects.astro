@@ -287,7 +287,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
   .case-meta {
     display: grid;
     font-family: var(--display);
-    font-size: 0.95rem;
+    font-size: var(--label);
     font-stretch: 95%;
     color: var(--soft);
   }
@@ -384,13 +384,13 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     align-self: center;
   }
   .summary {
-    font-size: clamp(1.2rem, 2vw, var(--step-1));
-    line-height: 1.38;
+    font-size: var(--lead);
+    line-height: var(--lead-lh);
   }
   .detail {
     margin-top: 1rem;
     color: var(--soft);
-    font-size: 1rem;
+    font-size: var(--step-small);
   }
   .states {
     list-style: none;
@@ -446,7 +446,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     border: 1px solid var(--line);
     border-radius: 999px;
     font-family: var(--display);
-    font-size: 0.85rem;
+    font-size: var(--label-s);
     font-stretch: 92%;
   }
   .case-links {
@@ -490,7 +490,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     scroll-margin-top: 1rem;
   }
   .earlier-title {
-    font-size: var(--step-1);
+    font-size: var(--step-2);
     font-stretch: 110%;
     padding-top: 1.25rem;
     border-top: 2px solid var(--ink);
@@ -515,6 +515,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
   }
   .year {
     font-family: var(--display);
+    font-size: var(--label);
     color: var(--ink-soft);
     font-variant-numeric: tabular-nums;
   }
@@ -525,7 +526,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     margin-top: 1rem;
     font-family: var(--display);
     font-stretch: 90%;
-    font-size: 1rem;
+    font-size: var(--label);
   }
   .minor-links {
     margin-top: 1rem;

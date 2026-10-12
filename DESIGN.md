@@ -55,15 +55,30 @@ typography:
     lineHeight: 1.6
   body-lead:
     fontFamily: "'Literata Variable', Georgia, serif"
-    fontSize: "1.5rem"
+    fontSize: "clamp(1.2rem, 1rem + 1vw, 1.5rem)"
     fontWeight: 400
     lineHeight: 1.38
+  body-small:
+    fontFamily: "'Literata Variable', Georgia, serif"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.6
+  label-small:
+    fontFamily: "'Anybody Variable', 'Arial Narrow', sans-serif"
+    fontSize: "0.85rem"
+    fontWeight: 600
+    lineHeight: 1.3
   label:
     fontFamily: "'Anybody Variable', 'Arial Narrow', sans-serif"
     fontSize: "0.95rem"
     fontWeight: 600
     lineHeight: 1.3
     fontVariation: "'wdth' 90"
+  label-large:
+    fontFamily: "'Anybody Variable', 'Arial Narrow', sans-serif"
+    fontSize: "1.05rem"
+    fontWeight: 600
+    lineHeight: 1.3
 rounded:
   hairline: "2px"
   swatch: "0.2rem"
@@ -176,19 +191,25 @@ A cool drafting-table neutral set (haze paper, harbour ink) with one saturated s
 
 ## Typography
 
-**Display Font:** Anybody Variable (with Arial Narrow, sans-serif)
-**Body Font:** Literata Variable, optical sizing on (with Georgia, serif)
+**Display Font:** Anybody Variable (with Anybody Fallback, Arial Narrow, sans-serif)
+**Body Font:** Literata Variable, optical sizing on (with Literata Fallback, Georgia, serif)
+
+The two fallbacks are local Arial and Georgia with `size-adjust` (108% and 105%, measured on a Polish paragraph), so the swap to the web fonts barely moves a line. Blog posts also load Literata italic; code uses the system monospace (`ui-monospace`, Cascadia Code, SF Mono, Consolas).
 
 **Character:** A wide-ranging, slightly mechanical grotesque that can go from condensed whisper to extended shout, paired with a warm bookish serif that keeps long text calm. The display does the talking, the serif does the explaining.
 
 ### Hierarchy
 - **Display** (300, clamp(4rem, 16vw, 11rem), line-height 0.9, width 150%): subpage titles (Blog, CV). The hero name is its own fitted case: two lines sized by script to fill the sheet, weight 640 at width 100 at rest, ranging 280–860 weight and 50–150 width under the lens.
-- **Kinetic section title** (700, up to 9rem, fitted to the column, width 150%): section headings that animate from width 55% / weight 250 to width 150% / weight 700 as they enter; never wrap.
+- **Kinetic section title** (700, up to 9rem, fitted to the column, width 150%): section headings that animate from width 55% / weight 250 to width 150% / weight 700 as they enter; never wrap. Below 40rem they end at width 110% and grow by the measured ratio (0.725), so a long word like "Umiejętności" stays larger than the card headings under it.
 - **Headline** (300, clamp(2.6rem, 7vw, 3.55rem), width 105% on mobile, 140% from 48rem): static block titles.
 - **Subhead** (700, clamp(1.5rem, 3.2vw, 2.4rem), width 112–115%): bento tile titles, Claudius track step names, the hero role line; 2.4rem is its ceiling everywhere.
 - **Title** (800, up to 6rem, width 112%, letter-spacing −0.01em): product names on case cards; the hero role line uses 700 at width 112%.
-- **Body** (400, 1.125rem, line-height 1.6, max 36em): all reading text, Literata. **Lead** (1.5rem, line-height 1.38) for card summaries and the AI section lead.
-- **Label** (600, 0.85–1.05rem, width 85–95%): nav, chips, metadata, buttons, table headers, all in Anybody.
+- **Body** (400, 1.125rem, line-height 1.6, max 33em, about 68 characters): all reading text, Literata. **Small** (`--step-small`, 1rem) for secondary reading text: card details, AI proof lines, matrix notes, Claudius step descriptions.
+- **Lead** (`--lead`, clamp(1.2rem, 1rem + 1vw, 1.5rem), line-height 1.38): the first sentence under a title, one role everywhere: AI section lead, card summaries, the collaboration pitch, the Contact intro.
+- **Label**, Anybody only, three steps that never mix within one role:
+  - `--label-s` 0.85rem: chips, footer, group headers in the skills matrix (those in capitals, tracking 0.08em, so they read apart from the project names above the columns).
+  - `--label` 0.95rem, width 85–95%: metadata (case meta, hero rail, years, stacks, CV period and place, blog dates).
+  - `--label-l` 1.05rem, weight 600: actions and navigation (nav, `.actions`, hero CTA, dock, AI CTA, outcome lines, matrix column heads).
 
 Type scale is a perfect fourth (1.333) from 18 px: 0.8125, 1.125, 1.5, 2, ~2.67, ~3.55rem.
 
@@ -285,7 +306,7 @@ A themed tile with a fitted condensed word (width 75%) that widens to 150% on ho
 ### Do:
 - **Do** give every new product its own sheet colored from its own screenshots, and add its accent to the skills matrix tone map.
 - **Do** put large surfaces on rounded sheets (1.5rem, 2rem from 64rem) that reach to the sheet gap from the window edge while their content stays on the title line.
-- **Do** use Anybody's width axis for hierarchy and meaningful motion; keep Literata for reading text at 1.125rem / 1.6, max 36em.
+- **Do** use Anybody's width axis for hierarchy and meaningful motion; keep Literata for reading text at 1.125rem / 1.6, max 33em, and take sizes from the role tokens (`--lead`, `--step-small`, `--label-s`, `--label`, `--label-l`) instead of new literal values.
 - **Do** drive motion with scroll timelines in CSS, animate only transform and opacity on heavy paths, and give every effect a `prefers-reduced-motion` fallback and a readable no-script state.
 - **Do** show real screenshots in device frames.
 - **Do** keep colored sheets identical in light and dark mode.

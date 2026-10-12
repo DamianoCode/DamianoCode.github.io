@@ -59,8 +59,8 @@ import { mailto, profile, subjects } from '../../data/profile';
     line-height: 0.98;
   }
   .pitch-text {
-    font-size: var(--step-1);
-    line-height: 1.38;
+    font-size: var(--lead);
+    line-height: var(--lead-lh);
     max-width: 30em;
   }
   .actions a {
@@ -96,6 +96,8 @@ import { mailto, profile, subjects } from '../../data/profile';
     font-weight: 700;
     font-stretch: 112%;
     line-height: 1.1;
+    hyphens: auto;
+    overflow-wrap: break-word;
   }
   @media (min-width: 60rem) {
     .collab-inner {
