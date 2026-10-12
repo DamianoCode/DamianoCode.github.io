@@ -3,9 +3,12 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base title="Nie ma takiej strony" description="Ta strona nie istnieje albo została przeniesiona." noindex>
-  <h1 slot="masthead">404</h1>
+  <!-- Środkowe zero wysuwa się ze stosu jak arkusz, którego tu brakuje. -->
+  <h1 slot="masthead" aria-label="404">
+    <span aria-hidden="true">4</span><span class="slipped" aria-hidden="true">0</span><span aria-hidden="true">4</span>
+  </h1>
   <section class="wrap page">
-    <p>Pod tym adresem nic nie ma. Sprawdź adres albo wróć na stronę główną.</p>
+    <p>Tego arkusza nie ma w stosie. Sprawdź adres albo wróć na stronę główną.</p>
     <a href="/">Strona główna</a>
   </section>
 </Base>
@@ -17,10 +20,30 @@ import Base from '../layouts/Base.astro';
     justify-items: start;
   }
   h1 {
+    display: flex;
+    gap: 0.05em;
     font-size: clamp(6rem, 30vw, 20rem);
     font-stretch: 50%;
     font-weight: 800;
     line-height: 0.8;
+  }
+  h1 span {
+    display: block;
+  }
+  .slipped {
+    transform-origin: 50% 100%;
+    margin-inline: 0.04em;
+    transform: translateY(0.07em) rotate(-6deg);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .slipped {
+      animation: slip 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+    }
+  }
+  @keyframes slip {
+    from {
+      transform: none;
+    }
   }
   a {
     font-family: var(--display);
