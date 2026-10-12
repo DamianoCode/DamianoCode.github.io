@@ -243,6 +243,11 @@ const [emailUser, emailDomain] = profile.email.split('@');
     align-content: start;
     justify-items: start;
   }
+  /* Ścieżki dzieli kreska jak w arkuszu Współpraca: na telefonie pozioma, obok siebie pionowa. */
+  .paths li + li {
+    padding-top: 1.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+  }
   .paths p {
     color: var(--soft);
   }
@@ -274,9 +279,23 @@ const [emailUser, emailDomain] = profile.email.split('@');
   .paths a:active {
     transform: translateY(1px);
   }
+  /* Obok siebie ścieżki dzielą wiersze siatki: pytanie, opis i przycisk stoją na tej samej wysokości,
+     nawet gdy jedno pytanie zajmuje dwa wiersze, a drugie jeden. */
   @media (min-width: 48rem) {
     .paths {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(3, auto);
+      row-gap: 0.75rem;
+    }
+    .paths li {
+      grid-row: span 3;
+      grid-template-rows: subgrid;
+    }
+    .paths li + li {
+      padding-top: 0;
+      padding-left: 2rem;
+      border-top: 0;
+      border-left: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
     }
   }
 
