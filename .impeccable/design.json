@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-12T09:47:58.371Z",
+  "generatedAt": "2026-10-12T11:46:40.727Z",
   "title": "Design System: Damian Ułaś — portfolio",
   "extensions": {
     "colorMeta": {
@@ -343,6 +343,36 @@
         "name": "status-pulse",
         "value": "2.4s ease-out infinite",
         "purpose": "Availability dot in the hero."
+      },
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Confident arrivals: active Claudius step, copy tick, brand mark settle, 404 slip."
+      },
+      {
+        "name": "flow-crossfade",
+        "value": "opacity + scaleX 0.5s ease-out-expo (in), 0.3s ease-out-soft (out); narrow cut to scaleX 2.6, wide cut from 0.385",
+        "purpose": "Claudius step emphasis without per-frame font interpolation."
+      },
+      {
+        "name": "flow-drain",
+        "value": "transform 0.7s cubic-bezier(0.65, 0, 0.35, 1)",
+        "purpose": "All Claudius rails emptying upward before the next pass; the active rail fills linearly over 1.5s."
+      },
+      {
+        "name": "anchor-glide",
+        "value": "min(1100ms, 320ms + 180ms * sqrt(distance / viewport)), ease-in-out cubic, travel capped at 4 viewports",
+        "purpose": "In-page anchor scrolling; interrupted by wheel, touch or key."
+      },
+      {
+        "name": "copier-sweep",
+        "value": "translateX(-70%) to translateX(70%), 750ms cubic-bezier(0.45, 0, 0.2, 1)",
+        "purpose": "Light bar across the email after a successful copy."
+      },
+      {
+        "name": "sheet-slip",
+        "value": "1.1s ease-out-expo, 0.35s delay, to rotate(-6deg) translateY(0.07em)",
+        "purpose": "The 404 zero slipping out of the stack."
       }
     ],
     "breakpoints": [
@@ -433,6 +463,29 @@
       "description": "Two stacked sheets with a D: the sheet stack in one glyph, shown on paper and inverted on a cobalt sheet.",
       "html": "<div class=\"ds-marks\"><span class=\"ds-mark-paper\"><svg class=\"ds-mark\" viewBox=\"0 0 100 100\"><rect class=\"b\" x=\"8\" y=\"0\" width=\"84\" height=\"80\" rx=\"18\"/><rect class=\"f\" x=\"0\" y=\"12.5\" width=\"100\" height=\"87.5\" rx=\"21\"/><path class=\"l\" d=\"M24.4 78.5H54.5Q65.2 78.5 70.4 73.4Q75.6 68.2 75.6 56.2Q75.6 44.2 70.5 39.1Q65.3 34 54.5 34H24.4ZM40.1 68.1V44.4H50.6Q55.3 44.4 57.6 46.4Q59.9 48.4 59.9 56.2Q59.9 64 57.6 66.1Q55.3 68.1 50.6 68.1Z\"/></svg>Damian Ułaś</span><span class=\"ds-mark-sheet\"><svg class=\"ds-mark\" viewBox=\"0 0 100 100\"><rect class=\"b\" x=\"8\" y=\"0\" width=\"84\" height=\"80\" rx=\"18\"/><rect class=\"f\" x=\"0\" y=\"12.5\" width=\"100\" height=\"87.5\" rx=\"21\"/><path class=\"l\" d=\"M24.4 78.5H54.5Q65.2 78.5 70.4 73.4Q75.6 68.2 75.6 56.2Q75.6 44.2 70.5 39.1Q65.3 34 54.5 34H24.4ZM40.1 68.1V44.4H50.6Q55.3 44.4 57.6 46.4Q59.9 48.4 59.9 56.2Q59.9 64 57.6 66.1Q55.3 68.1 50.6 68.1Z\"/></svg>Damian Ułaś</span></div>",
       "css": ".ds-marks{display:flex;flex-wrap:wrap;gap:1rem}.ds-marks>span{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 1.25rem;border-radius:1.5rem;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-weight:800;font-stretch:115%;font-size:1.15rem}.ds-mark{width:2rem;height:2rem;overflow:visible}.ds-mark-paper{background:#dce2e8;color:#16223a}.ds-mark-paper .b{fill:#8d9cff}.ds-mark-paper .f{fill:#2f45e0}.ds-mark-paper .l{fill:#f4f6ff}.ds-mark-sheet{background:#2f45e0;color:#f4f6ff}.ds-mark-sheet .b{fill:#8d9cff}.ds-mark-sheet .f{fill:#f4f6ff}.ds-mark-sheet .l{fill:#2f45e0}"
+    },
+    {
+      "name": "Floating dock",
+      "kind": "button",
+      "refersTo": "dock-button",
+      "description": "Fixed bottom-right shortcuts after the hero: a round back-to-top button and a \"Napisz do mnie\" pill, cobalt with a 2px Sheet Ink ring; hover inverts.",
+      "html": "<div class=\"ds-dock-demo\"><div class=\"ds-dock\"><a class=\"ds-dock-up\" href=\"#\" aria-label=\"Wróć na górę strony\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 19V5M5.5 11.5 12 5l6.5 6.5\"/></svg></a><a class=\"ds-dock-write\" href=\"#\">Napisz do mnie</a></div></div>",
+      "css": ".ds-dock-demo{background:#dce2e8;padding:2rem;border-radius:1.5rem;display:flex;justify-content:flex-end}.ds-dock{display:flex;gap:.5rem;align-items:center}.ds-dock a{display:inline-flex;align-items:center;justify-content:center;min-height:3rem;border:2px solid #f4f6ff;border-radius:999px;background:#2f45e0;color:#f4f6ff;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-weight:600;font-size:1.05rem;text-decoration:none}.ds-dock a:hover{background:#f4f6ff;color:#2f45e0}.ds-dock a:active{transform:translateY(1px)}.ds-dock a:focus-visible{outline:3px solid #2f45e0;outline-offset:3px}.ds-dock-write{padding:.6rem 1.25rem}.ds-dock-up{width:3rem}.ds-dock-up svg{width:1.35rem;height:1.35rem;fill:none;stroke:currentColor;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round}"
+    },
+    {
+      "name": "Copy address (outline pill)",
+      "kind": "button",
+      "refersTo": "button-outline-on-sheet",
+      "description": "Second-rank action on the Contact sheet. Click to see the confirmation: a drawn tick at fixed width and the photocopier light crossing the address.",
+      "html": "<div class=\"ds-copy-demo\"><span class=\"ds-email\">damianulas@gmail.com</span><button class=\"ds-copy\" type=\"button\" onclick=\"this.toggleAttribute('data-done');var e=this.previousElementSibling;e.classList.remove('ds-sweep');void e.offsetWidth;e.classList.add('ds-sweep')\"><span class=\"ds-idle\">Kopiuj adres</span><span class=\"ds-done\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4.5 12.5 9.5 17.5 19.5 7\" pathLength=\"1\"/></svg>Skopiowano</span></button></div>",
+      "css": ".ds-copy-demo{background:#2f45e0;color:#f4f6ff;padding:2rem;border-radius:1.5rem;display:grid;gap:1.25rem;justify-items:start}.ds-email{position:relative;overflow-x:clip;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-weight:800;font-stretch:125%;font-size:2.2rem;line-height:.95}.ds-email::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,transparent 38%,rgb(255 255 255 / .28) 47%,rgb(255 255 255 / .6) 50%,rgb(255 255 255 / .28) 53%,transparent 62%);mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);transform:translateX(-70%);visibility:hidden}.ds-email.ds-sweep::after{animation:ds-sweep .75s cubic-bezier(.45,0,.2,1)}@keyframes ds-sweep{from{visibility:visible;transform:translateX(-70%)}to{visibility:visible;transform:translateX(70%)}}.ds-copy{display:inline-grid;font:inherit;font-family:var(--text, \"Literata Variable\", Georgia, serif);min-height:2.75rem;color:#f4f6ff;background:transparent;border:2px solid #f4f6ff;border-radius:999px;padding:.5rem 1.1rem;cursor:pointer;transition:background-color .2s ease}.ds-copy:hover{color:#2f45e0;background:#f4f6ff}.ds-copy>span{grid-area:1/1;display:inline-flex;align-items:center;justify-content:center;gap:.4rem}.ds-done,.ds-copy[data-done] .ds-idle{visibility:hidden}.ds-copy[data-done] .ds-done{visibility:visible}.ds-copy svg{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.ds-copy[data-done] path{stroke-dasharray:1;animation:ds-tick .35s cubic-bezier(.16,1,.3,1) both}@keyframes ds-tick{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@media (prefers-reduced-motion:reduce){.ds-email.ds-sweep::after,.ds-copy[data-done] path{animation:none}}"
+    },
+    {
+      "name": "Claudius track",
+      "kind": "list",
+      "description": "Signature process rail on the cobalt card: the active step goes wide and heavy by crossfading two pre-set cuts; its rail fills, then all rails drain together.",
+      "html": "<ol class=\"ds-track\"><li class=\"ds-st is-done\"><span class=\"ds-rail\"></span><b class=\"ds-name\"><span class=\"ds-rest\">Zadanie</span><span class=\"ds-on\" aria-hidden=\"true\">Zadanie</span></b><span class=\"ds-what\">opis tego, co ma się zmienić</span></li><li class=\"ds-st is-active\"><span class=\"ds-rail\"></span><b class=\"ds-name\"><span class=\"ds-rest\">Kontrakt</span><span class=\"ds-on\" aria-hidden=\"true\">Kontrakt</span></b><span class=\"ds-what\">co ma powstać i jak to sprawdzić</span></li><li class=\"ds-st\"><span class=\"ds-rail\"></span><b class=\"ds-name\"><span class=\"ds-rest\">Przegląd</span><span class=\"ds-on\" aria-hidden=\"true\">Przegląd</span></b><span class=\"ds-what\">niezależny, osobno pod kątem poprawności</span></li></ol>",
+      "css": ".ds-track{list-style:none;margin:0;padding:2rem;display:grid;background:#2f45e0;color:#f4f6ff;border-radius:1.5rem}.ds-st{display:grid;grid-template-columns:.2rem minmax(0,1fr);column-gap:1.1rem;padding-block:.15rem}.ds-rail{grid-row:span 2;position:relative;background:rgb(255 255 255 / .28)}.ds-rail::after{content:'';position:absolute;inset:0;background:#f4f6ff;transform-origin:top;transform:scaleY(0)}.ds-st.is-done .ds-rail::after{transform:none}.ds-st.is-active .ds-rail::after{animation:ds-fill 1.5s linear infinite}@keyframes ds-fill{from{transform:scaleY(0)}to{transform:none}}.ds-name{display:grid;justify-items:start;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-size:2rem;line-height:1.05;white-space:nowrap;padding-top:.35rem}.ds-name>span{grid-area:1/1;transform-origin:left center}.ds-rest{font-weight:400;font-stretch:70%;color:color-mix(in srgb,#f4f6ff 64%,transparent)}.ds-st.is-done .ds-rest{color:color-mix(in srgb,#f4f6ff 80%,transparent)}.ds-on{font-weight:800;font-stretch:135%;opacity:0;transform:scaleX(.385)}.ds-st.is-active .ds-rest{opacity:0;transform:scaleX(2.6)}.ds-st.is-active .ds-on{opacity:1;transform:none}.ds-what{padding-bottom:.5rem;color:#d3d9ff;font-family:var(--text, \"Literata Variable\", Georgia, serif);font-size:.95rem}.ds-st.is-active .ds-what{color:#f4f6ff}@media (prefers-reduced-motion:reduce){.ds-st.is-active .ds-rail::after{animation:none;transform:none}}"
     }
   ],
   "narrative": {
@@ -501,6 +554,8 @@
       "**Do** drive motion with scroll timelines in CSS, animate only transform and opacity on heavy paths, and give every effect a `prefers-reduced-motion` fallback and a readable no-script state.\r",
       "**Do** show real screenshots in device frames.\r",
       "**Do** keep colored sheets identical in light and dark mode.\r",
+      "**Do** keep repeating motion on the compositor: when a width or weight change repeats (the Claudius track), set both cuts in one cell and crossfade them with opacity and transform instead of interpolating the axis every frame.\r",
+      "**Do** route in-page links through `src/scripts/anchor-scroll.ts` so they glide; leave the skip link and reduced motion on the plain jump.\r",
       "**Do** take the brand mark from `src/data/brand.ts` (regenerated by `scripts/brand/logo.py`) and recolor it only through `--mark-back`, `--mark-front`, `--mark-letter`.\r"
     ],
     "donts": [
@@ -510,6 +565,7 @@
       "**Don't** let fitted display lines wrap; re-measure `--fit` when the text changes.\r",
       "**Don't** set labels, buttons, numbers or names in Literata.\r",
       "**Don't** introduce square buttons or pill-shaped large surfaces.\r",
+      "**Don't** react to touch the way you react to hover: a finger on a moving element is usually a scroll, so pins and hover states listen to the mouse only.\r",
       "**Don't** redraw or restyle the brand mark by hand; change it in `scripts/brand/logo.py` and regenerate.\r"
     ]
   }

@@ -103,6 +103,25 @@ components:
   case-card:
     rounded: "{rounded.sheet-wide}"
     padding: "{spacing.card-pad}"
+  button-outline-on-sheet:
+    backgroundColor: "transparent"
+    textColor: "{colors.sheet-ink}"
+    rounded: "{rounded.pill}"
+    padding: "0.5rem 1.1rem"
+    height: "2.75rem"
+  button-outline-on-sheet-hover:
+    backgroundColor: "{colors.sheet-ink}"
+    textColor: "{colors.blueprint-cobalt}"
+  dock-button:
+    backgroundColor: "{colors.blueprint-cobalt}"
+    textColor: "{colors.sheet-ink}"
+    typography: "{typography.label}"
+    rounded: "{rounded.pill}"
+    padding: "0.6rem 1.25rem"
+    height: "3rem"
+  dock-button-hover:
+    backgroundColor: "{colors.sheet-ink}"
+    textColor: "{colors.blueprint-cobalt}"
 ---
 
 # Design System: Damian Ułaś — portfolio
@@ -214,6 +233,7 @@ Tactile and confident: a solid pill paired with a plain underlined link.
 - **Primary:** on a colored sheet the pill is filled with the sheet's ink and labelled in the sheet's background color (cobalt on Sheet Ink in hero and Contact; card ink on card bg in product cards). Anybody 600, padding 0.6rem 1.1rem.
 - **Hover / Active:** hover brightens to white (or the card's accent), and the cobalt dock inverts to white with a cobalt label; active nudges down 1px. Every link and button is at least 44px tall. Focus is a 3px outline in the local ink or accent, offset 3px.
 - **Secondary:** a text link in the same label face with a 2px underline, colored by the local accent.
+- **Outline:** a second-rank action that sits next to filled pills (only "Kopiuj adres" today): transparent with a 2px ink ring, 2.75rem tall, filling with ink on hover. When its label changes for a moment (the copy confirmation), both labels share one grid cell so the pill keeps its width.
 
 ### Chips
 - **Style:** hairline border in the local line color, pill, Anybody 0.85rem at width 92%, no fill. Used for tech stacks.
@@ -237,7 +257,7 @@ Blog, CV and 404 open with a cobalt sheet holding the site header and the page t
 After the visitor scrolls past the hero, two cobalt controls with a 2px Sheet Ink ring sit fixed in the bottom-right thumb zone: a round 48px "back to top" button with a drawn arrow, and a "Napisz do mnie" pill that jumps to Contact and disappears while Contact is on screen (the arrow stays to the very end). The dock hides while scrolling down and returns on scroll up, so it never sits over text being read. Hover inverts to Sheet Ink with a cobalt glyph. It fades and rises in 0.3s, without motion under reduced motion, and stays hidden without script.
 
 ### Contact paths
-Right under the intro, before the big email, the Contact sheet splits into two paths: "Rekrutujesz?" and "Masz projekt albo zespół do wdrożenia agentów?", each a subhead question, one line of soft text and a filled pill mail link with a prefilled subject. The decision comes first; the email, an outlined "Kopiuj adres" pill and the secondary links follow. Mail subjects are shared site-wide (`subjects` in `profile.ts`), so the same intent always arrives with the same subject.
+Right under the intro, before the big email, the Contact sheet splits into two paths, the project one first: "Masz projekt albo zespół do wdrożenia agentów?" and "Rekrutujesz?", each a subhead question, one line of soft text and a filled pill mail link with a prefilled subject. The decision comes first; the email, an outlined "Kopiuj adres" pill and the secondary links follow. Mail subjects are shared site-wide (`subjects` in `profile.ts`), so the same intent always arrives with the same subject.
 
 ### Collaboration sheet
 Right after Projects, a sheet in Morning Haze Paper Deep (it stands apart from the page like every sheet, without competing with the cobalt hero and Contact that bracket the page). Clients lead: a large display question "Masz pomysł na aplikację?" (step-4, 800, width 115%), a lead-size line on what gets built with PlaceMates as proof, a cobalt pill and an underlined link. Recruiters follow in a narrower column (8fr/4fr from 60rem) behind a 1px rule: a subhead question, one soft line, two underlined links. It sits one sheet gap above the next sheet.
@@ -247,6 +267,12 @@ The hero name, every letter absolutely positioned and moved by transform, reacts
 
 ### Claudius track (signature)
 A vertical rail of process steps; the active step's rail fills over time while its name goes from width 70% / weight 400 to width 135% / weight 800. The name is not interpolated per frame: both cuts are set in the same cell, and the narrow one stretches out (scaleX 2.6, the measured ratio) and fades while the wide one grows from scaleX 0.385 and appears, so only opacity and transform run on the compositor. After the last step all rails drain upward together (0.7s) before the next pass. A mouse hover pins a step; touch never does, because a finger lands on the rail while scrolling. Without script every step is plainly readable.
+
+### Small sheet moments
+- **Copy address:** a successful copy sends a soft light bar across the big email, like a photocopier lamp (0.75s, WAAPI on `::after`, faded top and bottom so it never draws a rectangle), and the outlined button shows a drawn tick with "Skopiowano" for 2.5s. Both labels share one grid cell, so the button keeps its width. Reduced motion keeps the label swap and the `aria-live` message, without the bar or tick drawing.
+- **404:** the middle zero slips out of the "404" like a sheet missing from the stack (rotate -6deg, 1.1s expo-out after 0.35s). Copy: "Tego arkusza nie ma w stosie."
+- **Selection:** text selection is cobalt on paper and inverts to Sheet Ink with cobalt text on cobalt sheets (`--select-bg`, `--select-ink` set on hero, masthead, Contact, the Claudius card and the review tile).
+- **Console:** a single pill-styled line points developers who open devtools to the public repository.
 
 ### Anchor scroll
 In-page links (menu, dock, CTAs) glide instead of jumping: duration grows with distance (about 0.5s for one screen, capped at 1.1s), ease in-out cubic, and a trip longer than four screens is shortened to its last four so the card stack does not flicker past. Any wheel, touch or key stops it. The URL updates without a second native jump, and keyboard activation moves focus to the target. The skip link and reduced motion keep the plain jump.
@@ -263,6 +289,8 @@ A themed tile with a fitted condensed word (width 75%) that widens to 150% on ho
 - **Do** drive motion with scroll timelines in CSS, animate only transform and opacity on heavy paths, and give every effect a `prefers-reduced-motion` fallback and a readable no-script state.
 - **Do** show real screenshots in device frames.
 - **Do** keep colored sheets identical in light and dark mode.
+- **Do** keep repeating motion on the compositor: when a width or weight change repeats (the Claudius track), set both cuts in one cell and crossfade them with opacity and transform instead of interpolating the axis every frame.
+- **Do** route in-page links through `src/scripts/anchor-scroll.ts` so they glide; leave the skip link and reduced motion on the plain jump.
 - **Do** take the brand mark from `src/data/brand.ts` (regenerated by `scripts/brand/logo.py`) and recolor it only through `--mark-back`, `--mark-front`, `--mark-letter`.
 
 ### Don't:
@@ -272,4 +300,5 @@ A themed tile with a fitted condensed word (width 75%) that widens to 150% on ho
 - **Don't** let fitted display lines wrap; re-measure `--fit` when the text changes.
 - **Don't** set labels, buttons, numbers or names in Literata.
 - **Don't** introduce square buttons or pill-shaped large surfaces.
+- **Don't** react to touch the way you react to hover: a finger on a moving element is usually a scroll, so pins and hover states listen to the mouse only.
 - **Don't** redraw or restyle the brand mark by hand; change it in `scripts/brand/logo.py` and regenerate.

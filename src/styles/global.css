@@ -121,6 +121,13 @@ a:hover {
   outline: none;
 }
 
+/* Zaznaczenie w kolorach arkusza: kobalt na papierze, a na kobaltowych arkuszach odwrotnie
+   (te ustawiają --select-bg i --select-ink). */
+::selection {
+  background: var(--select-bg, var(--cobalt));
+  color: var(--select-ink, var(--paper));
+}
+
 .wrap {
   width: 100%;
   max-width: 88rem;

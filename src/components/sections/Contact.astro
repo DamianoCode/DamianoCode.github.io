@@ -30,7 +30,13 @@ const [emailUser, emailDomain] = profile.email.split('@');
 
   <a class="email" href={mailto()}><span>{emailUser}@</span><span>{emailDomain}</span></a>
   <p class="actions more">
-    <button class="copy" type="button" data-copy={profile.email} hidden>Kopiuj adres</button>
+    <button class="copy" type="button" data-copy={profile.email} hidden>
+      <span class="copy-idle">Kopiuj adres</span>
+      <span class="copy-done" aria-hidden="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5 9.5 17.5 19.5 7" pathLength="1" /></svg>
+        Skopiowano
+      </span>
+    </button>
     <a href={profile.linkedin} rel="me">LinkedIn</a>
     <a href={profile.github} rel="me">GitHub</a>
     {cvReady ? <a href="/cv">CV</a> : <a href={mailto(subjects.cv)}>Poproś o CV</a>}
@@ -41,20 +47,38 @@ const [emailUser, emailDomain] = profile.email.split('@');
 
 <script>
   // Przycisk pojawia się tylko tam, gdzie schowek jest dostępny; bez skryptu zostaje sam link mailto.
+  // Udane kopiowanie przechodzi przez adres jak światło kopiarki, a przycisk na chwilę potwierdza je ptaszkiem.
   const button = document.querySelector<HTMLButtonElement>('[data-copy]');
   const status = document.querySelector<HTMLElement>('#kontakt .copied');
+  const email = document.querySelector<HTMLElement>('#kontakt .email');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   if (button && status && navigator.clipboard) {
     button.hidden = false;
     let timer = 0;
     button.addEventListener('click', async () => {
+      let copied = false;
       try {
         await navigator.clipboard.writeText(button.dataset.copy!);
+        copied = true;
         status.textContent = 'Skopiowano';
       } catch {
         status.textContent = 'Nie udało się skopiować';
       }
+      button.toggleAttribute('data-done', copied);
+      if (copied && email && !reduced.matches) {
+        email.animate(
+          [
+            { transform: 'translateX(-70%)', visibility: 'visible' },
+            { transform: 'translateX(70%)', visibility: 'visible' },
+          ],
+          { duration: 750, easing: 'cubic-bezier(0.45, 0, 0.2, 1)', pseudoElement: '::after' },
+        );
+      }
       clearTimeout(timer);
-      timer = window.setTimeout(() => (status.textContent = ''), 2500);
+      timer = window.setTimeout(() => {
+        status.textContent = '';
+        button.removeAttribute('data-done');
+      }, 2500);
     });
   }
 </script>
@@ -63,6 +87,8 @@ const [emailUser, emailDomain] = profile.email.split('@');
   .contact {
     --ink: #f4f6ff;
     --soft: #d3d9ff;
+    --select-bg: #f4f6ff;
+    --select-ink: #2f45e0;
     margin-top: clamp(3rem, 8vh, 6rem);
     background: #2f45e0;
     color: var(--ink);
@@ -90,6 +116,28 @@ const [emailUser, emailDomain] = profile.email.split('@');
     letter-spacing: -0.01em;
     color: var(--ink);
     text-decoration: none;
+    /* Pas światła „kopiarki” (patrz skrypt) przecina adres w poziomie i nie wychodzi poza niego. */
+    position: relative;
+    width: fit-content;
+    overflow-x: clip;
+  }
+  .email::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 38%,
+      rgb(255 255 255 / 0.28) 47%,
+      rgb(255 255 255 / 0.6) 50%,
+      rgb(255 255 255 / 0.28) 53%,
+      transparent 62%
+    );
+    /* Pas gaśnie ku górze i dołowi, żeby nie rysował prostokąta na tle arkusza. */
+    mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+    transform: translateX(-70%);
+    visibility: hidden;
   }
   .email span {
     display: block;
@@ -133,6 +181,50 @@ const [emailUser, emailDomain] = profile.email.split('@');
   .copy:hover {
     color: #2f45e0;
     background: var(--ink);
+  }
+  /* Obie etykiety leżą w jednej komórce, więc zmiana napisu nie zmienia szerokości przycisku. */
+  .copy {
+    display: inline-grid;
+  }
+  .copy[hidden] {
+    display: none;
+  }
+  .copy > span {
+    grid-area: 1 / 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+  .copy-done,
+  .copy[data-done] .copy-idle {
+    visibility: hidden;
+  }
+  .copy[data-done] .copy-done {
+    visibility: visible;
+  }
+  .copy svg {
+    width: 1.1em;
+    height: 1.1em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .copy[data-done] svg path {
+      stroke-dasharray: 1;
+      animation: tick 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+  }
+  @keyframes tick {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
   }
   .copy:active {
     transform: translateY(1px);
