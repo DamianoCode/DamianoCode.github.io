@@ -1,0 +1,20 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "literata fallback",
+        "createdAt": "2026-10-12T12:52:41.512Z",
+        "reason": "Claude (typeset pass): metric-adjusted local Georgia fallback for Literata, documented in DESIGN.md Typography"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "anybody fallback",
+        "createdAt": "2026-10-12T12:52:41.735Z",
+        "reason": "Claude (typeset pass): metric-adjusted local Arial fallback for Anybody, documented in DESIGN.md Typography"
+      }
+    ]
+  }
+}

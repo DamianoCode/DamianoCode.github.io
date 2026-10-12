@@ -1,3 +1,16 @@
+/* Zapasowe kroje z dopasowanym rozmiarem: zanim przyjdą Literata i Anybody, tekst ma prawie tę samą szerokość,
+   więc podmiana kroju nie przestawia wierszy. Proporcje zmierzone na polskim akapicie. */
+@font-face {
+  font-family: 'Literata Fallback';
+  src: local('Georgia');
+  size-adjust: 105%;
+}
+@font-face {
+  font-family: 'Anybody Fallback';
+  src: local('Arial');
+  size-adjust: 108%;
+}
+
 :root {
   --paper: #dce2e8;
   --paper-deep: #c9d1db;
@@ -12,16 +25,25 @@
   --brand-cobalt-light: #8d9cff;
   --brand-snow: #f4f6ff;
 
-  --display: 'Anybody Variable', 'Arial Narrow', sans-serif;
-  --text: 'Literata Variable', Georgia, serif;
+  --display: 'Anybody Variable', 'Anybody Fallback', 'Arial Narrow', sans-serif;
+  --text: 'Literata Variable', 'Literata Fallback', Georgia, serif;
 
   /* Skala typograficzna: kwarta (1.333) od 18 px. */
   --step--1: 0.8125rem;
+  /* Tekst drugiego planu w Literacie: opisy pod kartami, dowody, notatki. */
+  --step-small: 1rem;
   --step-0: 1.125rem;
   --step-1: 1.5rem;
   --step-2: 2rem;
   --step-3: clamp(2.2rem, 5vw, 2.67rem);
   --step-4: clamp(2.6rem, 7vw, 3.55rem);
+  /* Lead: pierwsze zdanie pod tytułem (AI, karty projektów, współpraca, kontakt). */
+  --lead: clamp(1.2rem, 1rem + 1vw, 1.5rem);
+  --lead-lh: 1.38;
+  /* Etykiety w Anybody, trzy wyraźne stopnie: drobne (tagi, stopka), metadane, akcje. */
+  --label-s: 0.85rem;
+  --label: 0.95rem;
+  --label-l: 1.05rem;
 
   --gutter: clamp(1rem, 4vw, 3.5rem);
   /* Odstęp arkuszy (karty projektów, sekcje na kolorowym tle) od krawędzi okna. */
@@ -29,7 +51,8 @@
   /* Największa szerokość arkusza: kolumna treści (88rem) plus 1rem z każdej strony. Treść arkusza
      (jego `.wrap` albo padding karty 4.5rem) zaczyna się wtedy w linii tytułów sekcji. */
   --sheet-max: 90rem;
-  --measure: 36em;
+  /* Ok. 68 znaków Literaty w wierszu. */
+  --measure: 33em;
 
   color-scheme: light;
 }
@@ -87,7 +110,7 @@ main {
   flex: 1;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
   font-family: var(--display);
   font-weight: 700;
   line-height: 1.02;
@@ -148,6 +171,8 @@ a:hover {
   position: absolute;
   left: var(--gutter);
   top: -4rem;
+  font-family: var(--display);
+  font-weight: 600;
   background: var(--ink);
   color: var(--paper);
   padding: 0.5rem 1rem;
@@ -201,6 +226,7 @@ a:hover {
   align-items: center;
   gap: 0 1.5rem;
   font-family: var(--display);
+  font-size: var(--label-l);
   font-weight: 600;
 }
 .actions a {
@@ -222,11 +248,15 @@ a:hover {
 
 /* Kinetyczny tytuł sekcji: przy wjeździe na ekran krój rośnie z wąskiego i lekkiego do szerokiego i grubego,
    jak soczewka w hero. Napis się nie zawija, a rozmiar mieści stan końcowy w szerokości strony.
-   `--fit` to szerokość napisu w em przy szerokości 150% i grubości 800, zmierzona w przeglądarce. */
+   `--fit` to szerokość napisu w em przy szerokości 150% i grubości 800, zmierzona w przeglądarce.
+   Na telefonie tytuł kończy na szerokości 110% (napis węższy o 28%, zmierzone dla wszystkich tytułów)
+   i może być o tyle większy: inaczej „Umiejętności” wychodziło mniejsze od nagłówków kart pod nim. */
 .kinetic {
-  font-size: min(9rem, calc((min(100vw, 88rem) - 2 * var(--gutter)) / (var(--fit) * 1.05)));
+  --end: 150%;
+  --end-ratio: 1;
+  font-size: min(9rem, calc((min(100vw, 88rem) - 2 * var(--gutter)) / (var(--fit) * var(--end-ratio) * 1.05)));
   font-weight: 700;
-  font-stretch: 150%;
+  font-stretch: var(--end);
   line-height: 0.95;
   letter-spacing: -0.01em;
   white-space: nowrap;
@@ -241,13 +271,19 @@ a:hover {
     }
   }
 }
+@media (max-width: 40rem) {
+  .kinetic {
+    --end: 110%;
+    --end-ratio: 0.725;
+  }
+}
 @keyframes kinetic {
   from {
     font-stretch: 55%;
     font-weight: 250;
   }
   to {
-    font-stretch: 150%;
+    font-stretch: var(--end);
     font-weight: 700;
   }
 }
