@@ -184,6 +184,26 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     });
     cases.querySelectorAll<HTMLElement>('.case').forEach((card) => heights.observe(card));
     cases.classList.add('is-stacked');
+
+    // Przeglądarka przewija fokusowany link tylko „do widoku”, a w stosie to bywa miejsce, nad którym leży już
+    // następna karta. Jeśli link jest zasłonięty, strona staje tam, gdzie jego karta leży na wierzchu w całości:
+    // na pozycji, w której karta właśnie się przykleiła.
+    cases.addEventListener('focusin', (event) => {
+      const target = event.target as HTMLElement;
+      const card = target.closest<HTMLElement>('.case');
+      if (!card || !target.matches(':focus-visible')) return;
+      requestAnimationFrame(() => {
+        const box = target.getBoundingClientRect();
+        const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+        if (hit && (hit === target || target.contains(hit))) return;
+        // Położenie karty w układzie, bez przyklejenia; zmiana i powrót w jednej klatce niczego nie rysują.
+        card.style.position = 'static';
+        const staticTop = card.getBoundingClientRect().top + scrollY;
+        card.style.position = '';
+        const stuckTop = parseFloat(getComputedStyle(card).top) || 0;
+        scrollTo({ top: staticTop - stuckTop, behavior: 'instant' });
+      });
+    });
   }
 </script>
 
