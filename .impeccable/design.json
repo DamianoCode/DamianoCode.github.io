@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-12T09:45:06.879Z",
+  "generatedAt": "2026-10-12T09:47:58.371Z",
   "title": "Design System: Damian Ułaś — portfolio",
   "extensions": {
     "colorMeta": {
@@ -426,13 +426,21 @@
       "description": "Themed tile with a fitted condensed word that widens on hover.",
       "html": "<div class=\"ds-tile\"><span class=\"ds-word\">Rower</span><p>Trasy, które kończą się przy kawie.</p></div>",
       "css": ".ds-tile{display:flex;flex-direction:column;justify-content:space-between;gap:2.5rem;min-height:16rem;padding:clamp(1.25rem,3vw,2.25rem);border-radius:1.25rem;background:#1d3a30;color:#e8f1eb}.ds-word{font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-size:5rem;font-weight:700;font-stretch:75%;line-height:.95;transition:font-stretch .6s cubic-bezier(.2,.7,.2,1)}.ds-tile:hover .ds-word{font-stretch:150%}.ds-tile p{margin:0;max-width:26em;color:#b4cdbf;font-family:var(--text, \"Literata Variable\", Georgia, serif)}@media (prefers-reduced-motion:reduce){.ds-word{transition:none}}"
+    },
+    {
+      "name": "Brand mark",
+      "kind": "custom",
+      "description": "Two stacked sheets with a D: the sheet stack in one glyph, shown on paper and inverted on a cobalt sheet.",
+      "html": "<div class=\"ds-marks\"><span class=\"ds-mark-paper\"><svg class=\"ds-mark\" viewBox=\"0 0 100 100\"><rect class=\"b\" x=\"8\" y=\"0\" width=\"84\" height=\"80\" rx=\"18\"/><rect class=\"f\" x=\"0\" y=\"12.5\" width=\"100\" height=\"87.5\" rx=\"21\"/><path class=\"l\" d=\"M24.4 78.5H54.5Q65.2 78.5 70.4 73.4Q75.6 68.2 75.6 56.2Q75.6 44.2 70.5 39.1Q65.3 34 54.5 34H24.4ZM40.1 68.1V44.4H50.6Q55.3 44.4 57.6 46.4Q59.9 48.4 59.9 56.2Q59.9 64 57.6 66.1Q55.3 68.1 50.6 68.1Z\"/></svg>Damian Ułaś</span><span class=\"ds-mark-sheet\"><svg class=\"ds-mark\" viewBox=\"0 0 100 100\"><rect class=\"b\" x=\"8\" y=\"0\" width=\"84\" height=\"80\" rx=\"18\"/><rect class=\"f\" x=\"0\" y=\"12.5\" width=\"100\" height=\"87.5\" rx=\"21\"/><path class=\"l\" d=\"M24.4 78.5H54.5Q65.2 78.5 70.4 73.4Q75.6 68.2 75.6 56.2Q75.6 44.2 70.5 39.1Q65.3 34 54.5 34H24.4ZM40.1 68.1V44.4H50.6Q55.3 44.4 57.6 46.4Q59.9 48.4 59.9 56.2Q59.9 64 57.6 66.1Q55.3 68.1 50.6 68.1Z\"/></svg>Damian Ułaś</span></div>",
+      "css": ".ds-marks{display:flex;flex-wrap:wrap;gap:1rem}.ds-marks>span{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 1.25rem;border-radius:1.5rem;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-weight:800;font-stretch:115%;font-size:1.15rem}.ds-mark{width:2rem;height:2rem;overflow:visible}.ds-mark-paper{background:#dce2e8;color:#16223a}.ds-mark-paper .b{fill:#8d9cff}.ds-mark-paper .f{fill:#2f45e0}.ds-mark-paper .l{fill:#f4f6ff}.ds-mark-sheet{background:#2f45e0;color:#f4f6ff}.ds-mark-sheet .b{fill:#8d9cff}.ds-mark-sheet .f{fill:#f4f6ff}.ds-mark-sheet .l{fill:#2f45e0}"
     }
   ],
   "narrative": {
     "northStar": "The Sheet Stack",
-    "overview": "The page is a stack of sheets. The hero is the first one, a full-bleed cobalt sheet that stays pinned, shrinks and dims as the next sheet slides over it with rounded top corners and a soft shadow. Every product gets a sheet in its own colors, taken straight from its screenshots, and on wide, tall screens those cards stack sticky on top of each other as you scroll. Between the sheets lies cool, slightly blue paper and dark navy ink: a drafting table the products are laid on.\r\n\r\nThe second voice is the typeface. Anybody is a variable face with a width axis from 50% to 150%, and the system uses that axis as motion: the hero name swells under a typographic lens that follows the cursor (or the scroll on touch), section titles grow from narrow and light to wide and heavy as they enter, interest tiles widen their word on hover. Literata, an optical-size serif, carries the reading text so the expressive display never has to.\r\n\r\nComponents are tactile and confident: solid pill buttons, big rounded sheets, clear states, real device frames around real screenshots. Density is low; each section earns a full screen. Motion is scroll-driven CSS wherever possible, only transform and opacity animate in the heavy paths, and everything collapses gracefully under `prefers-reduced-motion`.",
+    "overview": "The page is a stack of sheets, and the brand mark says so literally: two rounded sheets, one stepped behind the other, with a D on the front one. The hero is the first sheet of the page, a full-bleed cobalt sheet carrying the site header; on desktop it rides its own track, stays pinned, shrinks and dims as the next sheet slides over it with rounded top corners and a soft shadow, and on phones it simply scrolls away and shrinks a little as it leaves. Subpages open the same way, on a cobalt masthead sheet. Every product gets a sheet in its own colors, taken straight from its screenshots, and on wide, tall screens those cards stack sticky on top of each other as you scroll. Between the sheets lies cool, slightly blue paper and dark navy ink: a drafting table the products are laid on.\r\n\r\nThe second voice is the typeface. Anybody is a variable face with a width axis from 50% to 150%, and the system uses that axis as motion: the hero name swells under a typographic lens that follows the cursor (or the scroll on touch), section titles grow from narrow and light to wide and heavy as they enter, interest tiles widen their word on hover. Literata, an optical-size serif, carries the reading text so the expressive display never has to.\r\n\r\nComponents are tactile and confident: solid pill buttons, big rounded sheets, clear states, real device frames around real screenshots. Density is low; each section earns a full screen. Motion is scroll-driven CSS wherever possible, only transform and opacity animate in the heavy paths, and everything collapses gracefully under `prefers-reduced-motion`.",
     "keyCharacteristics": [
-      "Rounded sheets stacked in scroll order; the hero is the first sheet.\r",
+      "Rounded sheets stacked in scroll order; the hero (and every subpage masthead) is the first sheet.\r",
+      "A brand mark that is the system in miniature: two stacked sheets and a D.\r",
       "One sheet, one palette: products keep their own colors; cobalt belongs to the site.\r",
       "Width axis of Anybody used as a motion and hierarchy tool.\r",
       "Cool paper and navy ink in light mode, inverted navy night in dark mode; sheets keep fixed colors in both.\r",
@@ -492,7 +500,8 @@
       "**Do** use Anybody's width axis for hierarchy and meaningful motion; keep Literata for reading text at 1.125rem / 1.6, max 36em.\r",
       "**Do** drive motion with scroll timelines in CSS, animate only transform and opacity on heavy paths, and give every effect a `prefers-reduced-motion` fallback and a readable no-script state.\r",
       "**Do** show real screenshots in device frames.\r",
-      "**Do** keep colored sheets identical in light and dark mode.\r"
+      "**Do** keep colored sheets identical in light and dark mode.\r",
+      "**Do** take the brand mark from `src/data/brand.ts` (regenerated by `scripts/brand/logo.py`) and recolor it only through `--mark-back`, `--mark-front`, `--mark-letter`.\r"
     ],
     "donts": [
       "**Don't** add a headshot or a placeholder portrait.\r",
@@ -500,7 +509,8 @@
       "**Don't** use shadows as button affordances or on flat bento tiles.\r",
       "**Don't** let fitted display lines wrap; re-measure `--fit` when the text changes.\r",
       "**Don't** set labels, buttons, numbers or names in Literata.\r",
-      "**Don't** introduce square buttons or pill-shaped large surfaces.\r"
+      "**Don't** introduce square buttons or pill-shaped large surfaces.\r",
+      "**Don't** redraw or restyle the brand mark by hand; change it in `scripts/brand/logo.py` and regenerate.\r"
     ]
   }
 }

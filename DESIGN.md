@@ -111,14 +111,15 @@ components:
 
 **Creative North Star: "The Sheet Stack"**
 
-The page is a stack of sheets. The hero is the first one, a full-bleed cobalt sheet that stays pinned, shrinks and dims as the next sheet slides over it with rounded top corners and a soft shadow. Every product gets a sheet in its own colors, taken straight from its screenshots, and on wide, tall screens those cards stack sticky on top of each other as you scroll. Between the sheets lies cool, slightly blue paper and dark navy ink: a drafting table the products are laid on.
+The page is a stack of sheets, and the brand mark says so literally: two rounded sheets, one stepped behind the other, with a D on the front one. The hero is the first sheet of the page, a full-bleed cobalt sheet carrying the site header; on desktop it rides its own track, stays pinned, shrinks and dims as the next sheet slides over it with rounded top corners and a soft shadow, and on phones it simply scrolls away and shrinks a little as it leaves. Subpages open the same way, on a cobalt masthead sheet. Every product gets a sheet in its own colors, taken straight from its screenshots, and on wide, tall screens those cards stack sticky on top of each other as you scroll. Between the sheets lies cool, slightly blue paper and dark navy ink: a drafting table the products are laid on.
 
 The second voice is the typeface. Anybody is a variable face with a width axis from 50% to 150%, and the system uses that axis as motion: the hero name swells under a typographic lens that follows the cursor (or the scroll on touch), section titles grow from narrow and light to wide and heavy as they enter, interest tiles widen their word on hover. Literata, an optical-size serif, carries the reading text so the expressive display never has to.
 
 Components are tactile and confident: solid pill buttons, big rounded sheets, clear states, real device frames around real screenshots. Density is low; each section earns a full screen. Motion is scroll-driven CSS wherever possible, only transform and opacity animate in the heavy paths, and everything collapses gracefully under `prefers-reduced-motion`.
 
 **Key Characteristics:**
-- Rounded sheets stacked in scroll order; the hero is the first sheet.
+- Rounded sheets stacked in scroll order; the hero (and every subpage masthead) is the first sheet.
+- A brand mark that is the system in miniature: two stacked sheets and a D.
 - One sheet, one palette: products keep their own colors; cobalt belongs to the site.
 - Width axis of Anybody used as a motion and hierarchy tool.
 - Cool paper and navy ink in light mode, inverted navy night in dark mode; sheets keep fixed colors in both.
@@ -130,7 +131,7 @@ Components are tactile and confident: solid pill buttons, big rounded sheets, cl
 A cool drafting-table neutral set (haze paper, harbour ink) with one saturated site accent, Blueprint Cobalt, plus a palette borrowed product by product.
 
 ### Primary
-- **Blueprint Cobalt**: the site's own color. Links, focus rings, nav underline, the hero sheet, the Contact sheet, the Claudius card and the Claudius process tile. In dark mode links and focus shift to **Blueprint Cobalt Night**, while cobalt sheets stay cobalt.
+- **Blueprint Cobalt**: the site's own color, also exposed as the fixed brand token `--brand-cobalt` (with `--brand-cobalt-light` = Blueprint Cobalt Night and `--brand-snow` = Sheet Ink) that the mark, favicon and share images use in both themes. Links, focus rings, nav underline, the hero sheet, the Contact sheet, the Claudius card and the Claudius process tile. In dark mode links and focus shift to **Blueprint Cobalt Night**, while cobalt sheets stay cobalt.
 
 ### Secondary
 - **Sheet Ink** and **Sheet Ink Soft**: text on cobalt sheets (hero, Contact, Claudius). Fixed in both themes. Sheet Ink is also the fill of pill buttons on cobalt, with the label in cobalt.
@@ -181,9 +182,9 @@ Type scale is a perfect fourth (1.333) from 18 px: 0.8125, 1.125, 1.5, 2, ~2.67,
 
 ## Layout
 
-Content sits in a centered column (`.wrap`, max 88rem, gutter clamp(1rem, 4vw, 3.5rem)). Sheets break out of it to almost the full window: a margin of the sheet gap (clamp(0.5rem, 1.2vw, 1rem)) from the edges, capped at 90rem so a sheet's inner content lines up with section titles on wide screens. The hero sheet alone ignores the cap and fills the first viewport (100svh minus the sheet gaps), with the site header laid on top of it.
+Content sits in a centered column (`.wrap`, max 88rem, gutter clamp(1rem, 4vw, 3.5rem)). Sheets break out of it to almost the full window: a margin of the sheet gap (clamp(0.5rem, 1.2vw, 1rem)) from the edges, capped at 90rem so a sheet's inner content lines up with section titles on wide screens. The hero sheet alone ignores the cap and fills the first viewport (100svh minus the sheet gaps), with the site header inside it. Subpages put the header and the page title in a cobalt masthead sheet one sheet gap below the top edge. The body is a full-height column, so the footer sits at the bottom of the window even on short subpages.
 
-Sections are generous (block padding clamp(3rem, 9vh, 6.5rem)); each tends to own a screen. Product cards stack in a column with a sheet-gap gap; from 64rem wide and 37.5rem tall they become sticky (top offset grows 0.85rem per card) at near-viewport height with 14vh between them. Below 50rem of height the cards switch to a denser variant (smaller name, tighter padding, the long detail paragraph hidden) so the text always fits inside the card. At 64rem cards switch to a header over a 5fr/7fr text/stage split that alternates sides. Bentos (AI work, interests) use 7fr/5fr or a 12-column grid with mirrored rows from 60rem. Key breakpoints: 30rem, 40rem, 48rem, 52rem, 60rem, 64rem.
+Sections are generous (block padding clamp(3rem, 9vh, 6.5rem)); each tends to own a screen. Product cards always stack. From 64rem wide and 44rem tall they are viewport-height and stick to the top (offset grows 0.85rem per card) with 14vh between them; between 44rem and 50rem of height they use a denser variant (smaller name, tighter padding, the long detail paragraph hidden) so the text fits. On phones and short windows a script measures each card and they keep their natural height, sticking by the bottom edge (or the top edge when shorter than the screen) while the next one slides over, 2rem apart. At 64rem cards switch to a header over a 5fr/7fr text/stage split that alternates sides. Bentos (AI work, interests) use 7fr/5fr or a 12-column grid with mirrored rows from 60rem. Key breakpoints: 30rem, 40rem, 48rem, 52rem, 60rem, 64rem.
 
 **The Content Line Rule.** Whatever breaks out to the edges, its text starts on the same line as the section titles.
 
@@ -224,7 +225,13 @@ Tactile and confident: a solid pill paired with a plain underlined link.
 - **Inverted sheet:** the AI section swaps paper and ink so it stands apart in both themes.
 
 ### Navigation
-Anybody 1rem at width 90% (78% under 30rem), ink-colored links with a 44px tall touch target and a 2px cobalt underline drawn just under the label on hover and for the current page. The name on the left in Anybody 800 at width 115%. Blog and CV appear only once they have content. On the home page the header sits on the hero sheet in Sheet Ink and fades up as you scroll.
+One site header (`SiteHeader`) used everywhere: the brand mark plus the name in Anybody 800 at width 115% on the left, links on the right in Anybody 1rem at width 90% (78% under 30rem), each a 44px tall touch target with a 2px underline drawn just under the label on hover and for the current page. Blog and CV appear only once they have content; RSS is advertised only when there are posts. The header always sits on a cobalt sheet (the hero on the home page, the masthead on subpages), so it is drawn in Sheet Ink.
+
+### Brand mark (signature)
+Two rounded sheets, the back one in Blueprint Cobalt Night and stepped up behind the front one in Blueprint Cobalt, with a D cut from Sheet Ink: the page's sheet stack in one glyph. On cobalt sheets it inverts (Sheet Ink front, cobalt D) through the `--mark-*` variables. Geometry lives in `src/data/brand.ts`, generated by `scripts/brand/logo.py`, which also exports the lockup and lens wordmark in `public/brand/`. On load the back sheet settles once into place (0.7s, expo-out), the same gesture as the hero receding; no motion under reduced motion.
+
+### Subpage masthead
+Blog, CV and 404 open with a cobalt sheet holding the site header and the page title, mirroring the hero; content follows on paper below. Colors inside are the hero's: Sheet Ink text, Sheet Ink focus rings.
 
 ### Floating dock
 After the visitor scrolls past the hero, two cobalt controls with a 2px Sheet Ink ring sit fixed in the bottom-right thumb zone: a round 48px "back to top" button with a drawn arrow, and a "Napisz do mnie" pill that jumps to Contact and disappears while Contact is on screen (the arrow stays to the very end). The dock hides while scrolling down and returns on scroll up, so it never sits over text being read. Hover inverts to Sheet Ink with a cobalt glyph. It fades and rises in 0.3s, without motion under reduced motion, and stays hidden without script.
@@ -253,6 +260,7 @@ A themed tile with a fitted condensed word (width 75%) that widens to 150% on ho
 - **Do** drive motion with scroll timelines in CSS, animate only transform and opacity on heavy paths, and give every effect a `prefers-reduced-motion` fallback and a readable no-script state.
 - **Do** show real screenshots in device frames.
 - **Do** keep colored sheets identical in light and dark mode.
+- **Do** take the brand mark from `src/data/brand.ts` (regenerated by `scripts/brand/logo.py`) and recolor it only through `--mark-back`, `--mark-front`, `--mark-letter`.
 
 ### Don't:
 - **Don't** add a headshot or a placeholder portrait.
@@ -261,3 +269,4 @@ A themed tile with a fitted condensed word (width 75%) that widens to 150% on ho
 - **Don't** let fitted display lines wrap; re-measure `--fit` when the text changes.
 - **Don't** set labels, buttons, numbers or names in Literata.
 - **Don't** introduce square buttons or pill-shaped large surfaces.
+- **Don't** redraw or restyle the brand mark by hand; change it in `scripts/brand/logo.py` and regenerate.
