@@ -91,8 +91,16 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
     width: 100%;
     border-collapse: collapse;
   }
+  /* Nagłówek kolumn zostaje u góry ekranu przez całą tabelę: przy dolnych wierszach wciąż widać, który kolor to który projekt. */
+  thead th,
+  thead td {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--paper);
+  }
   thead th {
-    padding: 0 0.5rem 1rem;
+    padding: 1rem 0.5rem;
     vertical-align: bottom;
     font-family: var(--display);
     font-weight: 600;

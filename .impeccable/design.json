@@ -1,0 +1,516 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T09:47:58.371Z",
+  "title": "Design System: Damian Ułaś — portfolio",
+  "extensions": {
+    "colorMeta": {
+      "blueprint-cobalt": {
+        "role": "primary",
+        "displayName": "Blueprint Cobalt",
+        "canonical": "#2f45e0",
+        "tonalRamp": [
+          "oklch(15% 0.087 268.7)",
+          "oklch(26% 0.123 268.7)",
+          "oklch(37% 0.160 268.7)",
+          "oklch(48% 0.197 268.7)",
+          "oklch(59% 0.207 268.7)",
+          "oklch(70% 0.170 268.7)",
+          "oklch(82% 0.130 268.7)",
+          "oklch(95% 0.087 268.7)"
+        ]
+      },
+      "blueprint-cobalt-night": {
+        "role": "primary",
+        "displayName": "Blueprint Cobalt Night",
+        "canonical": "#8d9cff",
+        "tonalRamp": [
+          "oklch(15% 0.087 275.7)",
+          "oklch(26% 0.123 275.7)",
+          "oklch(37% 0.144 275.7)",
+          "oklch(48% 0.144 275.7)",
+          "oklch(59% 0.144 275.7)",
+          "oklch(70% 0.144 275.7)",
+          "oklch(82% 0.130 275.7)",
+          "oklch(95% 0.087 275.7)"
+        ]
+      },
+      "sheet-ink": {
+        "role": "secondary",
+        "displayName": "Sheet Ink",
+        "canonical": "#f4f6ff",
+        "tonalRamp": [
+          "oklch(15% 0.012 276.1)",
+          "oklch(26% 0.012 276.1)",
+          "oklch(37% 0.012 276.1)",
+          "oklch(48% 0.012 276.1)",
+          "oklch(59% 0.012 276.1)",
+          "oklch(70% 0.012 276.1)",
+          "oklch(82% 0.012 276.1)",
+          "oklch(95% 0.012 276.1)"
+        ]
+      },
+      "sheet-ink-soft": {
+        "role": "secondary",
+        "displayName": "Sheet Ink Soft",
+        "canonical": "#d3d9ff",
+        "tonalRamp": [
+          "oklch(15% 0.053 278.2)",
+          "oklch(26% 0.053 278.2)",
+          "oklch(37% 0.053 278.2)",
+          "oklch(48% 0.053 278.2)",
+          "oklch(59% 0.053 278.2)",
+          "oklch(70% 0.053 278.2)",
+          "oklch(82% 0.053 278.2)",
+          "oklch(95% 0.053 278.2)"
+        ]
+      },
+      "signal-green": {
+        "role": "secondary",
+        "displayName": "Signal Green",
+        "canonical": "#5fe3a1",
+        "tonalRamp": [
+          "oklch(15% 0.087 158.6)",
+          "oklch(26% 0.123 158.6)",
+          "oklch(37% 0.150 158.6)",
+          "oklch(48% 0.150 158.6)",
+          "oklch(59% 0.150 158.6)",
+          "oklch(70% 0.150 158.6)",
+          "oklch(82% 0.130 158.6)",
+          "oklch(95% 0.087 158.6)"
+        ]
+      },
+      "placemates-ember": {
+        "role": "tertiary",
+        "displayName": "PlaceMates Ember",
+        "canonical": "#e8834a",
+        "tonalRamp": [
+          "oklch(15% 0.087 48.4)",
+          "oklch(26% 0.123 48.4)",
+          "oklch(37% 0.143 48.4)",
+          "oklch(48% 0.143 48.4)",
+          "oklch(59% 0.143 48.4)",
+          "oklch(70% 0.143 48.4)",
+          "oklch(82% 0.130 48.4)",
+          "oklch(95% 0.087 48.4)"
+        ]
+      },
+      "tutor-brick": {
+        "role": "tertiary",
+        "displayName": "Tutor Brick",
+        "canonical": "#d4533d",
+        "tonalRamp": [
+          "oklch(15% 0.087 31.9)",
+          "oklch(26% 0.123 31.9)",
+          "oklch(37% 0.160 31.9)",
+          "oklch(48% 0.167 31.9)",
+          "oklch(59% 0.167 31.9)",
+          "oklch(70% 0.167 31.9)",
+          "oklch(82% 0.130 31.9)",
+          "oklch(95% 0.087 31.9)"
+        ]
+      },
+      "widget-amber": {
+        "role": "tertiary",
+        "displayName": "Widget Amber",
+        "canonical": "#e3a21a",
+        "tonalRamp": [
+          "oklch(15% 0.087 78.6)",
+          "oklch(26% 0.123 78.6)",
+          "oklch(37% 0.152 78.6)",
+          "oklch(48% 0.152 78.6)",
+          "oklch(59% 0.152 78.6)",
+          "oklch(70% 0.152 78.6)",
+          "oklch(82% 0.130 78.6)",
+          "oklch(95% 0.087 78.6)"
+        ]
+      },
+      "shop-slate": {
+        "role": "tertiary",
+        "displayName": "Shop Slate",
+        "canonical": "#7d8aa5",
+        "tonalRamp": [
+          "oklch(15% 0.043 264.9)",
+          "oklch(26% 0.043 264.9)",
+          "oklch(37% 0.043 264.9)",
+          "oklch(48% 0.043 264.9)",
+          "oklch(59% 0.043 264.9)",
+          "oklch(70% 0.043 264.9)",
+          "oklch(82% 0.043 264.9)",
+          "oklch(95% 0.043 264.9)"
+        ]
+      },
+      "morning-haze-paper": {
+        "role": "neutral",
+        "displayName": "Morning Haze Paper",
+        "canonical": "#dce2e8",
+        "tonalRamp": [
+          "oklch(15% 0.010 247.9)",
+          "oklch(26% 0.010 247.9)",
+          "oklch(37% 0.010 247.9)",
+          "oklch(48% 0.010 247.9)",
+          "oklch(59% 0.010 247.9)",
+          "oklch(70% 0.010 247.9)",
+          "oklch(82% 0.010 247.9)",
+          "oklch(95% 0.010 247.9)"
+        ]
+      },
+      "morning-haze-paper-deep": {
+        "role": "neutral",
+        "displayName": "Morning Haze Paper Deep",
+        "canonical": "#c9d1db",
+        "tonalRamp": [
+          "oklch(15% 0.016 253.9)",
+          "oklch(26% 0.016 253.9)",
+          "oklch(37% 0.016 253.9)",
+          "oklch(48% 0.016 253.9)",
+          "oklch(59% 0.016 253.9)",
+          "oklch(70% 0.016 253.9)",
+          "oklch(82% 0.016 253.9)",
+          "oklch(95% 0.016 253.9)"
+        ]
+      },
+      "deep-harbour-ink": {
+        "role": "neutral",
+        "displayName": "Deep Harbour Ink",
+        "canonical": "#16223a",
+        "tonalRamp": [
+          "oklch(15% 0.049 263.2)",
+          "oklch(26% 0.049 263.2)",
+          "oklch(37% 0.049 263.2)",
+          "oklch(48% 0.049 263.2)",
+          "oklch(59% 0.049 263.2)",
+          "oklch(70% 0.049 263.2)",
+          "oklch(82% 0.049 263.2)",
+          "oklch(95% 0.049 263.2)"
+        ]
+      },
+      "deep-harbour-ink-soft": {
+        "role": "neutral",
+        "displayName": "Deep Harbour Ink Soft",
+        "canonical": "#4e5b72",
+        "tonalRamp": [
+          "oklch(15% 0.041 261.8)",
+          "oklch(26% 0.041 261.8)",
+          "oklch(37% 0.041 261.8)",
+          "oklch(48% 0.041 261.8)",
+          "oklch(59% 0.041 261.8)",
+          "oklch(70% 0.041 261.8)",
+          "oklch(82% 0.041 261.8)",
+          "oklch(95% 0.041 261.8)"
+        ]
+      },
+      "survey-rule": {
+        "role": "neutral",
+        "displayName": "Survey Rule",
+        "canonical": "#b3bdca",
+        "tonalRamp": [
+          "oklch(15% 0.021 254.9)",
+          "oklch(26% 0.021 254.9)",
+          "oklch(37% 0.021 254.9)",
+          "oklch(48% 0.021 254.9)",
+          "oklch(59% 0.021 254.9)",
+          "oklch(70% 0.021 254.9)",
+          "oklch(82% 0.021 254.9)",
+          "oklch(95% 0.021 254.9)"
+        ]
+      },
+      "night-paper": {
+        "role": "neutral",
+        "displayName": "Night Paper",
+        "canonical": "#131c2e",
+        "tonalRamp": [
+          "oklch(15% 0.038 263.4)",
+          "oklch(26% 0.038 263.4)",
+          "oklch(37% 0.038 263.4)",
+          "oklch(48% 0.038 263.4)",
+          "oklch(59% 0.038 263.4)",
+          "oklch(70% 0.038 263.4)",
+          "oklch(82% 0.038 263.4)",
+          "oklch(95% 0.038 263.4)"
+        ]
+      },
+      "night-paper-deep": {
+        "role": "neutral",
+        "displayName": "Night Paper Deep",
+        "canonical": "#1f2a40",
+        "tonalRamp": [
+          "oklch(15% 0.043 263.5)",
+          "oklch(26% 0.043 263.5)",
+          "oklch(37% 0.043 263.5)",
+          "oklch(48% 0.043 263.5)",
+          "oklch(59% 0.043 263.5)",
+          "oklch(70% 0.043 263.5)",
+          "oklch(82% 0.043 263.5)",
+          "oklch(95% 0.043 263.5)"
+        ]
+      },
+      "night-ink-soft": {
+        "role": "neutral",
+        "displayName": "Night Ink Soft",
+        "canonical": "#97a3b7",
+        "tonalRamp": [
+          "oklch(15% 0.032 260.7)",
+          "oklch(26% 0.032 260.7)",
+          "oklch(37% 0.032 260.7)",
+          "oklch(48% 0.032 260.7)",
+          "oklch(59% 0.032 260.7)",
+          "oklch(70% 0.032 260.7)",
+          "oklch(82% 0.032 260.7)",
+          "oklch(95% 0.032 260.7)"
+        ]
+      },
+      "night-rule": {
+        "role": "neutral",
+        "displayName": "Night Rule",
+        "canonical": "#33405a",
+        "tonalRamp": [
+          "oklch(15% 0.048 263.7)",
+          "oklch(26% 0.048 263.7)",
+          "oklch(37% 0.048 263.7)",
+          "oklch(48% 0.048 263.7)",
+          "oklch(59% 0.048 263.7)",
+          "oklch(70% 0.048 263.7)",
+          "oklch(82% 0.048 263.7)",
+          "oklch(95% 0.048 263.7)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Subpage titles; the hero name is a script-fitted case of the same face."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Static block titles; kinetic section titles animate width 55→150% and weight 250→700 on entry."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Product names on case cards; the hero role line."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All reading text, Literata, max 36em."
+      },
+      "body-lead": {
+        "displayName": "Lead",
+        "purpose": "Card summaries and section leads."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Nav, chips, metadata, buttons, table headers."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sheet-over-sheet",
+        "value": "0 -1.25rem 3rem -1.5rem rgb(0 0 0 / 0.45)",
+        "purpose": "The sheet sliding over the pinned hero."
+      },
+      {
+        "name": "card-lift",
+        "value": "0 -0.5rem 2.5rem -0.75rem var(--shadow)",
+        "purpose": "Product cards in the sticky stack; --shadow is the product shadow tint."
+      },
+      {
+        "name": "screen-float",
+        "value": "0 0 0 1px var(--line), 0 2rem 3.5rem -1.25rem var(--shadow)",
+        "purpose": "Screenshots inside product cards."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-soft",
+        "value": "cubic-bezier(0.2, 0.7, 0.2, 1)",
+        "purpose": "Width and weight transitions, wheel and press responses."
+      },
+      {
+        "name": "ease-pop",
+        "value": "cubic-bezier(0.3, 1.6, 0.5, 1)",
+        "purpose": "Overshoot pop in the anime tile drawing."
+      },
+      {
+        "name": "kinetic-entry",
+        "value": "animation-timeline: view(); animation-range: entry 10% cover 40%",
+        "purpose": "Section titles growing from narrow and light to wide and heavy."
+      },
+      {
+        "name": "hero-recede",
+        "value": "animation-timeline: scroll(root); animation-range: 0 100vh",
+        "purpose": "Pinned hero scales to 0.92 and dims to 0.22 under the next sheet."
+      },
+      {
+        "name": "status-pulse",
+        "value": "2.4s ease-out infinite",
+        "purpose": "Availability dot in the hero."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "30rem"
+      },
+      {
+        "name": "sm",
+        "value": "40rem"
+      },
+      {
+        "name": "md",
+        "value": "48rem"
+      },
+      {
+        "name": "matrix",
+        "value": "52rem"
+      },
+      {
+        "name": "lg",
+        "value": "60rem"
+      },
+      {
+        "name": "xl",
+        "value": "64rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Pill button on sheet",
+      "kind": "button",
+      "refersTo": "button-pill-on-sheet",
+      "description": "Primary action on a colored sheet: filled with sheet ink, labelled in the sheet color, paired with an underlined link.",
+      "html": "<div class=\"ds-sheet-demo\"><a class=\"ds-btn-pill\" href=\"#\">Zobacz projekty</a><a class=\"ds-link\" href=\"#\">Napisz do mnie</a></div>",
+      "css": ".ds-sheet-demo{background:#2f45e0;padding:2rem;border-radius:1.5rem;display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;align-items:center;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-weight:600;font-size:1.05rem}.ds-btn-pill{color:#2f45e0;background:#f4f6ff;padding:.6rem 1.1rem;border-radius:999px;text-decoration:none;transition:background .2s}.ds-btn-pill:hover{background:#fff}.ds-btn-pill:active{transform:translateY(1px)}.ds-btn-pill:focus-visible,.ds-link:focus-visible{outline:3px solid #f4f6ff;outline-offset:3px;border-radius:2px}.ds-link{color:#f4f6ff;text-decoration-thickness:2px;text-underline-offset:.2em;padding-block:.6rem}"
+    },
+    {
+      "name": "Product pill button",
+      "kind": "button",
+      "refersTo": "button-pill-on-sheet",
+      "description": "Primary link on a product card: card ink fill, card background label, product accent on hover (PlaceMates palette).",
+      "html": "<div class=\"ds-case-demo\"><a class=\"ds-btn-case\" href=\"#\">placemates.pl</a><a class=\"ds-case-link\" href=\"#\">Kod na GitHubie</a></div>",
+      "css": ".ds-case-demo{background:#17110d;padding:2rem;border-radius:1.5rem;display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;align-items:center;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-weight:600}.ds-btn-case{color:#17110d;background:#f4ece3;padding:.6rem 1.15rem;border-radius:999px;text-decoration:none;transition:background .2s}.ds-btn-case:hover{background:#ee8f57}.ds-btn-case:active{transform:translateY(1px)}.ds-btn-case:focus-visible,.ds-case-link:focus-visible{outline:3px solid #ee8f57;outline-offset:3px;border-radius:2px}.ds-case-link{color:#f4ece3;text-decoration-color:#ee8f57;text-decoration-thickness:2px;text-underline-offset:.2em}"
+    },
+    {
+      "name": "Tech chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Hairline pill for one technology in a stack.",
+      "html": "<ul class=\"ds-chips\"><li>Next.js 16</li><li>Supabase</li><li>PostGIS</li></ul>",
+      "css": ".ds-chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.4rem;color:var(--ink,#16223a)}.ds-chips li{padding:.2rem .7rem;border:1px solid color-mix(in srgb,currentColor 25%,transparent);border-radius:999px;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-size:.85rem;font-stretch:92%}"
+    },
+    {
+      "name": "Hero metadata rail",
+      "kind": "chip",
+      "description": "Key/value pills on the hero sheet, with the pulsing availability dot.",
+      "html": "<dl class=\"ds-rail\"><div><dt>Status</dt><dd><span class=\"ds-dot\"></span>Otwarty na nowe projekty</dd></div><div><dt>Miasto</dt><dd>Zamość</dd></div></dl>",
+      "css": ".ds-rail{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:1.5rem;background:#2f45e0;border-radius:1.5rem;color:#f4f6ff;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-size:.95rem;line-height:1.3}.ds-rail div{display:inline-flex;gap:.5rem;align-items:center;padding:.35rem .85rem;border:1px solid color-mix(in srgb,#f4f6ff 35%,transparent);border-radius:999px}.ds-rail dt{color:#c9d0ff;font-stretch:90%}.ds-rail dd{margin:0;font-weight:600}.ds-dot{display:inline-block;width:.55rem;height:.55rem;margin-right:.5rem;border-radius:50%;background:#5fe3a1;animation:ds-pulse 2.4s ease-out infinite}@keyframes ds-pulse{0%{box-shadow:0 0 0 0 rgb(95 227 161 / .6)}70%,100%{box-shadow:0 0 0 .45rem rgb(95 227 161 / 0)}}@media (prefers-reduced-motion:reduce){.ds-dot{animation:none}}"
+    },
+    {
+      "name": "Site navigation",
+      "kind": "nav",
+      "description": "Narrow Anybody links; a cobalt underline marks hover and the current page.",
+      "html": "<header class=\"ds-head\"><a class=\"ds-home\" href=\"#\">Damian Ułaś</a><nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">Projekty</a><a href=\"#\">AI</a><a href=\"#\">Umiejętności</a><a href=\"#\">Blog</a><a href=\"#\">CV</a><a href=\"#\">Kontakt</a></nav></header>",
+      "css": ".ds-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.5rem 2rem;padding:1.25rem;background:var(--paper,#dce2e8)}.ds-home{font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-weight:800;font-stretch:115%;font-size:1.15rem;color:var(--ink,#16223a);text-decoration:none}.ds-nav{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-size:1rem;font-stretch:90%}.ds-nav a{color:var(--ink,#16223a);text-decoration:none;padding-block:.25rem;border-bottom:2px solid transparent}.ds-nav a:hover,.ds-nav a[aria-current=page]{border-color:var(--cobalt,#2f45e0)}.ds-home:focus-visible,.ds-nav a:focus-visible{outline:3px solid var(--cobalt,#2f45e0);outline-offset:3px;border-radius:2px}"
+    },
+    {
+      "name": "Product case card",
+      "kind": "card",
+      "refersTo": "case-card",
+      "description": "Sheet in the product palette with a radial glow, ruled header and a floating screenshot (PlaceMates palette).",
+      "html": "<article class=\"ds-case\"><header class=\"ds-case-head\"><h3>PlaceMates</h3><span class=\"ds-meta\"><b>Na produkcji</b></span></header><div class=\"ds-screen\"></div><p>Mapa miejsc poleconych przez znajomych.</p></article>",
+      "css": ".ds-case{position:relative;isolation:isolate;overflow:hidden;display:grid;gap:1.75rem;padding:clamp(1.25rem,4.5vw,3rem);border-radius:2rem;background:#17110d;color:#f4ece3;box-shadow:0 -.5rem 2.5rem -.75rem rgb(0 0 0 / .55)}.ds-case::before{content:\"\";position:absolute;inset:0;z-index:-1;background:radial-gradient(60% 70% at 70% 60%,rgb(232 131 74 / .3),transparent 70%)}.ds-case-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:.75rem 2rem;padding-bottom:1rem;border-bottom:1px solid rgb(244 236 227 / .16)}.ds-case-head h3{margin:0;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-size:clamp(2rem,6vw,4rem);font-weight:800;font-stretch:112%;line-height:.95;letter-spacing:-.01em}.ds-meta{font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-size:.95rem;color:#bcae9f}.ds-meta b{color:#ee8f57;font-weight:600}.ds-screen{aspect-ratio:16/10;border-radius:.75rem;background:#2a201a;box-shadow:0 0 0 1px rgb(244 236 227 / .16),0 2rem 3.5rem -1.25rem rgb(0 0 0 / .55)}.ds-case p{margin:0;font-family:var(--text, \"Literata Variable\", Georgia, serif);font-size:1.3rem;line-height:1.38}"
+    },
+    {
+      "name": "Interest bento tile",
+      "kind": "card",
+      "refersTo": "tile",
+      "description": "Themed tile with a fitted condensed word that widens on hover.",
+      "html": "<div class=\"ds-tile\"><span class=\"ds-word\">Rower</span><p>Trasy, które kończą się przy kawie.</p></div>",
+      "css": ".ds-tile{display:flex;flex-direction:column;justify-content:space-between;gap:2.5rem;min-height:16rem;padding:clamp(1.25rem,3vw,2.25rem);border-radius:1.25rem;background:#1d3a30;color:#e8f1eb}.ds-word{font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-size:5rem;font-weight:700;font-stretch:75%;line-height:.95;transition:font-stretch .6s cubic-bezier(.2,.7,.2,1)}.ds-tile:hover .ds-word{font-stretch:150%}.ds-tile p{margin:0;max-width:26em;color:#b4cdbf;font-family:var(--text, \"Literata Variable\", Georgia, serif)}@media (prefers-reduced-motion:reduce){.ds-word{transition:none}}"
+    },
+    {
+      "name": "Brand mark",
+      "kind": "custom",
+      "description": "Two stacked sheets with a D: the sheet stack in one glyph, shown on paper and inverted on a cobalt sheet.",
+      "html": "<div class=\"ds-marks\"><span class=\"ds-mark-paper\"><svg class=\"ds-mark\" viewBox=\"0 0 100 100\"><rect class=\"b\" x=\"8\" y=\"0\" width=\"84\" height=\"80\" rx=\"18\"/><rect class=\"f\" x=\"0\" y=\"12.5\" width=\"100\" height=\"87.5\" rx=\"21\"/><path class=\"l\" d=\"M24.4 78.5H54.5Q65.2 78.5 70.4 73.4Q75.6 68.2 75.6 56.2Q75.6 44.2 70.5 39.1Q65.3 34 54.5 34H24.4ZM40.1 68.1V44.4H50.6Q55.3 44.4 57.6 46.4Q59.9 48.4 59.9 56.2Q59.9 64 57.6 66.1Q55.3 68.1 50.6 68.1Z\"/></svg>Damian Ułaś</span><span class=\"ds-mark-sheet\"><svg class=\"ds-mark\" viewBox=\"0 0 100 100\"><rect class=\"b\" x=\"8\" y=\"0\" width=\"84\" height=\"80\" rx=\"18\"/><rect class=\"f\" x=\"0\" y=\"12.5\" width=\"100\" height=\"87.5\" rx=\"21\"/><path class=\"l\" d=\"M24.4 78.5H54.5Q65.2 78.5 70.4 73.4Q75.6 68.2 75.6 56.2Q75.6 44.2 70.5 39.1Q65.3 34 54.5 34H24.4ZM40.1 68.1V44.4H50.6Q55.3 44.4 57.6 46.4Q59.9 48.4 59.9 56.2Q59.9 64 57.6 66.1Q55.3 68.1 50.6 68.1Z\"/></svg>Damian Ułaś</span></div>",
+      "css": ".ds-marks{display:flex;flex-wrap:wrap;gap:1rem}.ds-marks>span{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 1.25rem;border-radius:1.5rem;font-family:var(--display, \"Anybody Variable\", \"Arial Narrow\", sans-serif);font-weight:800;font-stretch:115%;font-size:1.15rem}.ds-mark{width:2rem;height:2rem;overflow:visible}.ds-mark-paper{background:#dce2e8;color:#16223a}.ds-mark-paper .b{fill:#8d9cff}.ds-mark-paper .f{fill:#2f45e0}.ds-mark-paper .l{fill:#f4f6ff}.ds-mark-sheet{background:#2f45e0;color:#f4f6ff}.ds-mark-sheet .b{fill:#8d9cff}.ds-mark-sheet .f{fill:#f4f6ff}.ds-mark-sheet .l{fill:#2f45e0}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Sheet Stack",
+    "overview": "The page is a stack of sheets, and the brand mark says so literally: two rounded sheets, one stepped behind the other, with a D on the front one. The hero is the first sheet of the page, a full-bleed cobalt sheet carrying the site header; on desktop it rides its own track, stays pinned, shrinks and dims as the next sheet slides over it with rounded top corners and a soft shadow, and on phones it simply scrolls away and shrinks a little as it leaves. Subpages open the same way, on a cobalt masthead sheet. Every product gets a sheet in its own colors, taken straight from its screenshots, and on wide, tall screens those cards stack sticky on top of each other as you scroll. Between the sheets lies cool, slightly blue paper and dark navy ink: a drafting table the products are laid on.\r\n\r\nThe second voice is the typeface. Anybody is a variable face with a width axis from 50% to 150%, and the system uses that axis as motion: the hero name swells under a typographic lens that follows the cursor (or the scroll on touch), section titles grow from narrow and light to wide and heavy as they enter, interest tiles widen their word on hover. Literata, an optical-size serif, carries the reading text so the expressive display never has to.\r\n\r\nComponents are tactile and confident: solid pill buttons, big rounded sheets, clear states, real device frames around real screenshots. Density is low; each section earns a full screen. Motion is scroll-driven CSS wherever possible, only transform and opacity animate in the heavy paths, and everything collapses gracefully under `prefers-reduced-motion`.",
+    "keyCharacteristics": [
+      "Rounded sheets stacked in scroll order; the hero (and every subpage masthead) is the first sheet.\r",
+      "A brand mark that is the system in miniature: two stacked sheets and a D.\r",
+      "One sheet, one palette: products keep their own colors; cobalt belongs to the site.\r",
+      "Width axis of Anybody used as a motion and hierarchy tool.\r",
+      "Cool paper and navy ink in light mode, inverted navy night in dark mode; sheets keep fixed colors in both.\r",
+      "Real screenshots in device frames, never illustrations of products.\r",
+      "Thin-stroke line drawings and technical-grid plates for diagrams.\r"
+    ],
+    "rules": [
+      {
+        "name": "The Borrowed Palette Rule",
+        "body": "A product sheet is painted in that product's colors, sampled from its own screenshots. Cobalt never tints another product's card, and a product color never leaks outside its card except as its marker in the skills matrix.",
+        "section": "colors"
+      },
+      {
+        "name": "The AA Floor Rule",
+        "body": "Secondary text on a colored sheet stays at 4.5:1 or better, and dimmed states never drop large text below 3:1. Darken the sheet a step before you wash out its text.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fixed Sheet Rule",
+        "body": "Colored sheets (hero, Contact, product cards, interest tiles) keep the same colors in light and dark mode. Only the paper, ink and rule between them flip with the theme.",
+        "section": "colors"
+      },
+      {
+        "name": "The Width Is Voice Rule",
+        "body": "Hierarchy and emphasis come from the width axis as much as from size or weight: narrow for quiet metadata (85–95%), extended for headlines (110–150%). Animate width only where motion means something (lens, entry, hover, active step).",
+        "section": "typography"
+      },
+      {
+        "name": "The Fitted Line Rule",
+        "body": "Hero name, kinetic titles, the contact email and interest words are sized to fill their container and never wrap; their measured `--fit` width in em drives the size. Changing the word means re-measuring.",
+        "section": "typography"
+      },
+      {
+        "name": "The Serif Reads Rule",
+        "body": "Literata is only for reading text. Labels, actions, numbers and names are always Anybody.",
+        "section": "typography"
+      },
+      {
+        "name": "The Content Line Rule",
+        "body": "Whatever breaks out to the edges, its text starts on the same line as the section titles.",
+        "section": "layout"
+      },
+      {
+        "name": "The Shadow Points Up Rule",
+        "body": "Stack shadows are cast upward onto the sheet below. A shadow means \"this sheet is on top\", never \"this button is clickable\".",
+        "section": "elevation"
+      },
+      {
+        "name": "The Pill Means Press Rule",
+        "body": "Full pill shape is reserved for small interactive or metadata elements; large surfaces never go pill, and buttons never go square.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** give every new product its own sheet colored from its own screenshots, and add its accent to the skills matrix tone map.\r",
+      "**Do** put large surfaces on rounded sheets (1.5rem, 2rem from 64rem) that reach to the sheet gap from the window edge while their content stays on the title line.\r",
+      "**Do** use Anybody's width axis for hierarchy and meaningful motion; keep Literata for reading text at 1.125rem / 1.6, max 36em.\r",
+      "**Do** drive motion with scroll timelines in CSS, animate only transform and opacity on heavy paths, and give every effect a `prefers-reduced-motion` fallback and a readable no-script state.\r",
+      "**Do** show real screenshots in device frames.\r",
+      "**Do** keep colored sheets identical in light and dark mode.\r",
+      "**Do** take the brand mark from `src/data/brand.ts` (regenerated by `scripts/brand/logo.py`) and recolor it only through `--mark-back`, `--mark-front`, `--mark-letter`.\r"
+    ],
+    "donts": [
+      "**Don't** add a headshot or a placeholder portrait.\r",
+      "**Don't** use cobalt inside another product's card, or a product color outside its card and its matrix column.\r",
+      "**Don't** use shadows as button affordances or on flat bento tiles.\r",
+      "**Don't** let fitted display lines wrap; re-measure `--fit` when the text changes.\r",
+      "**Don't** set labels, buttons, numbers or names in Literata.\r",
+      "**Don't** introduce square buttons or pill-shaped large surfaces.\r",
+      "**Don't** redraw or restyle the brand mark by hand; change it in `scripts/brand/logo.py` and regenerate.\r"
+    ]
+  }
+}

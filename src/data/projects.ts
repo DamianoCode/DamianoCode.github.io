@@ -96,7 +96,7 @@ export const projects: Project[] = [
     kind: 'Wtyczka do Claude Code',
     summary: 'Wtyczka do Claude Code, która dobiera sposób pracy do ryzyka zmiany.',
     detail:
-      'Drobną poprawkę wprowadza od razu. Większą zmianę najpierw klasyfikuje, zamraża kontrakt i rozdziela między czterech podagentów na różnych modelach, a na końcu zleca niezależny przegląd. Chroni przed poprawnym zbudowaniem złej rzeczy i przed naprawianiem błędu, którego nikt nie zlokalizował.',
+      'Drobną poprawkę wprowadza od razu. Większą zmianę najpierw klasyfikuje, spisuje, co ma powstać, i rozdziela pracę między czterech agentów na różnych modelach, a na końcu zleca niezależny przegląd. Chroni przed poprawnym zbudowaniem złej rzeczy i przed naprawianiem błędu, którego nikt nie zlokalizował.',
     stack: ['Claude Code', 'podagenci', 'hooki', 'Node.js'],
     links: [{ href: 'https://github.com/DamianoCode/claudius', label: 'Kod' }],
   },

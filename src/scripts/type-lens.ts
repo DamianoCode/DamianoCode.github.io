@@ -16,11 +16,15 @@
 
 /** Tyle poziomów daje kroki ok. 1 jednostki szerokości i 6 jednostek grubości: poniżej progu widoczności. */
 const LEVELS = 100;
-const W_RANGE = [50, 150] as const;
+/** Najwęższe litery mają szerokość 70, nie 50 krojowego minimum: przy kursorze z dala od napisu
+ *  skrajnie wąskie litery wyglądały jak zepsuty napis, a nie jak efekt. */
+const W_RANGE = [70, 150] as const;
 const G_RANGE = [280, 860] as const;
-/** Spoczynek: szerokość 100, grubość 640. Krzywa grubości jest dobrana tak, by oba punkty wypadły przy u = 0.5. */
+/** Spoczynek: szerokość 100, grubość 640. Krzywe obu osi są dobrane tak, by oba punkty wypadły przy u = 0.5. */
 const U_REST = 0.5;
 const G_CURVE = Math.log((640 - G_RANGE[0]) / (G_RANGE[1] - G_RANGE[0])) / Math.log(U_REST);
+/** Tak samo dla szerokości: spoczynkowe 100 wypada przy u = 0.5. */
+const W_CURVE = Math.log((100 - W_RANGE[0]) / (W_RANGE[1] - W_RANGE[0])) / Math.log(U_REST);
 const SPREAD = 0.17;
 const SWEEP_MS = 1500;
 const EASE = 0.16;
@@ -66,7 +70,7 @@ type Line = {
 
 /** Wartości osi kroju (szerokość, grubość) dla parametru `u`. */
 const axesOf = (u: number) =>
-  [W_RANGE[0] + (W_RANGE[1] - W_RANGE[0]) * u, G_RANGE[0] + (G_RANGE[1] - G_RANGE[0]) * u ** G_CURVE] as const;
+  [W_RANGE[0] + (W_RANGE[1] - W_RANGE[0]) * u ** W_CURVE, G_RANGE[0] + (G_RANGE[1] - G_RANGE[0]) * u ** G_CURVE] as const;
 
 const REST_LEVEL = Math.round(U_REST * LEVELS);
 const VARIATIONS = Array.from({ length: LEVELS + 1 }, (_, level) => {

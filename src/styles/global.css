@@ -182,13 +182,19 @@ a:hover {
   justify-items: start;
 }
 
-/* Linki-akcje w kroju nagłówkowym */
+/* Linki-akcje w kroju nagłówkowym. Każdy ma co najmniej 44 px wysokości, jak cel dotyku w menu. */
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1.5rem;
+  align-items: center;
+  gap: 0 1.5rem;
   font-family: var(--display);
   font-weight: 600;
+}
+.actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
 /* Płyta rysunkowa: schematy i diagramy leżą na siatce, jak na papierze technicznym. */

@@ -1,0 +1,131 @@
+<!--
+  Pływające skróty w prawym dolnym rogu (w zasięgu kciuka), widoczne po zejściu z hero:
+  - „Napisz do mnie” prowadzi do arkusza Kontakt i chowa się, gdy Kontakt jest już na ekranie;
+  - strzałka wraca na górę strony i zostaje do samego końca, bo tam jest najbardziej potrzebna.
+  Oba chowają się przy przewijaniu w dół, żeby nie zasłaniać czytanego tekstu, i wracają przy przewijaniu
+  w górę, gdy ktoś szuka drogi dalej. Bez skryptu się nie pokazują: zostaje menu i sam arkusz Kontakt.
+-->
+<div class="dock" data-dock hidden>
+  <a class="dock-up" href="#top" aria-label="Wróć na górę strony">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" /></svg>
+  </a>
+  <a class="dock-write" href="#kontakt" data-dock-write>Napisz do mnie</a>
+</div>
+
+<script>
+  const dock = document.querySelector<HTMLElement>('[data-dock]');
+  const write = document.querySelector<HTMLElement>('[data-dock-write]');
+  const contact = document.querySelector('#kontakt');
+  if (dock && write && contact) {
+    dock.hidden = false;
+    // Hero jest przyklejony pod kolejnymi arkuszami, więc dla obserwatora przecięć stale „widoczny”.
+    // Dlatego o hero decyduje przewinięcie: skróty pojawiają się po zejściu o 80% wysokości ekranu.
+    let pastHero = false;
+    let goingDown = false;
+    let lastY = window.scrollY;
+    const update = () => {
+      dock.toggleAttribute('data-shown', pastHero && !goingDown);
+    };
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const y = window.scrollY;
+        pastHero = y > window.innerHeight * 0.8;
+        // Próg 8 px: drobne drgnięcia palca nie przełączają widoczności.
+        if (Math.abs(y - lastY) > 8) {
+          goingDown = y > lastY;
+          lastY = y;
+        }
+        update();
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    new IntersectionObserver(([entry]) => {
+      write.toggleAttribute('data-off', entry.isIntersecting);
+    }).observe(contact);
+  }
+</script>
+
+<style>
+  /* Skróty w kolorach arkusza Kontakt. Biała obwódka oddziela je od kart w dowolnym kolorze,
+     także od kobaltowej karty Claudiusa; cień nie służy tu za sygnał „kliknij”. */
+  .dock {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1rem);
+    pointer-events: none;
+  }
+  .dock[data-shown] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  .dock a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    border: 2px solid #f4f6ff;
+    border-radius: 999px;
+    background: #2f45e0;
+    color: #f4f6ff;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    text-decoration: none;
+    pointer-events: auto;
+  }
+  .dock-write {
+    padding: 0.6rem 1.25rem;
+  }
+  .dock-write[data-off] {
+    display: none !important;
+  }
+  .dock-up {
+    width: 3rem;
+  }
+  .dock-up svg {
+    width: 1.35rem;
+    height: 1.35rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .dock a:hover {
+    background: #f4f6ff;
+    color: #2f45e0;
+  }
+  .dock a:active {
+    transform: translateY(1px);
+  }
+  .dock a:focus-visible {
+    outline: 3px solid #2f45e0;
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .dock {
+      transition:
+        opacity 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+        visibility 0s linear 0.3s;
+    }
+    .dock[data-shown] {
+      transition:
+        opacity 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+        visibility 0s;
+    }
+  }
+</style>

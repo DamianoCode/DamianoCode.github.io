@@ -1,21 +1,30 @@
-/** Sekcja „Agenci AI”: doświadczenie z Claude Code i modelami językowymi. */
+/**
+ * Sekcja „Agenci AI”: jak pracuję i co z tego mogę wdrożyć w zespole. Każda oferta mówi, co zostaje
+ * w zespole po współpracy (`outcome`), i ma dowód z mojej codziennej pracy (`proof`).
+ */
 export const aiWork = {
   lead:
-    'Z agentami AI pracuję codziennie, głównie w Claude Code. Agent pisze kod, a ja wyznaczam kierunek, pilnuję jakości i przeglądam każdą zmianę.',
-  points: [
-    {
-      title: 'Kilka sesji naraz',
-      text: 'Prowadzę równolegle kilka sesji Claude Code, każdą na osobnym worktree. Żeby żadna nie czekała na mnie niezauważona, napisałem widżet, który pokazuje stan każdej sesji, limity konta i zajętość kontekstu.',
+    'Z agentami AI pracuję codziennie, głównie w Claude Code. Agent pisze kod, a ja wyznaczam kierunek, pilnuję jakości i przeglądam każdą zmianę. Ten sam sposób pracy mogę ustawić w Twoim zespole.',
+  offers: {
+    repo: {
+      title: 'Claude Code w waszym repozytorium',
+      text: 'Konfiguruję Claude Code pod konkretny projekt: instrukcje, gotowe procedury i automatyczne sprawdzenia, dzięki którym agent zna wasze konwencje i działa przewidywalnie. Dobieram model do zadania i pilnuję, co agent dostaje do przeczytania.',
+      outcome: 'Konfiguracja zostaje w waszym repozytorium i działa u każdego w zespole.',
+      proof: 'Takie instrukcje, procedury i sprawdzenia piszę na co dzień do własnych repozytoriów.',
     },
-    {
-      title: 'Własny proces dla agentów',
-      text: 'Claudius to mój sposób pracy zapisany jako wtyczka: orkestrator ocenia ryzyko zmiany, rozdziela pracę między podagentów na tańszych i droższych modelach i zleca niezależny przegląd, zanim cokolwiek uzna za skończone.',
+    pilot: {
+      title: 'Pilot na realnym zadaniu',
+      text: 'Bierzemy jedno zadanie z waszego backlogu i dowozimy je razem z agentami. Zespół widzi cały proces na własnym kodzie, od opisu zadania po przegląd zmian.',
+      outcome: 'Zostaje dowiezione zadanie i proces, który zespół zobaczył na własnym kodzie i może powtórzyć.',
+      proof: 'Na co dzień prowadzę kilka sesji agenta naraz, każdą na osobnej kopii repozytorium, a mój widżet pokazuje, która czeka na decyzję.',
     },
-    {
-      title: 'Modele językowe w praktyce',
-      text: 'Dobieram model do zadania, dbam o to, co trafia do kontekstu, i piszę skille, hooki oraz instrukcje, dzięki którym agent działa przewidywalnie w konkretnym repozytorium.',
+    review: {
+      title: 'Proces z niezależnym przeglądem',
+      text: 'Agent nie ocenia sam siebie. Większa zmiana dostaje najpierw spisane wymagania, pracę dzieli kilku agentów na modelach dobranych do zadania, a na końcu wynik sprawdza osobny agent, który go nie pisał.',
+      outcome: 'Zostaje proces przeglądu ustawiony w waszym repozytorium, który uruchamiacie bez mnie.',
+      proof: 'Tak działa Claudius, moja wtyczka do Claude Code.',
     },
-  ],
+  },
 };
 
 /** Kroki, przez które przechodzi zmiana w Claudiusie. */

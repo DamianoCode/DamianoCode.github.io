@@ -1,6 +1,6 @@
 ---
 import { cvReady } from '../../data/cv';
-import { profile } from '../../data/profile';
+import { mailto, profile, subjects } from '../../data/profile';
 
 // Na wąskich ekranach adres łamie się tylko po „@”, nigdy w środku domeny.
 const [emailUser, emailDomain] = profile.email.split('@');
@@ -11,14 +11,29 @@ const [emailUser, emailDomain] = profile.email.split('@');
   <div class="wrap block">
   <h2 id="kontakt-h" class="block-title kinetic" style="--fit: 6.78">Kontakt</h2>
   <p class="intro">
-    Szukasz fullstack developera albo kogoś, kto pomoże wdrożyć agentów AI w zespole? Napisz maila.
+    Wybierz, w jakiej sprawie piszesz: temat maila uzupełni się sam. Możesz też napisać prosto na adres poniżej.
   </p>
-  <a class="email" href={`mailto:${profile.email}`}><span>{emailUser}@</span><span>{emailDomain}</span></a>
+
+  <!-- Najpierw decyzja: dwie ścieżki z gotowym tematem maila. Adres i reszta linków są pod nimi. -->
+  <ul class="paths">
+    <li>
+      <h3 class="path-q">Masz projekt albo zespół do wdrożenia agentów?</h3>
+      <p>Aplikacja od bazy po interfejs albo Claude Code w waszym repozytorium.</p>
+      <a href={mailto(subjects.project)}>Napisz o projekcie</a>
+    </li>
+    <li>
+      <h3 class="path-q">Rekrutujesz?</h3>
+      <p>B2B albo etat, {profile.remote}. Napisz, czego szuka zespół.</p>
+      <a href={mailto(subjects.job)}>Napisz w sprawie pracy</a>
+    </li>
+  </ul>
+
+  <a class="email" href={mailto()}><span>{emailUser}@</span><span>{emailDomain}</span></a>
   <p class="actions more">
     <button class="copy" type="button" data-copy={profile.email} hidden>Kopiuj adres</button>
     <a href={profile.linkedin} rel="me">LinkedIn</a>
     <a href={profile.github} rel="me">GitHub</a>
-    {cvReady && <a href="/cv">CV</a>}
+    {cvReady ? <a href="/cv">CV</a> : <a href={mailto(subjects.cv)}>Poproś o CV</a>}
   </p>
   <p class="copied" role="status" aria-live="polite"></p>
   </div>
@@ -103,22 +118,73 @@ const [emailUser, emailDomain] = profile.email.split('@');
     color: var(--ink);
     text-decoration-thickness: 2px;
   }
+  /* Kopiowanie jest akcją drugiego planu: obrys zamiast wypełnienia, bo pełne pigułki należą do ścieżek wyżej. */
   .copy {
     font: inherit;
-    color: #2f45e0;
-    background: var(--ink);
-    border: 0;
+    min-height: 2.75rem;
+    color: var(--ink);
+    background: transparent;
+    border: 2px solid var(--ink);
     border-radius: 999px;
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1.1rem;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
   }
   .copy:hover {
-    background: #ffffff;
+    color: #2f45e0;
+    background: var(--ink);
   }
   .copy:active {
     transform: translateY(1px);
   }
+  .paths {
+    list-style: none;
+    display: grid;
+    gap: 1.75rem 3rem;
+    margin: clamp(1.75rem, 4vw, 2.75rem) 0 0;
+    padding: 0;
+  }
+  .paths li {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    justify-items: start;
+  }
+  .paths p {
+    color: var(--soft);
+  }
+  .path-q {
+    font-weight: 700;
+    font-stretch: 112%;
+    font-size: var(--step-1);
+    line-height: 1.1;
+  }
+  /* Dwie główne akcje sekcji: pigułki w kolorach arkusza, jak przycisk w hero. */
+  .paths a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    margin-top: 0.5rem;
+    padding: 0.6rem 1.15rem;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #2f45e0;
+    font-family: var(--display);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .paths a:hover {
+    background: #ffffff;
+  }
+  .paths a:active {
+    transform: translateY(1px);
+  }
+  @media (min-width: 48rem) {
+    .paths {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   /* Komunikat ma stałe miejsce, więc jego pojawienie się niczego nie przesuwa. */
   .copied {
     min-height: 1.6em;
