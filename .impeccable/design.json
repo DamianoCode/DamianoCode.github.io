@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-12T11:46:40.727Z",
+  "generatedAt": "2026-10-12T13:10:32.670Z",
   "title": "Design System: Damian Ułaś — portfolio",
   "extensions": {
     "colorMeta": {
@@ -282,23 +282,39 @@
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Static block titles; kinetic section titles animate width 55→150% and weight 250→700 on entry."
+        "purpose": "Static block titles; kinetic section titles animate width 55→150% (110% below 40rem, sized up by 1/0.725) and weight 250→700 on entry."
       },
       "title": {
         "displayName": "Title",
         "purpose": "Product names on case cards; the hero role line."
       },
+      "subhead": {
+        "displayName": "Subhead",
+        "purpose": "Bento tile titles, Claudius step names, the hero role line; ceiling 2.4rem."
+      },
       "body": {
         "displayName": "Body",
-        "purpose": "All reading text, Literata, max 36em."
+        "purpose": "All reading text, Literata, max 33em (about 68 characters)."
       },
       "body-lead": {
         "displayName": "Lead",
-        "purpose": "Card summaries and section leads."
+        "purpose": "--lead: the first sentence under a title (AI lead, case summaries, collaboration pitch, Contact intro), line-height 1.38."
+      },
+      "body-small": {
+        "displayName": "Small",
+        "purpose": "--step-small: secondary reading text (card details, AI proof lines, matrix notes, Claudius step descriptions)."
+      },
+      "label-small": {
+        "displayName": "Label small",
+        "purpose": "--label-s: chips, footer, skills group headers (capitals, tracking 0.08em)."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Nav, chips, metadata, buttons, table headers."
+        "purpose": "--label: metadata (case meta, hero rail, years, stacks, CV period and place, blog dates), width 85–95%."
+      },
+      "label-large": {
+        "displayName": "Label large",
+        "purpose": "--label-l: actions and navigation (nav, .actions, hero CTA, dock, AI CTA, outcome lines, matrix column heads)."
       }
     },
     "shadows": [
@@ -399,6 +415,18 @@
       {
         "name": "xl",
         "value": "64rem"
+      }
+    ],
+    "fallbacks": [
+      {
+        "name": "Literata Fallback",
+        "value": "local('Georgia'), size-adjust 105%",
+        "purpose": "Keeps line breaks stable while Literata loads."
+      },
+      {
+        "name": "Anybody Fallback",
+        "value": "local('Arial'), size-adjust 108%",
+        "purpose": "Keeps label and heading widths close while Anybody loads."
       }
     ]
   },
@@ -550,7 +578,7 @@
     "dos": [
       "**Do** give every new product its own sheet colored from its own screenshots, and add its accent to the skills matrix tone map.\r",
       "**Do** put large surfaces on rounded sheets (1.5rem, 2rem from 64rem) that reach to the sheet gap from the window edge while their content stays on the title line.\r",
-      "**Do** use Anybody's width axis for hierarchy and meaningful motion; keep Literata for reading text at 1.125rem / 1.6, max 36em.\r",
+      "**Do** use Anybody's width axis for hierarchy and meaningful motion; keep Literata for reading text at 1.125rem / 1.6, max 33em, and take sizes from the role tokens (`--lead`, `--step-small`, `--label-s`, `--label`, `--label-l`) instead of new literal values.\r",
       "**Do** drive motion with scroll timelines in CSS, animate only transform and opacity on heavy paths, and give every effect a `prefers-reduced-motion` fallback and a readable no-script state.\r",
       "**Do** show real screenshots in device frames.\r",
       "**Do** keep colored sheets identical in light and dark mode.\r",
