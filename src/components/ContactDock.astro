@@ -92,7 +92,22 @@
     display: none !important;
   }
   .dock-up {
+    position: relative;
     width: 3rem;
+  }
+  /* Strzałka jest przednim arkuszem znaku. Za nią leży tylny, jaśniejszy, który w miarę przewijania wysuwa się
+     w górę i na końcu strony stoi tak jak w logo: dyskretny wskaźnik, ile stosu już za Tobą. Leży pod tłem
+     przycisku (przycisk nie tworzy własnego kontekstu nakładania), więc widać tylko wysuwający się brzeg. */
+  .dock-up::before {
+    content: '';
+    position: absolute;
+    inset: -2px 0.3rem;
+    z-index: -1;
+    border: 2px solid var(--brand-snow);
+    border-radius: 999px;
+    background: var(--brand-cobalt-light);
+    translate: 0 var(--rise, -0.6rem);
+    pointer-events: none;
   }
   .dock-up svg {
     width: 1.35rem;
@@ -115,6 +130,12 @@
     outline-offset: 3px;
   }
   @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .dock-up::before {
+        animation: rise linear both;
+        animation-timeline: scroll(root);
+      }
+    }
     .dock {
       transition:
         opacity 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -126,6 +147,11 @@
         opacity 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
         transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
         visibility 0s;
+    }
+  }
+  @keyframes rise {
+    from {
+      translate: 0 0;
     }
   }
 </style>
