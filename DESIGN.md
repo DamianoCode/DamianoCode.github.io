@@ -174,6 +174,7 @@ A cool drafting-table neutral set (haze paper, harbour ink) with one saturated s
 ### Tertiary (product palette)
 - **PlaceMates Ember**, **Tutor Brick**, **Widget Amber**, **Shop Slate**: each product's accent, sampled from its screenshots. They tint that product's card (background, glow, accent, link underline) and reappear as the column color in the skills matrix, so a column reads as a strip of its project card. Each card carries its own full local set (`--bg`, `--glow`, `--ink`, `--soft`, `--accent`, `--line`, `--shadow`) defined in the Projects component.
 - The widget tiles reuse the widget's own screenshot palette: near-black ground (#0c0c0c), light gray text (#efefef, secondary #b4b4b4) and Widget Amber underlines.
+- The widget card shows a single states board (`widget-stany.png`: every mode and state with its own labels) drawn on that exact ground, so it needs no frame; it blends with `lighten`, which makes the board's ground vanish into the card glow too.
 - The "Po godzinach" tiles follow the same idea with subject palettes: forest green for cycling, deep brick (#a93c25) for games, near-black with green and red for markets, off-white with navy ink for anime and manga.
 
 ### Neutral

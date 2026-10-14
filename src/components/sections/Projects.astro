@@ -5,10 +5,7 @@ import placematesShot from '../../assets/projects/placemates.png';
 import placematesMap from '../../assets/projects/placemates-map-telefon.png';
 import tutorWeek from '../../assets/projects/korepetytor-terminarz-desktop.png';
 import tutorToday from '../../assets/projects/korepetytor-dzis-telefon.png';
-import widgetPanel from '../../assets/projects/widget-panel.png';
-import widgetRobot from '../../assets/projects/widget-robot.png';
-import widgetMini from '../../assets/projects/widget-mini.png';
-import widgetBar from '../../assets/projects/widget-bar.png';
+import widgetStates from '../../assets/projects/widget-stany.png';
 import { archive, projects, type Project } from '../../data/projects';
 
 /** Karty w kolejności na stronie. `flip`: scena po lewej, tekst po prawej. */
@@ -88,10 +85,13 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
 
             {p.id === 'widget' && (
               <div class="rig rig-widget">
-                <Image class="w-panel" src={widgetPanel} alt="Pełny panel: sygnalizator, stan sesji, limit 5-godzinny, tygodniowy i zajętość kontekstu" loading="lazy" />
-                <Image class="w-robot" src={widgetRobot} alt="Maskotka z dymkiem: sesja ma nowy wynik" loading="lazy" />
-                <Image class="w-mini" src={widgetMini} alt="Sam sygnalizator, najmniejszy tryb" loading="lazy" />
-                <Image class="w-bar" src={widgetBar} alt="Pasek przy dolnej krawędzi ekranu ze światłami i limitami" loading="lazy" />
+                <Image
+                  src={widgetStates}
+                  alt="Wszystkie stany widżetu: pełny widok sygnalizatora w czterech stanach (czeka na Ciebie, pracuje, nowy wynik, nic nie czeka) z limitami konta, panel sesji po najechaniu, tryb mini, maskotka i wyspa przy krawędzi ekranu"
+                  widths={[700, 1100, 1600, 2200]}
+                  sizes="(min-width: 64rem) 46vw, 92vw"
+                  loading="lazy"
+                />
               </div>
             )}
 
@@ -334,9 +334,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     aspect-ratio: 100 / 128;
   }
   .case-widget .case-stage {
-    aspect-ratio: 100 / 118;
-    place-items: end center;
-    border-bottom: 1px solid var(--line);
+    aspect-ratio: 100 / 90;
   }
 
   /* Scena dopasowuje szerokość tak, by w całości zmieściła się w dostępnym miejscu. */
@@ -384,22 +382,13 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     translate: -50% 0;
   }
 
-  /* Widżet, telefon: panel po lewej, maskotka i sygnalizator po prawej, pasek przy dolnej krawędzi. */
+  /* Widżet: jedna plansza ze wszystkimi trybami i stanami. Jej tło to tło karty (#0c0c0c), więc plansza nie ma
+     ramki, a rozjaśnianie gasi to tło także na poświacie karty: tryby stoją wprost na karcie. Mieszanie jest na
+     całej scenie, bo animacja wejścia izoluje jej zawartość od tła. */
   .rig-widget {
-    --ratio: 0.85;
-  }
-  /* Ciemne tło zrzutów znika w tle karty (także na poświacie), zostają same elementy widżetu.
-     Mieszanie jest na całej scenie, bo animacja wejścia izoluje jej zawartość od tła. */
-  .rig-widget {
+    --ratio: 1.12;
     mix-blend-mode: lighten;
   }
-  .rig-widget :global(img) {
-    position: absolute;
-  }
-  .rig-widget :global(.w-panel) { left: 7%; top: 3%; width: 36%; }
-  .rig-widget :global(.w-robot) { left: 57%; top: 10%; width: 28%; }
-  .rig-widget :global(.w-mini) { left: 70%; top: 45%; width: 13%; }
-  .rig-widget :global(.w-bar) { left: 0; bottom: 0; width: 100%; }
 
   /* Tekst */
   .case-text {
@@ -696,7 +685,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
       aspect-ratio: 100 / 66;
     }
     .case-widget .case-stage {
-      aspect-ratio: 100 / 76;
+      aspect-ratio: 100 / 89;
     }
 
     /* Laptop: ekran po lewej, telefon przy prawej krawędzi, opuszczony w dół. */
@@ -712,15 +701,6 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
       width: 25%;
       translate: none;
     }
-
-    /* Widżet, laptop: tryby rozłożone jak na pulpicie. */
-    .rig-widget {
-      --ratio: 1.37;
-    }
-    .rig-widget :global(.w-panel) { left: 5%; top: 3%; width: 23%; }
-    .rig-widget :global(.w-robot) { left: 46%; top: 18%; width: 14%; }
-    .rig-widget :global(.w-mini) { left: 86%; top: 25%; width: 9%; }
-    .rig-widget :global(.w-bar) { left: 32%; bottom: 0; width: 66%; }
   }
 
   /* Stos kart na telefonie i w niskim oknie: karta przykleja się dolną krawędzią do dołu ekranu
