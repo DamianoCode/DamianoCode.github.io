@@ -158,7 +158,7 @@ Components are tactile and confident: solid pill buttons, big rounded sheets, cl
 - Width axis of Anybody used as a motion and hierarchy tool.
 - Cool paper and navy ink in light mode, inverted navy night in dark mode; sheets keep fixed colors in both.
 - Real screenshots in device frames, never illustrations of products.
-- Thin-stroke line drawings and technical-grid plates for diagrams.
+- Thin-stroke line drawings in the interest tiles.
 
 ## Colors
 
@@ -243,7 +243,7 @@ Depth is physical: sheets lie on top of each other. Shadows are soft and directi
 
 ## Shapes
 
-One family of soft rectangles, scaled by size: sheets and cards 1.5rem (2rem from 64rem), bento tiles 1.25rem, screenshots 0.75rem, matrix bars 0.4rem, tiny legend swatches 0.2rem, and everything interactive and small (buttons, chips, hero metadata) a full pill. Phones are drawn as real devices with a thick near-black bezel. Line drawings in interest tiles use a 0.9 stroke with round caps and sit under the text; most bleed off the tile edge as a fragment, but the gamepad is drawn whole (grips, d-pad, sticks, buttons), tilted slightly in the bottom-right corner beside the text, because a cropped pad stops reading as a pad. Diagrams sit on a "plate": a faint 0.75rem technical grid with a hairline border, all derived from `currentColor`.
+One family of soft rectangles, scaled by size: sheets and cards 1.5rem (2rem from 64rem), bento tiles 1.25rem, screenshots 0.75rem, matrix bars 0.4rem, tiny legend swatches 0.2rem, and everything interactive and small (buttons, chips, hero metadata) a full pill. Phones are drawn as real devices with a thick near-black bezel. Line drawings in interest tiles use a 0.9 stroke with round caps and sit under the text; most bleed off the tile edge as a fragment, but the gamepad is drawn whole (grips, d-pad, sticks, buttons), tilted slightly in the bottom-right corner beside the text, because a cropped pad stops reading as a pad.
 
 **The Pill Means Press Rule.** Full pill shape is reserved for small interactive or metadata elements; large surfaces never go pill, and buttons never go square.
 
@@ -262,7 +262,7 @@ Tactile and confident: a solid pill paired with a plain underlined link.
 - **Metadata variant:** the hero rail pairs a soft key (`dt`, width 90%) with a bold value in one bordered pill.
 
 ### Cards / Containers
-- **Product case card:** full-bleed sheet in the product's palette, radius 1.5rem / 2rem, padding clamp(1.25rem, 4.5vw, 4.5rem), radial product-colored glow behind the stage, header with a hairline rule, device-framed screenshots, traffic-light state list, chips, links.
+- **Product case card:** full-bleed sheet in the product's palette, radius 1.5rem / 2rem, padding clamp(1.25rem, 4.5vw, 4.5rem), radial product-colored glow behind the stage, header with a hairline rule, device-framed screenshots, traffic-light state list, chips, links. On entry the name rises from under its rule and the stage slides up and fades in, both on view timelines; the stage finishes once it is fully on screen, before the card sticks, so a stuck stage never freezes mid-move. Cards clip with `overflow: clip`, not `hidden`: `hidden` makes the card a scroll container and every `view()` entrance inside it would measure against the card instead of the window.
 - **Bento tile:** radius 1.25rem, padding clamp(1.25rem, 3vw, 2.25rem), solid themed background, no shadow. A tile on its own sheet color is separated by a 1px rule instead of a fill. Offer tiles carry an "outcome" line in the display face (what stays with the team) followed by a smaller "proof" line naming the tool or habit that backs the offer.
 - **Inverted sheet:** the AI section swaps paper and ink so it stands apart in both themes.
 
@@ -285,7 +285,7 @@ Right under the intro, before the big email, the Contact sheet splits into two p
 Right after Projects, a sheet in Morning Haze Paper Deep (it stands apart from the page like every sheet, without competing with the cobalt hero and Contact that bracket the page). Clients lead: a large display question "Masz pomysł na aplikację?" (step-4, 800, width 115%), a lead-size line on what gets built with PlaceMates as proof, a cobalt pill and an underlined link. Recruiters follow in a narrower column (8fr/4fr from 60rem) behind a 1px rule: a subhead question, one soft line, two underlined links. It sits one sheet gap above the next sheet.
 
 ### Typographic lens (signature)
-The hero name, every letter absolutely positioned and moved by transform, reacts to the cursor or scroll: letters near the focus go wide and heavy, far ones narrow and light, quantised to 100 pre-measured levels so nothing shifts layout. The axis values are shown live in a hero chip.
+The hero name, every letter absolutely positioned and moved by transform, reacts to the cursor or scroll: letters near the focus go wide and heavy, far ones narrow and light, quantised to 100 pre-measured levels so nothing shifts layout.
 
 ### Claudius track (signature)
 A vertical rail of process steps; the active step's rail fills over time while its name goes from width 70% / weight 400 to width 135% / weight 800. The name is not interpolated per frame: both cuts are set in the same cell, and the narrow one stretches out (scaleX 2.6, the measured ratio) and fades while the wide one grows from scaleX 0.385 and appears, so only opacity and transform run on the compositor. After the last step all rails drain upward together (0.7s) before the next pass. A mouse hover pins a step; touch never does, because a finger lands on the rail while scrolling. Without script every step is plainly readable.
