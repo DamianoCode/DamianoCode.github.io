@@ -1,12 +1,25 @@
 ---
 import { cvReady } from '../../data/cv';
 import { mailto, profile, subjects } from '../../data/profile';
+import { projects } from '../../data/projects';
+import { projectTone } from '../../data/tones';
+
+// Stos domyka się nad Kontaktem: krawędzie arkuszy produktów w kolejności z góry strony. Pierwszy leży najgłębiej,
+// ostatni tuż pod Kontaktem. Arkusze mają stałe kolory w obu motywach, więc Claudius bierze jasny kobalt ze znaku,
+// a nie motywowy, który na kobaltowym Kontakcie by zniknął.
+const edges = projects.map((project) =>
+  project.id === 'claudius' ? 'var(--brand-cobalt-light)' : projectTone[project.id],
+);
 
 // Na wąskich ekranach adres łamie się tylko po „@”, nigdy w środku domeny.
 const [emailUser, emailDomain] = profile.email.split('@');
 ---
 
-<!-- Finał strony: arkusz w kolorze akcentu, adres na całą szerokość. -->
+<!-- Finał strony: arkusz w kolorze akcentu, adres na całą szerokość. Nad nim wystają krawędzie arkuszy produktów,
+     schodkami jak tylny arkusz w znaku: cały stos z góry strony leży pod Kontaktem. -->
+<div class="stack-edges" aria-hidden="true" style={`--n: ${edges.length}`}>
+  {edges.map((color, i) => <span style={`--i: ${i}; --tone: ${color}`} />)}
+</div>
 <section class="sheet contact" id="kontakt" aria-labelledby="kontakt-h">
   <div class="wrap block">
   <h2 id="kontakt-h" class="block-title kinetic" style="--fit: 6.78">Kontakt</h2>
@@ -89,9 +102,58 @@ const [emailUser, emailDomain] = profile.email.split('@');
     --soft: #d3d9ff;
     --select-bg: var(--brand-snow);
     --select-ink: var(--brand-cobalt);
-    margin-top: clamp(3rem, 8vh, 6rem);
+    position: relative;
+    z-index: 1;
     background: var(--brand-cobalt);
     color: var(--ink);
+    /* Kontakt leży na wierzchu stosu: cień pada w górę, na krawędzie pod nim. */
+    box-shadow: 0 -0.4rem 1rem -0.5rem rgb(0 0 0 / 0.35);
+  }
+
+  /* Krawędzie arkuszy: każdy następny jest szerszy i niższy, jak arkusz z przodu znaku. Widać tylko pasek
+     u góry każdego; reszta chowa się pod następnym arkuszem, a dół wszystkich pod Kontaktem. */
+  .stack-edges {
+    --strip: clamp(0.6rem, 1.2vw, 1.05rem);
+    --step: clamp(0.5rem, 2vw, 1.6rem);
+    --tuck: 2rem;
+    position: relative;
+    height: calc(var(--n) * var(--strip) + var(--tuck));
+    margin: clamp(2rem, 6vh, 4.5rem) max(var(--sheet-gap), (100% - var(--sheet-max)) / 2) calc(-1 * var(--tuck));
+  }
+  .stack-edges span {
+    position: absolute;
+    top: calc(var(--i) * var(--strip));
+    bottom: 0;
+    inset-inline: calc((var(--n) - var(--i)) * var(--step));
+    border-radius: 1.5rem 1.5rem 0 0;
+    background: var(--tone);
+    box-shadow: 0 -0.3rem 0.7rem -0.4rem rgb(0 0 0 / 0.3);
+  }
+  @media (min-width: 64rem) {
+    .stack-edges span {
+      border-radius: 2rem 2rem 0 0;
+    }
+  }
+
+  /* Stos rozkłada się, gdy Kontakt wjeżdża na ekran: krawędzie wysuwają się spod niego, najbliższa pierwsza,
+     najgłębsza ostatnia. Bez obsługi osi przewijania i przy ograniczonym ruchu stos jest od razu rozłożony. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .stack-edges {
+        view-timeline: --stack;
+      }
+      .stack-edges span {
+        --lag: calc((var(--n) - 1 - var(--i)) * 4%);
+        animation: fan-out linear both;
+        animation-timeline: --stack;
+        animation-range: cover var(--lag) cover calc(24% + var(--lag));
+      }
+    }
+  }
+  @keyframes fan-out {
+    from {
+      transform: translateY(calc((var(--n) - var(--i)) * var(--strip)));
+    }
   }
   .contact :focus-visible {
     outline-color: var(--ink);
