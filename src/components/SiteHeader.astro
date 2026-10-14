@@ -23,7 +23,7 @@ const nav = [
 ---
 
 <div class="wrap site-head" id="top">
-  <a class="home" href="/"><BrandMark />{profile.fullName}</a>
+  <a class="home" href="/"><BrandMark />{profile.handle}</a>
   <nav aria-label="Główna">
     {nav.map((item) => (
       <a href={item.href} aria-current={item.current ? 'page' : undefined}>
