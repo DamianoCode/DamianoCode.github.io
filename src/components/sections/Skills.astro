@@ -1,17 +1,11 @@
 ---
 import { alsoUsed, columns, skillGroups, skills } from '../../data/skills';
+import { projectTone } from '../../data/tones';
 
 const grouped = skillGroups.map((group) => ({ group, items: skills.filter((s) => s.group === group) }));
 
 /** Kolor kolumny = kolor karty projektu: tabela łączy się wzrokowo z projektami wyżej. */
-const tone: Record<string, string> = {
-  placemates: '#e8834a',
-  korepetytor: '#d4533d',
-  widget: '#e3a21a',
-  claudius: 'var(--cobalt)',
-  ecommerce: '#7d8aa5',
-  wczesniej: 'var(--ink-soft)',
-};
+const tone: Record<string, string> = { ...projectTone, wczesniej: 'var(--ink-soft)' };
 
 const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : `#${id}`);
 ---

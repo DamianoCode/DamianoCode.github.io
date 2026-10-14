@@ -183,7 +183,7 @@ A cool drafting-table neutral set (haze paper, harbour ink) with one saturated s
 - **Night Paper**, **Night Paper Deep**, **Night Ink Soft**, **Night Rule**: the dark theme counterparts; ink becomes Morning Haze Paper.
 
 ### Named Rules
-**The Borrowed Palette Rule.** A product sheet is painted in that product's colors, sampled from its own screenshots. Cobalt never tints another product's card, and a product color never leaks outside its card except as its marker in the skills matrix.
+**The Borrowed Palette Rule.** A product sheet is painted in that product's colors, sampled from its own screenshots. Cobalt never tints another product's card, and a product color never leaks outside its card except as a marker: its column in the skills matrix and its edge in the closing stack above Contact. The accents live in `src/data/tones.ts`.
 
 **The AA Floor Rule.** Secondary text on a colored sheet stays at 4.5:1 or better, and dimmed states never drop large text below 3:1. Darken the sheet a step before you wash out its text.
 
@@ -235,6 +235,7 @@ Depth is physical: sheets lie on top of each other. Shadows are soft and directi
 ### Shadow Vocabulary
 - **Sheet over sheet** (`box-shadow: 0 -1.25rem 3rem -1.5rem rgb(0 0 0 / 0.45)`): the sheet that slides over the hero.
 - **Card lift** (`box-shadow: 0 -0.5rem 2.5rem -0.75rem var(--shadow)`): product cards in the sticky stack.
+- **Edge lift** (`box-shadow: 0 -0.3rem 0.7rem -0.4rem rgb(0 0 0 / 0.3)`, 0.35 on the Contact sheet): the stepped edges of the closing stack.
 - **Screen float** (`box-shadow: 0 0 0 1px var(--line), 0 2rem 3.5rem -1.25rem var(--shadow)`): screenshots in cards.
 
 ### Named Rules
@@ -280,6 +281,9 @@ After the visitor scrolls past the hero, two cobalt controls with a 2px Sheet In
 ### Contact paths
 Right under the intro, before the big email, the Contact sheet splits into two paths, the project one first: "Masz projekt albo zespół do wdrożenia agentów?" and "Rekrutujesz?", each a subhead question, one line of soft text and a filled pill mail link with a prefilled subject. A hairline in Sheet Ink at 35% separates them (horizontal on phones, vertical side by side, as in the Collaboration sheet), and side by side they share subgrid rows, so both pills sit on one line even when one question wraps. The decision comes first; the email, an outlined "Kopiuj adres" pill and the secondary links follow. Mail subjects are shared site-wide (`subjects` in `profile.ts`), so the same intent always arrives with the same subject.
 
+### Closing stack (signature)
+Above the Contact sheet the edges of every product sheet peek out in the order the cards came, PlaceMates deepest and the last product right under Contact, each a strip about 1rem tall (clamp(0.6rem, 1.2vw, 1.05rem)) in the product's accent, stepped like the back sheet of the mark: every deeper sheet is one step (clamp(0.5rem, 2vw, 1.6rem)) narrower on each side. Claudius uses Blueprint Cobalt Night so it does not vanish into the cobalt Contact. Each edge and the Contact sheet cast the small upward stack shadow. As Contact rides in, a view timeline slides the edges out from under it, nearest first and deepest last; without scroll timelines and under reduced motion the stack is simply open. It is the page's closing line: everything you scrolled past now lies under the place to write.
+
 ### Collaboration sheet
 Right after Projects, a sheet in Morning Haze Paper Deep (it stands apart from the page like every sheet, without competing with the cobalt hero and Contact that bracket the page). Clients lead: a large display question "Masz pomysł na aplikację?" (step-4, 800, width 115%), a lead-size line on what gets built with PlaceMates as proof, a cobalt pill and an underlined link. Recruiters follow in a narrower column (8fr/4fr from 60rem) behind a 1px rule: a subhead question, one soft line, two underlined links. It sits one sheet gap above the next sheet.
 
@@ -316,7 +320,7 @@ A themed tile with a fitted condensed word (width 75%) that widens to 150% on ho
 
 ### Don't:
 - **Don't** add a headshot or a placeholder portrait.
-- **Don't** use cobalt inside another product's card, or a product color outside its card and its matrix column.
+- **Don't** use cobalt inside another product's card, or a product color outside its card, its matrix column and its stack edge.
 - **Don't** use shadows as button affordances or on flat bento tiles.
 - **Don't** let fitted display lines wrap; re-measure `--fit` when the text changes.
 - **Don't** set labels, buttons, numbers or names in Literata.
