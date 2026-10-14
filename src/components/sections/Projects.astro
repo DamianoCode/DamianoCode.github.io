@@ -266,7 +266,9 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     --pad: clamp(1.25rem, 4.5vw, 4.5rem);
     position: relative;
     isolation: isolate;
-    overflow: hidden;
+    /* clip, nie hidden: hidden robi z karty kontener przewijania, a wtedy animacje wejścia (view()) liczą się
+       względem karty zamiast okna i stoją od razu w stanie końcowym. */
+    overflow: clip;
     display: grid;
     grid-template-areas: 'head' 'stage' 'text';
     gap: 1.75rem 3.5rem;
@@ -614,7 +616,9 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
       .rig {
         animation: stage-in linear both;
         animation-timeline: view();
-        animation-range: entry 0% cover 30%;
+        /* Scena kończy wejście, gdy cała jest na ekranie: zanim karta się przyklei, bo przyklejona scena przestaje
+           się przesuwać i zatrzymałaby się w połowie ruchu. */
+        animation-range: entry 0% entry 100%;
       }
     }
   }
