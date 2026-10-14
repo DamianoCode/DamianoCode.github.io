@@ -286,6 +286,9 @@ Right after Projects, a sheet in Morning Haze Paper Deep (it stands apart from t
 ### Typographic lens (signature)
 The hero name, every letter absolutely positioned and moved by transform, reacts to the cursor or scroll: letters near the focus go wide and heavy, far ones narrow and light, quantised to 100 pre-measured levels so nothing shifts layout. The axis values are shown live in a hero chip.
 
+### Glass lens (signature)
+The hero sheet carries a faint drafting grid in Sheet Ink (24px cells at 5%, every fourth line at 10%, the strong lines starting on the content line), and the typographic lens is also a piece of glass over it: a WebGL2 shader (`src/scripts/hero-glass.ts`) magnifies the grid about 1.5× under the same focus point the letters follow, with the lines growing clearer inside, a hairline of red/blue dispersion where the image bends most, and a barely brighter fill with a soft rim. The falloff reaches zero at the edge, so there is no seam. It sweeps once with the letters on load, follows the mouse, and fades out in place when the pointer leaves. Frames are drawn only while the lens moves or fades, never off screen. Without WebGL2 and under reduced motion the same grid is drawn in CSS with no lens.
+
 ### Claudius track (signature)
 A vertical rail of process steps; the active step's rail fills over time while its name goes from width 70% / weight 400 to width 135% / weight 800. The name is not interpolated per frame: both cuts are set in the same cell, and the narrow one stretches out (scaleX 2.6, the measured ratio) and fades while the wide one grows from scaleX 0.385 and appears, so only opacity and transform run on the compositor. After the last step all rails drain upward together (0.7s) before the next pass. A mouse hover pins a step; touch never does, because a finger lands on the rail while scrolling. Without script every step is plainly readable.
 

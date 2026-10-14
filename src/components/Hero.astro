@@ -12,6 +12,7 @@ const lines = [profile.name, profile.surname];
        przed <main>, a skok do treści prowadzi od razu do projektów. -->
   <div class="hero-pin">
   <div class="sheet hero-sheet">
+    <canvas class="glass" aria-hidden="true" data-glass></canvas>
     <SiteHeader />
     <div class="wrap hero-inner">
       <div class="stage">
@@ -63,11 +64,15 @@ const lines = [profile.name, profile.surname];
 </header>
 
 <script>
+  import { initHeroGlass } from '../scripts/hero-glass';
   import { initTypeLens } from '../scripts/type-lens';
 
   const root = document.querySelector<HTMLElement>('[data-type]');
   const section = root?.closest<HTMLElement>('.hero');
-  if (root && section) initTypeLens(root, section);
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-glass]');
+  // Szkło idzie za soczewką liter: jeden punkt ostrości dla napisu i siatki.
+  const glass = canvas ? initHeroGlass(canvas) : null;
+  if (root && section) initTypeLens(root, section, undefined, glass?.setLens);
 
   // Przypięty arkusz po przewinięciu jest pod następną sekcją. Fokus klawiatury w nim przewija stronę na górę,
   // gdzie hero jest w pełni widoczne.
@@ -113,7 +118,31 @@ const lines = [profile.name, profile.surname];
     flex-direction: column;
     min-height: calc(100svh - 2 * var(--sheet-gap));
     padding-bottom: clamp(2rem, 6vh, 4rem);
-    background: var(--sheet-bg);
+    /* Siatka kreślarska: drobne oczko 24px i co czwarta linia mocniej, zaczynając od linii treści.
+       Skrypt zastępuje ją tą samą siatką w WebGL, którą soczewka powiększa jak szkło. */
+    --grid-minor: color-mix(in srgb, var(--ink) 5%, transparent);
+    --grid-major: color-mix(in srgb, var(--ink) 10%, transparent);
+    background:
+      linear-gradient(to right, var(--grid-major) 1.25px, transparent 0) var(--gutter) 0 / 96px 96px,
+      linear-gradient(to bottom, var(--grid-major) 1.25px, transparent 0) 0 0 / 96px 96px,
+      linear-gradient(to right, var(--grid-minor) 1px, transparent 0) var(--gutter) 0 / 24px 24px,
+      linear-gradient(to bottom, var(--grid-minor) 1px, transparent 0) 0 0 / 24px 24px,
+      var(--sheet-bg);
+  }
+  .glass {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .hero-sheet.has-glass .glass {
+    visibility: visible;
+  }
+  /* Treść leży nad szkłem. */
+  .hero-sheet > :global(:not(.glass)) {
+    position: relative;
   }
   /* Nagłówek i treść hero rozciągają się na całą szerokość arkusza, a nie na kolumnę 88rem pozostałych sekcji:
      na dużym monitorze napis wypełnia okno zamiast stać w wąskim pasie pośrodku. */

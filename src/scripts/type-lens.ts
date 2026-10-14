@@ -162,7 +162,10 @@ async function prepareVariants(line: Line, fontSize: number) {
 /** Odczyt soczewki: osie najszerszej litery, w całych jednostkach. */
 export type AxesListener = (width: number, weight: number) => void;
 
-export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: AxesListener) {
+/** Położenie soczewki w pikselach okna, w każdej klatce ruchu; null, gdy soczewka wraca do spoczynku. */
+export type LensListener = (x: number | null, y: number) => void;
+
+export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: AxesListener, onLens?: LensListener) {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 
@@ -198,6 +201,8 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
   // Pozycja soczewki: x w pikselach okna, y jako 0–1 wysokości napisu. null = spoczynek.
   let lensX: number | null = null;
   let lensY = 0.5;
+  /** Ta sama pozycja w pionie w pikselach okna, bez przycięcia do napisu. */
+  let lensClientY = 0;
   let sweepStart = 0;
   let frame = 0;
   let reported = '';
@@ -289,8 +294,11 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
         const first = lines[0];
         lensX = first.boxLeft + first.boxWidth * (-0.15 + 1.3 * eased);
         lensY = 0.5;
+        lensClientY = rootTop - scrollY + rootHeight * 0.5;
       }
     }
+
+    onLens?.(lensX, lensClientY);
 
     let moving = sweepStart !== 0;
     let peak = 0;
@@ -332,12 +340,14 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
     if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
     sweepStart = 0;
     lensX = e.clientX;
+    lensClientY = e.clientY;
     lensY = clamp01((e.clientY + scrollY - rootTop) / rootHeight);
     wake();
   };
 
   const settle = () => {
     lensX = null;
+    onLens?.(null, 0);
     sweepStart = 0;
     for (const line of lines) {
       for (const c of line.chars) {
