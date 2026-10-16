@@ -77,6 +77,14 @@ import { interests } from '../../data/profile';
     --soft: #4e5b72;
     --art: #16223a;
   }
+  /* Rosso corsa o włos ciemniejsze od fabrycznego (#d40000), żeby opis w --soft trzymał AA (5.1:1). Bolid
+     rysuje żółta kreska z tarczy Ferrari. */
+  .tile-f1 {
+    --bg: #c8000a;
+    --ink: #fff6f0;
+    --soft: #ffe6dc;
+    --art: #ffd600;
+  }
 
   /* Hasła mają rozmiar dopasowany do kafla: linie się nie zawijają, a rozmiar mieści szeroki stan
      z najechania, więc kafel nie zmienia wysokości. `--fit` przychodzi z danych. */
@@ -209,6 +217,25 @@ import { interests } from '../../data/profile';
     stroke: none;
   }
 
+  /* Bolid stoi kołami na dolnej krawędzi pod hasłem, tyłem za lewą krawędzią, i jedzie w stronę tekstu.
+     Rysunek jest odbity w poziomie, bo w SVG nos patrzy w lewo. */
+  .tile :global(.art-f1) {
+    --art-strength: 80%;
+    width: clamp(24rem, 40vw, 36rem);
+    left: -1.5rem;
+    bottom: -0.2rem;
+    scale: -1 1;
+  }
+  .tile :global(.art-f1 .wheel) {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  /* Płat DRS obraca się wokół tylnej krawędzi, jak prawdziwa klapa. */
+  .tile :global(.art-f1 .drs) {
+    transform-box: fill-box;
+    transform-origin: 100% 50%;
+  }
+
   /* Na wąskim kaflu treść zajmuje całą szerokość, więc rysunek dostaje własny pas przy swojej krawędzi. */
   @media (max-width: 59.99rem) {
     .tile-rower,
@@ -217,6 +244,9 @@ import { interests } from '../../data/profile';
     }
     .tile-gielda {
       padding-top: 6.5rem;
+    }
+    .tile-f1 {
+      padding-bottom: 8.5rem;
     }
     .tile :global(.art) {
       width: 11rem;
@@ -233,6 +263,11 @@ import { interests } from '../../data/profile';
     .tile :global(.art-anime) {
       left: -1.25rem;
       bottom: -2.5rem;
+    }
+    .tile :global(.art-f1) {
+      width: 21rem;
+      left: -1.5rem;
+      bottom: -0.2rem;
     }
   }
 
@@ -252,6 +287,25 @@ import { interests } from '../../data/profile';
     .tile-anime {
       grid-column: 6 / 13;
     }
+    /* Trzeci rząd to finał sekcji: pas przez całą szerokość, niższy od kafli nad nim. Hasło zostaje
+       w lewym górnym rogu, tekst schodzi do prawego dolnego, a bolid jedzie pod hasłem. */
+    .tile-f1 {
+      grid-column: 1 / 13;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) min(24rem, 38%);
+      grid-template-rows: auto 1fr;
+      column-gap: 3rem;
+      min-height: clamp(18rem, 24vw, 21rem);
+    }
+    .tile-f1 .word-box {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .tile-f1 .text {
+      grid-column: 2;
+      grid-row: 2;
+      align-self: end;
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -266,6 +320,15 @@ import { interests } from '../../data/profile';
     }
     .tile :global(.art-anime .pop) {
       transition: scale 0.35s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i, 0) * 80ms);
+    }
+    .tile :global(.art-f1) {
+      transition: translate 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .tile :global(.art-f1 .wheel) {
+      transition: rotate 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .tile :global(.art-f1 .drs) {
+      transition: rotate 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s;
     }
 
     /* Wjazd kafla na ekran rysuje kontury od zera, tym samym przewijaniem co tytuły sekcji. */
@@ -317,6 +380,17 @@ import { interests } from '../../data/profile';
     }
     .tile:hover :global(.art-anime .pop) {
       scale: 1.08;
+    }
+    /* Bolid rusza do przodu, koła się toczą, a na prostej otwiera się DRS. Rysunek jest odbity, więc
+       obrót kół w jego układzie idzie w drugą stronę. */
+    .tile:hover :global(.art-f1) {
+      translate: 1.5rem 0;
+    }
+    .tile:hover :global(.art-f1 .wheel) {
+      rotate: -200deg;
+    }
+    .tile:hover :global(.art-f1 .drs) {
+      rotate: 16deg;
     }
   }
 </style>

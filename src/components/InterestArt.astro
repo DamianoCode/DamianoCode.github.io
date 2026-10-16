@@ -124,3 +124,32 @@ const burst = Array.from({ length: 24 }, (_, i) => polar(50, 140, i % 2 ? 19 : 3
     </g>
   </svg>
 )}
+
+{/* F1: bolid z boku, tyłem wychodzi za lewą krawędź i jedzie w stronę tekstu. Koła mają łuk napisu na
+    oponie, żeby obrót był widoczny; górny płat tylnego skrzydła to DRS, który otwiera się po najechaniu. */}
+{id === 'f1' && (
+  <svg class="art art-f1" viewBox="0 0 400 124" aria-hidden="true">
+    <path
+      data-draw
+      pathLength="1"
+      d="M18 104L64 94M112 86L160 76L214 70L226 50H240Q294 56 342 78L350 104H344M112 106H293"
+    />
+    <path d="M162 76Q166 60 180 59H210Q216 60 216 68" />
+    <circle cx="196" cy="68" r="7" />
+    <path d="M150 88Q200 79 238 83Q272 89 293 99M111 87L140 80M111 97L140 92" />
+    <path d="M4 114H56M8 100V114M12 107H52" />
+    <path class="wing" d="M382 34V102M346 98H382M340 60L382 55M358 60L346 78" />
+    <path class="drs" d="M344 48L382 43" />
+    {[
+      [88, 92, 24],
+      [318, 91, 25],
+    ].map(([cx, cy, r]) => (
+      <g class="wheel">
+        <circle data-draw pathLength="1" cx={cx} cy={cy} r={r} />
+        <circle cx={cx} cy={cy} r={r * 0.62} />
+        <circle cx={cx} cy={cy} r="3.5" />
+        <path d={`M${cx - r * 0.81} ${cy - r * 0.37}A${r * 0.89} ${r * 0.89} 0 0 1 ${cx - r * 0.37} ${cy - r * 0.81}`} />
+      </g>
+    ))}
+  </svg>
+)}
