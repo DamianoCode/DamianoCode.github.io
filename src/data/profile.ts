@@ -80,6 +80,13 @@ export const interests = [
     fit: 6.74,
     text: 'Lubię historie opowiadane obrazem. Kadrowanie w mangach i komiksach to przy okazji niezła lekcja projektowania.',
   },
+  {
+    id: 'f1',
+    word: 'Ferrari',
+    lines: ['Ferrari'],
+    fit: 6.31,
+    text: 'W F1 kibicuję Ferrari, więc „we are checking” słyszę w każdy weekend wyścigowy. U siebie sprawdzam wcześniej, zanim decyzja trafi na tor.',
+  },
 ] as const;
 
 export type InterestId = (typeof interests)[number]['id'];
