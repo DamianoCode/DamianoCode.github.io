@@ -2,8 +2,8 @@
   Pływające skróty w prawym dolnym rogu (w zasięgu kciuka), widoczne po zejściu z hero:
   - „Napisz do mnie” prowadzi do arkusza Kontakt i chowa się, gdy Kontakt jest już na ekranie;
   - strzałka wraca na górę strony i zostaje do samego końca, bo tam jest najbardziej potrzebna.
-  Oba chowają się przy przewijaniu w dół, żeby nie zasłaniać czytanego tekstu, i wracają przy przewijaniu
-  w górę, gdy ktoś szuka drogi dalej. Bez skryptu się nie pokazują: zostaje menu i sam arkusz Kontakt.
+  Kontakt pozostaje pod ręką niezależnie od kierunku przewijania; strzałka wraca przy przewijaniu w górę.
+  Bez skryptu się nie pokazują: zostaje menu i sam arkusz Kontakt.
 -->
 <div class="dock" data-dock hidden>
   <a class="dock-up" href="#top" aria-label="Wróć na górę strony">
@@ -24,7 +24,8 @@
     let goingDown = false;
     let lastY = window.scrollY;
     const update = () => {
-      dock.toggleAttribute('data-shown', pastHero && !goingDown);
+      dock.toggleAttribute('data-shown', pastHero);
+      dock.toggleAttribute('data-down', goingDown);
     };
     let frame = 0;
     const onScroll = () => {
@@ -93,6 +94,9 @@
   }
   .dock-up {
     width: 3rem;
+  }
+  .dock[data-down] .dock-up {
+    display: none;
   }
   .dock-up svg {
     width: 1.35rem;
