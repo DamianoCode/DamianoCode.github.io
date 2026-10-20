@@ -9,3 +9,5 @@ npm-debug.log*
 .impeccable/hook.cache.json
 .impeccable/critique/
 .impeccable/live/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
