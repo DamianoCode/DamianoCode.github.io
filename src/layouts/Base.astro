@@ -24,7 +24,7 @@ interface Props {
 const {
   title = seo.title,
   description = seo.description,
-  image = '/og.png',
+  image = '/og.jpg',
   type = 'website',
   noindex = false,
   jsonLd = [],
@@ -42,6 +42,11 @@ const cleanPath =
     .replace(/(.)\/$/, '$1') || '/';
 const canonical = new URL(cleanPath, site).href;
 const imageUrl = new URL(image, site).href;
+// Opis gotowego obrazka udostępniania (nocna scena z podpisem), nie samej osoby.
+const imageAlt =
+  image === '/og.jpg'
+    ? `${profile.fullName}, damianocode: agent z głową terminala siedzi nocą na murku nad miastem. Podpis: Człowiek w pętli.`
+    : profile.fullName;
 
 const person = {
   '@context': 'https://schema.org',
@@ -91,7 +96,7 @@ const website = {
     <meta property="og:image" content={imageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${profile.fullName}, ${profile.role.toLowerCase()}`} />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <meta name="theme-color" content="#17171a" />

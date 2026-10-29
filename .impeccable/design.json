@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-29T09:26:09.630717Z",
+  "generatedAt": "2026-10-29T10:31:51.678684Z",
   "title": "Design System: Damian Ułaś — portfolio",
   "extensions": {
     "colorMeta": {
@@ -539,7 +539,7 @@
   ],
   "narrative": {
     "northStar": "Printed in Soot and Crimson",
-    "overview": "The site is a stack of printed sheets: mineral paper, soot-black ink and one crimson, the same three colors as the keyboard mark, the favicon, the share image and the avatar on his profiles. The hero is the first sheet, a pale paper sheet held in a narrow soot frame and carrying the site header; on desktop it stays pinned, shrinks and dims as the next sheet slides over it, on phones it simply scrolls away and shrinks a little. The page closes on a crimson Contact sheet, and subpages open on a crimson masthead. Every product keeps a sheet in its own colors, taken from its screenshots.\n\nThe voice is the typeface pushed to one end of its range: Anybody at width 58 and weight 850 for every name and title, a heavy, narrow, poster-like cut. Literata, an optical-size serif, carries the reading text so the display never has to explain anything. Width is still the motion axis: section titles fill with ink as they enter, the hero name breathes under a lens.\n\nThe identity is meant to carry a hand-inked manga layer (agents with terminal heads waiting by an empty chair with red headphones, in black ink and screentone, red used only on the headphones). That illustration is the next stage; until it ships the hero is purely typographic, and nothing on the page imitates it.",
+    "overview": "The site is a stack of printed sheets: mineral paper, soot-black ink and one crimson, the same three colors as the keyboard mark, the favicon, the share image and the avatar on his profiles. The hero is the first sheet, a pale paper sheet held in a narrow soot frame and carrying the site header; on desktop it stays pinned, shrinks and dims as the next sheet slides over it, on phones it simply scrolls away and shrinks a little. The page closes on a crimson Contact sheet, and subpages open on a crimson masthead. Every product keeps a sheet in its own colors, taken from its screenshots.\n\nThe voice is the typeface pushed to one end of its range: Anybody at width 58 and weight 850 for every name and title, a heavy, narrow, poster-like cut. Literata, an optical-size serif, carries the reading text so the display never has to explain anything. Width is still the motion axis: section titles fill with ink as they enter, the hero name breathes under a lens.\n\nThe identity carries a hand-inked manga layer: agents with terminal heads waiting with blank tickets by an empty chair with red headphones, in black ink and screentone on paper, red used only on the headphones. It appears three times: in the hero, as a waiting room on the 404 page, and as a night scene (one agent on a parapet above the city, \"Człowiek w pętli.\") in the share image. The drawings contain no text at all; speech bubble, note, captions and numbers are HTML or composed in the share-image template, so they can be translated and read aloud.",
     "keyCharacteristics": [
       "Paper, soot and crimson, everywhere the brand appears, in both themes on brand surfaces.",
       "A heavy, narrow display (Anybody 58 / 850) for names and titles; a serif for reading.",
