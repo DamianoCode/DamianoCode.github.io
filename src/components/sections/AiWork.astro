@@ -1,16 +1,39 @@
 ---
 import { Image } from 'astro:assets';
 import widgetBar from '../../assets/projects/widget-bar.png';
-import { aiWork } from '../../data/ai';
-import { mailto, subjects } from '../../data/profile';
+import { getAiWork } from '../../data/ai';
+import { getSubjects, mailto } from '../../data/profile';
+import { localeOf } from '../../i18n';
 
+const locale = localeOf(Astro);
+const aiWork = getAiWork(locale);
+const subjects = getSubjects(locale);
 const { repo, pilot, review } = aiWork.offers;
+
+const copy = {
+  pl: {
+    title: 'Agenci AI',
+    fit: 2.93,
+    widget: 'Zobacz widżet',
+    widgetAlt: 'Pasek widżetu: światła sesji, stan i limity konta',
+    claudius: 'Zobacz Claudiusa',
+    cta: 'Napisz o wdrożeniu',
+  },
+  en: {
+    title: 'AI agents',
+    fit: 3.05,
+    widget: 'See the widget',
+    widgetAlt: 'Widget bar: session lights, status and account limits',
+    claudius: 'See Claudius',
+    cta: 'Write about a rollout',
+  },
+}[locale];
 ---
 
 <!-- Arkusz w odwróconych kolorach. Bento to trzy oferty dla zespołu; każda kończy się dowodem z mojej pracy. -->
 <section class="sheet ai" id="ai" aria-labelledby="ai-h">
   <div class="wrap block">
-    <h2 id="ai-h" class="block-title kinetic" style="--fit: 2.93">Agenci AI</h2>
+    <h2 id="ai-h" class="block-title kinetic" style={`--fit: ${copy.fit}`}>{copy.title}</h2>
     <p class="lead">{aiWork.lead}</p>
 
     <div class="bento">
@@ -28,11 +51,11 @@ const { repo, pilot, review } = aiWork.offers;
         <p>{pilot.text}</p>
         <p class="outcome">{pilot.outcome}</p>
         <p class="proof">{pilot.proof}</p>
-        <a class="tile-link" href="#widget">Zobacz widżet</a>
+        <a class="tile-link" href="#widget">{copy.widget}</a>
         <Image
           class="tile-bar"
           src={widgetBar}
-          alt="Pasek widżetu: światła sesji, stan i limity konta"
+          alt={copy.widgetAlt}
           loading="lazy"
         />
       </article>
@@ -42,12 +65,12 @@ const { repo, pilot, review } = aiWork.offers;
         <p>{review.text}</p>
         <p class="outcome">{review.outcome}</p>
         <p class="proof">{review.proof}</p>
-        <a class="tile-link" href="#claudius">Zobacz Claudiusa</a>
+        <a class="tile-link" href="#claudius">{copy.claudius}</a>
       </article>
     </div>
 
     <p class="ai-cta">
-      <a href={mailto(subjects.project)}>Napisz o wdrożeniu</a>
+      <a href={mailto(subjects.project)}>{copy.cta}</a>
     </p>
   </div>
 </section>

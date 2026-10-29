@@ -1,6 +1,8 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { profile } from '../data/profile';
+import { getProfile } from '../data/profile';
+
+const profile = getProfile('pl');
 import { getPublishedPosts } from '../lib/posts';
 
 export async function GET(context: APIContext) {

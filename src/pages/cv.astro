@@ -1,8 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import { cv, cvReady } from '../data/cv';
-import { mailto, profile, subjects } from '../data/profile';
-import { projects } from '../data/projects';
+import { getProfile, getSubjects, mailto } from '../data/profile';
+import { getProjects } from '../data/projects';
+
+// CV jest tylko po polsku.
+const profile = getProfile('pl');
+const subjects = getSubjects('pl');
+const projects = getProjects('pl');
 
 const sections = [
   { title: 'Doświadczenie', entries: cv.experience },

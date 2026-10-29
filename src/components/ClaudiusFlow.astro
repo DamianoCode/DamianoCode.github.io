@@ -1,9 +1,14 @@
 ---
-import { flowSteps } from '../data/ai';
+import { getFlowSteps } from '../data/ai';
+import { localeOf } from '../i18n';
+
+const locale = localeOf(Astro);
+const flowSteps = getFlowSteps(locale);
+const caption = { pl: 'Jak zmiana przechodzi przez Claudiusa', en: 'How a change goes through Claudius' }[locale];
 ---
 
 <figure class="flow" data-flow>
-  <figcaption class="visually-hidden">Jak zmiana przechodzi przez Claudiusa</figcaption>
+  <figcaption class="visually-hidden">{caption}</figcaption>
   <ol class="track" role="list">
     {flowSteps.map((step) => (
       <li class="station" data-station>

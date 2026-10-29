@@ -1,8 +1,10 @@
 ---
 import { formatDate } from '../../lib/format';
+import { localeOf } from '../../i18n';
 import { getPublishedPosts } from '../../lib/posts';
 
-const posts = (await getPublishedPosts()).slice(0, 3);
+// Wpisy są po polsku: na angielskiej stronie sekcji nie ma.
+const posts = localeOf(Astro) === 'pl' ? (await getPublishedPosts()).slice(0, 3) : [];
 ---
 
 {/* Bez wpisów sekcja się nie pokazuje: pusta zapowiedź na stronie głównej to wypełniacz. Link do /blog zostaje w menu. */}

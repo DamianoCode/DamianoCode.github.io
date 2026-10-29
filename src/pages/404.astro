@@ -1,11 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
 
-// Teksty strony poza znacznikami, pod przyszłą wersję angielską.
+// GitHub Pages ma jedną stronę 404 dla całej witryny, także dla adresów pod /en. Strona renderuje się po polsku,
+// a skrypt na początku body podmienia teksty na angielskie, gdy brakujący adres zaczyna się od /en.
 const copy = {
-  line: 'Ta strona odeszła do lepszego brancha.',
-  hint: 'Sprawdź adres albo wróć do tego, co na pewno działa.',
-  back: 'Wróć do projektów',
+  pl: {
+    line: 'Ta strona odeszła do lepszego brancha.',
+    hint: 'Sprawdź adres albo wróć do tego, co na pewno działa.',
+    back: 'Wróć do projektów',
+    href: '/#projekty',
+  },
+  en: {
+    line: 'This page has moved on to a better branch.',
+    hint: 'Check the address or go back to what definitely works.',
+    back: 'Back to projects',
+    href: '/en#projekty',
+  },
 };
 ---
 
@@ -20,10 +30,10 @@ const copy = {
   <section class="sheet lost">
     <div class="wrap lost-inner">
       <div class="lost-text">
-        <p class="lost-line">{copy.line}</p>
-        <p class="lost-hint">{copy.hint}</p>
-        <a class="lost-back" href="/#projekty">
-          {copy.back}
+        <p class="lost-line" data-en={copy.en.line}>{copy.pl.line}</p>
+        <p class="lost-hint" data-en={copy.en.hint}>{copy.pl.hint}</p>
+        <a class="lost-back" href={copy.pl.href} data-en-href={copy.en.href}>
+          <span data-en={copy.en.back}>{copy.pl.back}</span>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
         </a>
       </div>
@@ -47,6 +57,15 @@ const copy = {
       </picture>
     </div>
   </section>
+  <script is:inline>
+    if (location.pathname.startsWith('/en')) {
+      document.documentElement.lang = 'en';
+      document.title = 'Page not found';
+      for (const el of document.querySelectorAll('.lost [data-en]')) el.textContent = el.dataset.en;
+      const back = document.querySelector('.lost [data-en-href]');
+      if (back) back.href = back.dataset.enHref;
+    }
+  </script>
 </Base>
 
 <style>

@@ -265,7 +265,7 @@ Hairline border in the local line color, `--radius-control`, Anybody 0.85rem at 
 - **Inverted sheet:** the AI section swaps paper and ink (soot sheet in light mode, paper sheet in dark mode).
 
 ### Navigation
-One `SiteHeader` everywhere: the keyboard mark and the wordmark "damianocode" (Anybody 850 at width 62%, 1.6rem) on the left, links on the right in Anybody at width 90% (78% under 30rem), 44px targets, a 2px crimson underline on hover and for the current page. Blog and CV appear only once they have content.
+One `SiteHeader` everywhere: the keyboard mark and the wordmark "damianocode" (Anybody 850 at width 62%, 1.6rem) on the left, links on the right in Anybody at width 90% (78% under 30rem), 44px targets, a 2px crimson underline on hover and for the current page. Blog and CV appear only once they have content (Polish only). After the menu sits the language switch ("EN" on Polish pages, "PL" on English ones), Anybody 700 with a hairline separator; below 48rem it moves to the first row next to the mark and the section menu takes the full second row.
 
 ### Brand mark (signature)
 A keyboard: a soot body with ten key cut-outs and a space bar, two of them crimson keys carrying a paper "d" and "c". Geometry lives in `public/brand/znak-klawiatura.svg` and is copied into `src/data/brand.ts`; `BrandMark` recolors it only through `--mark-body`, `--mark-key`, `--mark-letter` (on crimson: paper body, soot keys). On load someone types the signature once: the d key presses, then the c (0.32s each); no motion under reduced motion. The favicon is a simplified six-key version on a soot square (`public/favicon.svg`, `favicon.ico`, `apple-touch-icon.png`). The illustrated avatar signs off the Contact sheet; everywhere else it lives on social profiles.

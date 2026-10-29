@@ -1,6 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { profile } from '../../data/profile';
+import { getProfile } from '../../data/profile';
+
+// Blog jest tylko po polsku.
+const profile = getProfile('pl');
 import { formatDate } from '../../lib/format';
 import { getPublishedPosts } from '../../lib/posts';
 

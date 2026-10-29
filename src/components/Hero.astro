@@ -1,12 +1,37 @@
 ---
 import HeroArt from './HeroArt.astro';
 import SiteHeader from './SiteHeader.astro';
-import { profile } from '../data/profile';
-import { projects } from '../data/projects';
+import { getProfile } from '../data/profile';
+import { getProjects } from '../data/projects';
+import { localeOf } from '../i18n';
+
+const locale = localeOf(Astro);
+const profile = getProfile(locale);
 
 // Dowód już na pierwszym ekranie: główny projekt i adres, pod którym działa.
-const lead = projects.find((project) => project.tier === 'lead')!;
+const lead = getProjects(locale).find((project) => project.tier === 'lead')!;
 const live = lead.links[0];
+
+const copy = {
+  pl: {
+    statement: ['Buduję aplikacje.', 'Ogarniam agentów.'],
+    intro: ['Aplikacje od bazy danych po interfejs: Next.js, TypeScript, PostgreSQL. Ostatnio', 'wspólna mapa dla paczki znajomych. Działa na'],
+    projects: 'Zobacz projekty',
+    contact: 'Napisz do mnie',
+    city: 'Miasto',
+    availability: 'Dostępność',
+    open: 'Otwarty na',
+  },
+  en: {
+    statement: ['I build apps.', 'I wrangle agents.'],
+    intro: ['Apps from the database to the interface: Next.js, TypeScript, PostgreSQL. Most recently', 'a shared map for a group of friends. Live at'],
+    projects: 'See the projects',
+    contact: 'Write to me',
+    city: 'City',
+    availability: 'Availability',
+    open: 'Open to',
+  },
+}[locale];
 
 // Szerokość każdej linii w em w spoczynku (szerokość 58, grubość 850), zmierzona w przeglądarce: przybliżone
 // dopasowanie, zanim skrypt soczewki dopasuje napis dokładnie.
@@ -42,21 +67,20 @@ const lines = [
         </h1>
 
         <p class="role">
-          Buduję aplikacje.<br />Ogarniam agentów.
+          {copy.statement[0]}<br />{copy.statement[1]}
         </p>
       </div>
 
       <div class="intro">
         <p>
-          Aplikacje od bazy danych po interfejs: Next.js, TypeScript, PostgreSQL. Ostatnio {lead.name},
-          wspólna mapa dla paczki znajomych. Działa na <a href={live.href}>{live.label}</a>.
+          {copy.intro[0]} {lead.name}, {copy.intro[1]} <a href={live.href}>{live.label}</a>.
         </p>
         <p class="intro-actions">
           <a class="cta" href="#projekty">
-            Zobacz projekty
+            {copy.projects}
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
           </a>
-          <a href="#kontakt">Napisz do mnie</a>
+          <a href="#kontakt">{copy.contact}</a>
         </p>
       </div>
 
@@ -64,7 +88,7 @@ const lines = [
 
       <dl class="rail">
         <div>
-          <dt class="visually-hidden">Miasto</dt>
+          <dt class="visually-hidden">{copy.city}</dt>
           <dd>
             <svg class="pin" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21Z" />
@@ -74,8 +98,8 @@ const lines = [
           </dd>
         </div>
         <div>
-          <dt class="visually-hidden">Dostępność</dt>
-          <dd><span class="status-dot" aria-hidden="true"></span>Otwarty na {profile.availability}</dd>
+          <dt class="visually-hidden">{copy.availability}</dt>
+          <dd><span class="status-dot" aria-hidden="true"></span>{copy.open} {profile.availability}</dd>
         </div>
       </dl>
     </div>

@@ -125,30 +125,40 @@ const burst = Array.from({ length: 24 }, (_, i) => polar(50, 140, i % 2 ? 19 : 3
   </svg>
 )}
 
-{/* F1: bolid z boku, tyłem wychodzi za lewą krawędź i jedzie w stronę tekstu. Koła mają łuk napisu na
-    oponie, żeby obrót był widoczny; górny płat tylnego skrzydła to DRS, który otwiera się po najechaniu. */}
+{/* F1: bolid z boku w sylwetce obecnych przepisów (niski nos, halo, sidepody opadające ku tyłowi, płaska
+    podłoga, skrzydło z belką i dyfuzorem). Tyłem wychodzi za lewą krawędź i jedzie w stronę tekstu; w SVG nos
+    patrzy w lewo, CSS odbija rysunek. Linie nadwozia przerywają się na kołach, bo koło jest bliżej patrzącego.
+    Koła mają łuk napisu na oponie, żeby obrót był widoczny; górny płat tylnego skrzydła to DRS. */}
 {id === 'f1' && (
   <svg class="art art-f1" viewBox="0 0 400 124" aria-hidden="true">
+    {/* Sylwetka nadwozia: nos (chowa się za przednim kołem), monokok, krawędź kokpitu, airbox, pokrywa silnika
+        schodząca nad tylnym kołem do struktury zgniotu, podłoga między kołami. */}
     <path
       data-draw
       pathLength="1"
-      d="M18 104L64 94M112 86L160 76L214 70L226 50H240Q294 56 342 78L350 104H344M112 106H293"
+      d="M14 104C30 102 44 100 59 98M106 88L150 80L168 75L214 68L226 50Q228 47 232 47H246Q250 47 252 50Q292 54 330 64L346 70L350 74V104L345 106M295 107H106"
     />
-    <path d="M162 76Q166 60 180 59H210Q216 60 216 68" />
-    <circle cx="196" cy="68" r="7" />
-    <path d="M150 88Q200 79 238 83Q272 89 293 99M111 87L140 80M111 97L140 92" />
-    <path d="M4 114H56M8 100V114M12 107H52" />
-    <path class="wing" d="M382 34V102M346 98H382M340 60L382 55M358 60L346 78" />
-    <path class="drs" d="M344 48L382 43" />
+    {/* Sidepod: wlot, górna krawędź opadająca ku tyłowi i podcięcie nad podłogą. */}
+    <path d="M150 82V93M150 82Q210 73 252 80Q282 86 296 97M150 93Q196 101 252 104" />
+    {/* Halo: przedni filar i prawie płaska górna belka; pod nią kask kierowcy. */}
+    <path d="M172 74L181 61Q200 58 219 60L223 67" />
+    <circle cx="200" cy="66" r="6" />
+    {/* Przednie skrzydło: płyta końcowa, płyta główna i dwie klapy. */}
+    <path d="M4 100V116M4 114H60M8 109Q34 105 60 108M12 104Q34 100 56 103" />
+    {/* Wahacze kończą się na oponie: koło jest bliżej patrzącego i zasłania resztę. */}
+    <path d="M106 90L130 84M106 97L128 99M295 88L278 84M295 95L280 99" />
+    {/* Tylne skrzydło: płyta końcowa, płat główny, mocowanie, belka, dyfuzor. Górny płat to DRS. */}
+    <path class="wing" d="M392 30V100M346 60L392 55M348 72L360 58M352 92L392 88M352 106L392 98" />
+    <path class="drs" d="M346 48L392 42" />
     {[
-      [88, 92, 24],
-      [318, 91, 25],
+      [82, 92, 24],
+      [320, 91, 25],
     ].map(([cx, cy, r]) => (
       <g class="wheel">
         <circle data-draw pathLength="1" cx={cx} cy={cy} r={r} />
-        <circle cx={cx} cy={cy} r={r * 0.62} />
+        <circle cx={cx} cy={cy} r={r * 0.7} />
         <circle cx={cx} cy={cy} r="3.5" />
-        <path d={`M${cx - r * 0.81} ${cy - r * 0.37}A${r * 0.89} ${r * 0.89} 0 0 1 ${cx - r * 0.37} ${cy - r * 0.81}`} />
+        <path d={`M${cx - r * 0.81} ${cy - r * 0.37}A${r * 0.86} ${r * 0.86} 0 0 1 ${cx - r * 0.37} ${cy - r * 0.81}`} />
       </g>
     ))}
   </svg>

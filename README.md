@@ -11,7 +11,10 @@ npm run images   # renderuje public/og.jpg (wymaga Chrome)
 
 ## Treść
 
-- **Projekty, umiejętności, sekcja AI, teksty SEO:** `src/data/projects.ts`. Tabela umiejętności buduje się z pola `usedIn`.
+- **Dwa języki:** polski pod `/`, angielski pod `/en` (strona główna). Każdy tekst ma wersję `pl` i `en`:
+  w danych (`src/data/*.ts`) i w obiekcie `copy` na początku komponentu. Brak tłumaczenia to błąd typu w `astro check`.
+  Blog i CV są tylko po polsku. Nowe dopasowane słowo (tytuł sekcji, hasło kafla) wymaga zmierzenia `fit` w obu językach.
+- **Projekty, umiejętności, sekcja AI, teksty SEO:** `src/data/projects.ts`, `skills.ts`, `ai.ts`, `profile.ts`. Tabela umiejętności buduje się z pola `usedIn`.
 - **Blog:** plik `.md` w `src/content/blog/` = wpis (wzór: `jak-pisac-wpisy.md`, ma `draft: true`). Wpisy trafiają do `/rss.xml` i sitemapy.
 - **CV:** uzupełnij `src/data/cv.ts` (doświadczenie, edukacja, opcjonalnie PDF w `public/`). Dopóki jest puste, `/cv` pokazuje komunikat i ma `noindex`.
   Gdy CV będzie gotowe, usuń filtr `/cv` z `astro.config.mjs`, żeby trafiło do sitemapy.
