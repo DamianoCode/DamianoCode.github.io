@@ -1,4 +1,4 @@
-// Renderuje public/og.png i public/apple-touch-icon.png z plików HTML w tym folderze.
+// Renderuje public/og.png z pliku HTML w tym folderze. Favicony i apple-touch-icon pochodzą z gotowego pakietu znaku.
 // Wymaga Chrome. Ścieżkę można nadpisać zmienną CHROME_PATH.
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -11,7 +11,6 @@ const pub = resolve(here, '../public');
 
 const shots = [
   { src: 'og.html', out: 'og.png', size: '1200,630' },
-  { src: 'icon.html', out: 'apple-touch-icon.png', size: '180,180' },
 ];
 
 for (const shot of shots) {

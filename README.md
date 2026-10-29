@@ -20,16 +20,21 @@ npm run images   # renderuje public/og.png i apple-touch-icon.png (wymaga Chrome
 
 ## Logo
 
-Znak to dwa arkusze z literą D (jak stos sekcji na stronie głównej), logotyp to „Damian / Ułaś” z soczewką z hero.
-Oba są zbudowane z konturów kroju Anybody przez `scripts/brand/logo.py` (wymaga `pip install fonttools brotli`):
+Znak to klawiatura, na której karminowe są tylko klawisze d i c (damianocode). Podpis „damianocode” obok znaku
+to tekst złożony krojem Anybody (szerokość 62%, grubość 850), nie osobny plik.
+
+- `public/brand/znak-klawiatura.svg`: znak w kolorze, na jasne tło. `-jasny.svg`: na ciemne tło.
+  `-jednobarwny.svg`: sama sylwetka. `znak-klawiatura.png`: duży eksport 1200 × 800.
+- `public/favicon.svg`, `favicon.ico`, `apple-touch-icon.png`: uproszczona klawiatura (6 klawiszy, bez liter)
+  na ciemnym kwadracie, czytelna od 16 px.
+- `src/data/brand.ts`: te same ścieżki co w `znak-klawiatura.svg`, dla komponentu `BrandMark`.
+  Zmiana znaku zaczyna się w SVG, a potem trzeba przepisać ścieżki do `brand.ts`.
+
+Awatar (rysunek w słuchawkach) jest na profilach (GitHub, LinkedIn), a na stronie tylko jako podpis w Kontakcie (`src/assets/brand/awatar.webp`).
 
 ```bash
-python scripts/brand/logo.py   # public/favicon.svg, public/brand/*.svg, src/data/brand.ts
-npm run images                 # potem odśwież og.png i apple-touch-icon.png
+npm run images   # odświeża public/og.png z scripts/og.html (wymaga Chrome)
 ```
-
-Pliki do użycia poza stroną (GitHub, CV, prezentacje) leżą w `public/brand/`: znak w kolorze, odwrócony (na kobalt),
-jednokolorowy, logotyp z soczewką (granat i biały) oraz znak z napisem.
 
 ## Publikacja
 

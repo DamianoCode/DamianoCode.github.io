@@ -14,6 +14,12 @@
         "value": "anybody fallback",
         "createdAt": "2026-10-12T12:52:41.735Z",
         "reason": "Claude (typeset pass): metric-adjusted local Arial fallback for Anybody, documented in DESIGN.md Typography"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "a",
+        "createdAt": "2026-10-29T08:46:45.878Z",
+        "reason": "model triage: scripts/og.html aliases the Anybody woff2 files as family 'A' for the headless OG render"
       }
     ]
   }

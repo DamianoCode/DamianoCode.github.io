@@ -1,53 +1,47 @@
 ---
 name: Damian Ułaś — portfolio
-description: A stack of colored sheets, one per product, set in a typeface that breathes.
+description: Paper, soot and crimson; a stack of sheets set in a heavy, narrow typeface, signed with a keyboard.
 colors:
-  blueprint-cobalt: "#2f45e0"
-  blueprint-cobalt-night: "#8d9cff"
-  morning-haze-paper: "#dce2e8"
-  morning-haze-paper-deep: "#c9d1db"
-  deep-harbour-ink: "#16223a"
-  deep-harbour-ink-soft: "#4e5b72"
-  survey-rule: "#b3bdca"
-  night-paper: "#131c2e"
-  night-paper-deep: "#1f2a40"
-  night-ink-soft: "#97a3b7"
-  night-rule: "#33405a"
-  sheet-ink: "#f4f6ff"
-  sheet-ink-soft: "#d3d9ff"
-  signal-green: "#5fe3a1"
+  paper: "#e9e5de"
+  paper-deep: "#ded8ce"
+  ink: "#17171a"
+  ink-soft: "#5a564f"
+  rule: "#c4bdb1"
+  crimson: "#be2337"
+  crimson-deep: "#9e1c2e"
+  crimson-soft: "#f7e4e6"
+  night-paper: "#141416"
+  night-paper-deep: "#1f1f23"
+  night-ink: "#e9e5de"
+  night-ink-soft: "#a8a39a"
+  night-rule: "#36353b"
+  night-crimson: "#ef5b6b"
+  status-green: "#1e6b47"
   placemates-ember: "#e8834a"
   tutor-brick: "#d4533d"
   widget-amber: "#e3a21a"
   shop-slate: "#7d8aa5"
-  hero-veil: "#0b1233"
-  stack-backdrop: "#060915"
+  stack-backdrop: "#0b0b0d"
 typography:
   display:
     fontFamily: "'Anybody Variable', 'Arial Narrow', sans-serif"
     fontSize: "clamp(4rem, 16vw, 11rem)"
-    fontWeight: 300
+    fontWeight: 850
     lineHeight: 0.9
-    fontVariation: "'wdth' 150"
-  headline:
-    fontFamily: "'Anybody Variable', 'Arial Narrow', sans-serif"
-    fontSize: "clamp(2.6rem, 7vw, 3.55rem)"
-    fontWeight: 300
-    lineHeight: 1.02
-    fontVariation: "'wdth' 140"
+    fontVariation: "'wdth' 58"
   title:
     fontFamily: "'Anybody Variable', 'Arial Narrow', sans-serif"
-    fontSize: "clamp(2rem, 8.4vw, 6rem)"
-    fontWeight: 800
+    fontSize: "clamp(2.5rem, 10vw, 7rem)"
+    fontWeight: 850
     lineHeight: 0.95
     letterSpacing: "-0.01em"
-    fontVariation: "'wdth' 112"
+    fontVariation: "'wdth' 58"
   subhead:
     fontFamily: "'Anybody Variable', 'Arial Narrow', sans-serif"
-    fontSize: "clamp(1.5rem, 3.2vw, 2.4rem)"
-    fontWeight: 700
-    lineHeight: 1.05
-    fontVariation: "'wdth' 112"
+    fontSize: "clamp(1.75rem, 3.6vw, 2.8rem)"
+    fontWeight: 850
+    lineHeight: 1
+    fontVariation: "'wdth' 74"
   body:
     fontFamily: "'Literata Variable', Georgia, serif"
     fontSize: "1.125rem"
@@ -80,14 +74,13 @@ typography:
     fontWeight: 600
     lineHeight: 1.3
 rounded:
-  hairline: "2px"
+  control: "0.375rem"
   swatch: "0.2rem"
-  chip-square: "0.4rem"
+  bar: "0.4rem"
   screen: "0.75rem"
   tile: "1.25rem"
   sheet: "1.5rem"
   sheet-wide: "2rem"
-  pill: "999px"
 spacing:
   sheet-gap: "clamp(0.5rem, 1.2vw, 1rem)"
   gutter: "clamp(1rem, 4vw, 3.5rem)"
@@ -95,22 +88,41 @@ spacing:
   card-pad: "clamp(1.25rem, 4.5vw, 4.5rem)"
   block: "clamp(3rem, 9vh, 6.5rem)"
 components:
-  button-pill-on-sheet:
-    backgroundColor: "{colors.sheet-ink}"
-    textColor: "{colors.blueprint-cobalt}"
+  button-primary:
+    backgroundColor: "{colors.crimson}"
+    textColor: "{colors.paper}"
+    typography: "{typography.label-large}"
+    rounded: "{rounded.control}"
+    padding: "0.7rem 1.35rem"
+  button-primary-hover:
+    backgroundColor: "{colors.crimson-deep}"
+  button-on-crimson:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.crimson}"
     typography: "{typography.label}"
-    rounded: "{rounded.pill}"
-    padding: "0.6rem 1.1rem"
-  button-pill-on-sheet-hover:
-    backgroundColor: "#ffffff"
+    rounded: "{rounded.control}"
+    padding: "0.6rem 1.15rem"
+  button-on-crimson-hover:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.paper}"
+  button-outline-on-sheet:
+    backgroundColor: "transparent"
+    textColor: "{colors.paper}"
+    rounded: "{rounded.control}"
+    padding: "0.5rem 1.1rem"
+    height: "2.75rem"
   chip:
-    textColor: "{colors.deep-harbour-ink}"
-    typography: "{typography.label}"
-    rounded: "{rounded.pill}"
+    textColor: "{colors.ink}"
+    typography: "{typography.label-small}"
+    rounded: "{rounded.control}"
     padding: "0.2rem 0.7rem"
-  sheet:
-    backgroundColor: "{colors.blueprint-cobalt}"
-    textColor: "{colors.sheet-ink}"
+  sheet-hero:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.sheet}"
+  sheet-crimson:
+    backgroundColor: "{colors.crimson}"
+    textColor: "{colors.paper}"
     rounded: "{rounded.sheet}"
   tile:
     rounded: "{rounded.tile}"
@@ -118,213 +130,196 @@ components:
   case-card:
     rounded: "{rounded.sheet-wide}"
     padding: "{spacing.card-pad}"
-  button-outline-on-sheet:
-    backgroundColor: "transparent"
-    textColor: "{colors.sheet-ink}"
-    rounded: "{rounded.pill}"
-    padding: "0.5rem 1.1rem"
-    height: "2.75rem"
-  button-outline-on-sheet-hover:
-    backgroundColor: "{colors.sheet-ink}"
-    textColor: "{colors.blueprint-cobalt}"
   dock-button:
-    backgroundColor: "{colors.blueprint-cobalt}"
-    textColor: "{colors.sheet-ink}"
-    typography: "{typography.label}"
-    rounded: "{rounded.pill}"
+    backgroundColor: "{colors.crimson}"
+    textColor: "{colors.paper}"
+    typography: "{typography.label-large}"
+    rounded: "{rounded.control}"
     padding: "0.6rem 1.25rem"
     height: "3rem"
   dock-button-hover:
-    backgroundColor: "{colors.sheet-ink}"
-    textColor: "{colors.blueprint-cobalt}"
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.paper}"
 ---
 
 # Design System: Damian Ułaś — portfolio
 
 ## Overview
 
-**Creative North Star: "The Sheet Stack"**
+**Creative North Star: "Printed in Soot and Crimson"**
 
-The page is a stack of sheets, and the brand mark says so literally: two rounded sheets, one stepped behind the other, with a D on the front one. The hero is the first sheet of the page, a full-bleed cobalt sheet carrying the site header; on desktop it rides its own track, stays pinned, shrinks and dims as the next sheet slides over it with rounded top corners and a soft shadow, and on phones it simply scrolls away and shrinks a little as it leaves. Subpages open the same way, on a cobalt masthead sheet. Every product gets a sheet in its own colors, taken straight from its screenshots, and on wide, tall screens those cards stack sticky on top of each other as you scroll. Between the sheets lies cool, slightly blue paper and dark navy ink: a drafting table the products are laid on.
+The site is a stack of printed sheets: mineral paper, soot-black ink and one crimson, the same three colors as the keyboard mark, the favicon, the share image and the avatar on his profiles. The hero is the first sheet, a pale paper sheet held in a narrow soot frame and carrying the site header; on desktop it stays pinned, shrinks and dims as the next sheet slides over it, on phones it simply scrolls away and shrinks a little. The page closes on a crimson Contact sheet, and subpages open on a crimson masthead. Every product keeps a sheet in its own colors, taken from its screenshots.
 
-The second voice is the typeface. Anybody is a variable face with a width axis from 50% to 150%, and the system uses that axis as motion: the hero name swells under a typographic lens that follows the cursor (or the scroll on touch), section titles grow from narrow and light to wide and heavy as they enter, interest tiles widen their word on hover. Literata, an optical-size serif, carries the reading text so the expressive display never has to.
+The voice is the typeface pushed to one end of its range: Anybody at width 58 and weight 850 for every name and title, a heavy, narrow, poster-like cut. Literata, an optical-size serif, carries the reading text so the display never has to explain anything. Width is still the motion axis: section titles fill with ink as they enter, the hero name breathes under a lens.
 
-Components are tactile and confident: solid pill buttons, big rounded sheets, clear states, real device frames around real screenshots. Density is low; each section earns a full screen. Motion is scroll-driven CSS wherever possible, only transform and opacity animate in the heavy paths, and everything collapses gracefully under `prefers-reduced-motion`.
+The identity is meant to carry a hand-inked manga layer (agents with terminal heads waiting by an empty chair with red headphones, in black ink and screentone, red used only on the headphones). That illustration is the next stage; until it ships the hero is purely typographic, and nothing on the page imitates it.
 
 **Key Characteristics:**
-- Rounded sheets stacked in scroll order; the hero (and every subpage masthead) is the first sheet.
-- A brand mark that is the system in miniature: two stacked sheets and a D.
-- One sheet, one palette: products keep their own colors; cobalt belongs to the site.
-- Width axis of Anybody used as a motion and hierarchy tool.
-- Cool paper and navy ink in light mode, inverted navy night in dark mode; sheets keep fixed colors in both.
+- Paper, soot and crimson, everywhere the brand appears, in both themes on brand surfaces.
+- A heavy, narrow display (Anybody 58 / 850) for names and titles; a serif for reading.
+- Rounded sheets stacked in scroll order; the hero is a paper sheet in a soot frame, Contact and subpage mastheads are crimson.
+- One sheet, one palette: products keep their own colors; crimson belongs to the site and to Claudius, his own tool.
+- Buttons and chips are softly squared (`--radius-control`), one token away from pills.
 - Real screenshots in device frames, never illustrations of products.
-- Thin-stroke line drawings in the interest tiles.
 
 ## Colors
 
-A cool drafting-table neutral set (haze paper, harbour ink) with one saturated site accent, Blueprint Cobalt, plus a palette borrowed product by product.
+Warm mineral paper and soot ink with one saturated accent, Crimson, plus a palette borrowed product by product.
 
 ### Primary
-- **Blueprint Cobalt**: the site's own color, also exposed as the fixed brand token `--brand-cobalt` (with `--brand-cobalt-light` = Blueprint Cobalt Night and `--brand-snow` = Sheet Ink) that the mark, favicon and share images use in both themes. Links, focus rings, nav underline, the hero sheet, the Contact sheet, the Claudius card and the Claudius process tile. In dark mode links and focus shift to **Blueprint Cobalt Night**, while cobalt sheets stay cobalt.
-
-### Secondary
-- **Sheet Ink** and **Sheet Ink Soft**: text on cobalt sheets (hero, Contact, Claudius). Fixed in both themes. Sheet Ink is also the fill of pill buttons on cobalt, with the label in cobalt.
-- **Signal Green**: only the pulsing "Otwarty na nowe projekty" status dot in the hero.
-
-### Tertiary (product palette)
-- **PlaceMates Ember**, **Tutor Brick**, **Widget Amber**, **Shop Slate**: each product's accent, sampled from its screenshots. They tint that product's card (background, glow, accent, link underline) and reappear as the column color in the skills matrix, so a column reads as a strip of its project card. Each card carries its own full local set (`--bg`, `--glow`, `--ink`, `--soft`, `--accent`, `--line`, `--shadow`) defined in the Projects component.
-- The widget tiles reuse the widget's own screenshot palette: near-black ground (#0c0c0c), light gray text (#efefef, secondary #b4b4b4) and Widget Amber underlines.
-- The widget card shows a single states board (`widget-stany.png`: every mode and state with its own labels) drawn on that exact ground, so it needs no frame; it blends with `lighten`, which makes the board's ground vanish into the card glow too.
-- The "Po godzinach" tiles follow the same idea with subject palettes: forest green for cycling, deep brick (#a93c25) for games, near-black with green and red for markets, off-white with navy ink for anime and manga, rosso corsa (#c8000a, a shade under the factory #d40000 so the soft text holds AA) with a Giallo Modena (#ffd600) drawing for Ferrari.
+- **Crimson** (`--brand-crimson`, #be2337): the site's own color. Links and focus rings on paper, the active nav underline, the primary button, the Contact sheet, the subpage masthead, the Claudius card, its process tile in the AI section and the dock. Crimson on paper is 4.8:1, paper on crimson 4.8:1.
+- **Crimson Deep** (#9e1c2e): hover and pressed state of crimson buttons.
+- **Crimson Soft** (#f7e4e6): secondary text on crimson sheets (4.9:1).
+- **Night Crimson** (#ef5b6b): the theme accent (`--accent`) in dark mode, because brand crimson on soot is only 3:1. Crimson sheets stay brand crimson.
 
 ### Neutral
-- **Morning Haze Paper**: page background in light mode. **Morning Haze Paper Deep**: secondary surface.
-- **Deep Harbour Ink**: body text and headings; also the background of the inverted AI sheet. **Deep Harbour Ink Soft**: intros, metadata, secondary text.
-- **Survey Rule**: hairline dividers and table group rules.
-- **Night Paper**, **Night Paper Deep**, **Night Ink Soft**, **Night Rule**: the dark theme counterparts; ink becomes Morning Haze Paper.
+- **Paper** (#e9e5de, `--brand-paper`): page background in light mode, the hero sheet in both themes, text on crimson and soot surfaces. **Paper Deep** (#ded8ce): secondary surface (Collaboration sheet).
+- **Ink** (#17171a, `--brand-ink`, "sadza"): body text and headings; the hero frame and the inverted AI sheet. **Ink Soft** (#5a564f): intros, metadata, secondary text (5.8:1 on paper).
+- **Rule** (#c4bdb1): hairlines and table rules.
+- **Night Paper**, **Night Paper Deep**, **Night Ink Soft**, **Night Rule**: the dark theme counterparts; ink becomes Paper.
+- **Status Green** (#1e6b47): only the pulsing availability dot in the hero.
+
+### Tertiary (product palette)
+- **PlaceMates Ember**, **Tutor Brick**, **Widget Amber**, **Shop Slate**: each product's accent, sampled from its screenshots. They tint that product's card and reappear as the column color in the skills matrix and as its edge in the closing stack. Claudius, Damian's own plugin, uses Crimson. Each card carries its full local set (`--bg`, `--glow`, `--ink`, `--soft`, `--accent`, `--line`, `--shadow`) in the Projects component; accents live in `src/data/tones.ts`.
+- The widget card and tiles reuse the widget's own screenshot palette (near-black #0c0c0c, light gray text, Widget Amber).
+- "Po godzinach" tiles keep subject palettes: forest green for cycling, deep brick for games, near-black with green and red for markets, off-white with navy for anime and manga, rosso corsa with Giallo Modena for Ferrari. Rosso corsa sits near Crimson on purpose: it is the subject's own red, inside its own tile.
 
 ### Named Rules
-**The Borrowed Palette Rule.** A product sheet is painted in that product's colors, sampled from its own screenshots. Cobalt never tints another product's card, and a product color never leaks outside its card except as a marker: its column in the skills matrix and its edge in the closing stack above Contact. The accents live in `src/data/tones.ts`.
+**The Three Inks Rule.** Brand surfaces (mark, favicon, share image, hero, Contact, masthead, dock) use only paper, soot and crimson. A fourth color on a brand surface needs a reason; the green status dot is the only one.
 
-**The AA Floor Rule.** Secondary text on a colored sheet stays at 4.5:1 or better, and dimmed states never drop large text below 3:1. Darken the sheet a step before you wash out its text.
+**The Borrowed Palette Rule.** A product sheet is painted in that product's colors. Crimson never tints another product's card, and a product color never leaves its card except as a marker: its matrix column and its stack edge.
 
-**The Fixed Sheet Rule.** Colored sheets (hero, Contact, product cards, interest tiles) keep the same colors in light and dark mode. Only the paper, ink and rule between them flip with the theme.
+**The AA Floor Rule.** Secondary text on a colored sheet stays at 4.5:1 or better, and dimmed large text never drops below 3:1 (the resting Claudius track steps are paper at 76% on crimson, about 3.2:1). Darken the sheet before washing out its text.
+
+**The Fixed Sheet Rule.** Colored sheets (hero paper, crimson Contact and masthead, product cards, interest tiles) keep the same colors in light and dark mode. Only the page paper, ink and rules flip with the theme. The hero is paper in both themes: its frame is soot, so in dark mode it reads as a lit sheet on a dark desk.
 
 ## Typography
 
 **Display Font:** Anybody Variable (with Anybody Fallback, Arial Narrow, sans-serif)
 **Body Font:** Literata Variable, optical sizing on (with Literata Fallback, Georgia, serif)
 
-The two fallbacks are local Arial and Georgia with `size-adjust` (108% and 105%, measured on a Polish paragraph), so the swap to the web fonts barely moves a line. Blog posts also load Literata italic; code uses the system monospace (`ui-monospace`, Cascadia Code, SF Mono, Consolas).
+The fallbacks are local Arial and Georgia with `size-adjust` (108% and 105%), so the swap barely moves a line. Code uses the system monospace.
 
-**Character:** A wide-ranging, slightly mechanical grotesque that can go from condensed whisper to extended shout, paired with a warm bookish serif that keeps long text calm. The display does the talking, the serif does the explaining.
+**Character:** a heavy, narrow grotesque that reads like a printed poster, paired with a warm bookish serif. The display does the talking, the serif does the explaining. No third family: labels and metadata use Anybody at a narrower width instead of a monospace.
+
+### Tokens
+- `--tight` (58%) and `--heavy` (850): the display voice. Hero name, section titles, subpage titles, product names, the Collaboration question, the Contact email.
+- `--tight-sub` (74%): subheads, one notch wider for legibility at 1.5–2.8rem (bento tiles, contact questions, matrix row names, CV and blog headings).
 
 ### Hierarchy
-- **Display** (300, clamp(4rem, 16vw, 11rem), line-height 0.9, width 150%): subpage titles (Blog, CV). The hero name is its own fitted case: two lines sized by script to fill the sheet, weight 640 at width 100 at rest, ranging 280–860 weight and 50–150 width under the lens.
-- **Kinetic section title** (700, up to 9rem, fitted to the column, width 150%): section headings that animate from width 55% / weight 250 to width 150% / weight 700 as they enter; never wrap. Below 40rem they end at width 110% and grow by the measured ratio (0.725), so a long word like "Umiejętności" stays larger than the card headings under it.
-- **Headline** (300, clamp(2.6rem, 7vw, 3.55rem), width 105% on mobile, 140% from 48rem): static block titles.
-- **Subhead** (700, clamp(1.5rem, 3.2vw, 2.4rem), width 112–115%): bento tile titles, Claudius track step names, the hero role line; 2.4rem is its ceiling everywhere.
-- **Title** (800, up to 6rem, width 112%, letter-spacing −0.01em): product names on case cards; the hero role line uses 700 at width 112%.
-- **Body** (400, 1.125rem, line-height 1.6, max 33em, about 68 characters): all reading text, Literata. **Small** (`--step-small`, 1rem) for secondary reading text: card details, AI proof lines, matrix notes, Claudius step descriptions.
-- **Lead** (`--lead`, clamp(1.2rem, 1rem + 1vw, 1.5rem), line-height 1.38): the first sentence under a title, one role everywhere: AI section lead, card summaries, the collaboration pitch, the Contact intro.
-- **Label**, Anybody only, three steps that never mix within one role:
-  - `--label-s` 0.85rem: chips, footer, group headers in the skills matrix (those in capitals, tracking 0.08em, so they read apart from the project names above the columns).
-  - `--label` 0.95rem, width 85–95%: metadata (case meta, hero rail, years, stacks, CV period and place, blog dates).
-  - `--label-l` 1.05rem, weight 600: actions and navigation (nav, `.actions`, hero CTA, dock, AI CTA, outcome lines, matrix column heads).
-
-Type scale is a perfect fourth (1.333) from 18 px: 0.8125, 1.125, 1.5, 2, ~2.67, ~3.55rem.
+- **Hero name**: two lines, left-aligned, sized by script to the sheet (`--type-height`), at rest width 58 / weight 850; under the lens 50–115 width and 640–900 weight.
+- **Hero statement**: the same voice in Crimson, two lines ("Buduję aplikacje. / Ogarniam agentów."), clamp(1.75rem, min(3.6vw, 6svh), 3.4rem); on short laptops (≤50rem tall) the hero tightens its spacing so the name stays at least 2.5× the statement; below 40rem the statement opens to width 68% at 2rem (`--step-2`), because the narrowest cut closes its counters at small sizes.
+- **Kinetic section title** (850, up to 9rem, 5.5rem below 40rem, fitted to the column, width 58%): grows from width 50% / weight 200 to the display voice as it enters, like ink filling in; the start state is narrower than the end, so it never overflows. Size is `100cqi / (--fit × 1.05)` against the `.wrap` column (a size container), so titles inside sheets respect the sheet's own inset. The phone cap keeps all titles within 76–88px instead of swinging with word length. `--fit` is the width in em at the end state.
+- **Title** (product names): 850 at width 58%, clamp(2.75rem, 12.5vw, 7rem), min(7.5rem, 6.6vw) from 64rem; about half the section title on phones, so the product never reads as a caption.
+- **Subhead** (850, width 74%).
+- **Body** (Literata 400, 1.125rem, line-height 1.6, max 33em). **Small** (`--step-small`, 1rem). **Lead** (`--lead`, clamp(1.2rem, 1rem + 1vw, 1.5rem)).
+- **Label**, Anybody only: `--label-s` 0.85rem (chips, footer, matrix group headers in capitals), `--label` 0.95rem at width 85–95% (metadata, hero rail), `--label-l` 1.05rem weight 600 (actions, navigation, dock).
 
 ### Named Rules
-**The Width Is Voice Rule.** Hierarchy and emphasis come from the width axis as much as from size or weight: narrow for quiet metadata (85–95%), extended for headlines (110–150%). Animate width only where motion means something (lens, entry, hover, active step).
+**The One Voice Rule.** Every name and title is the same heavy, narrow cut, opening a little (width 68–74%) only where it is set small; hierarchy comes from size and color (ink or crimson), not from switching widths. Extended widths appear only in motion (lens, interest-tile hover, the active Claudius step).
 
-**The Fitted Line Rule.** Hero name, kinetic titles, the contact email and interest words are sized to fill their container and never wrap; their measured `--fit` width in em drives the size. Changing the word means re-measuring.
+**The Fitted Line Rule.** Hero name, kinetic titles, the contact email and interest words are sized to fill their container and never wrap; their measured `--fit` (em) drives the size. Changing the word or the axes means re-measuring.
 
 **The Serif Reads Rule.** Literata is only for reading text. Labels, actions, numbers and names are always Anybody.
 
 ## Layout
 
-Content sits in a centered column (`.wrap`, max 88rem, gutter clamp(1rem, 4vw, 3.5rem)). Sheets break out of it to almost the full window: a margin of the sheet gap (clamp(0.5rem, 1.2vw, 1rem)) from the edges, capped at 90rem so a sheet's inner content lines up with section titles on wide screens. The hero sheet alone ignores the cap and fills the first viewport (100svh minus the sheet gaps), with the site header inside it. Subpages put the header and the page title in a cobalt masthead sheet one sheet gap below the top edge. The body is a full-height column, so the footer sits at the bottom of the window even on short subpages.
+Content sits in a centered column (`.wrap`, max 88rem, gutter clamp(1rem, 4vw, 3.5rem)). Sheets break out to almost the full window (a sheet gap from the edges, capped at 90rem so their content lines up with section titles). The hero fills the first viewport inside its soot frame: header on top, then the name, the crimson statement, a short intro, the two actions and a bottom rail (hairline, "Zamość · zdalnie" on the left, availability on the right). On a 375×667 phone the primary action stays in the first screen. The right side of the desktop hero is reserved for the illustration that comes next. The body is a full-height column, so the footer sits at the bottom of short subpages.
 
-Sections are generous (block padding clamp(3rem, 9vh, 6.5rem)); each tends to own a screen. Product cards always stack. From 64rem wide and 44rem tall they are at least viewport-height and stick to the top (offset grows 0.85rem per card) with 14vh between them; a card whose text does not fit (a narrow window, larger text) grows instead of clipping and sticks by its bottom edge, like on phones; between 44rem and 50rem of height they use a denser variant (smaller name, tighter padding, the long detail paragraph hidden) so the text fits. On phones and short windows a script measures each card and they keep their natural height, sticking by the bottom edge (or the top edge when shorter than the screen) while the next one slides over, 2rem apart. At 64rem cards switch to a header over a 5fr/7fr text/stage split that alternates sides. Bentos (AI work, interests) use 7fr/5fr or a 12-column grid with mirrored rows from 60rem; the interests close with a lower full-width row (Ferrari) that puts the word top-left, the text bottom-right and the car under the word. Key breakpoints: 30rem, 40rem, 48rem, 52rem, 60rem, 64rem.
+Sections are generous (block padding clamp(3rem, 9vh, 6.5rem)). Product cards stack: from 64rem wide and 44rem tall they stick to the top with a growing offset, a denser variant between 44rem and 50rem of height; on phones and short windows they keep their natural height and slide over each other. Bentos use 7fr/5fr or a 12-column grid from 60rem. Key breakpoints: 30rem, 40rem, 48rem, 52rem, 60rem, 64rem.
 
 **The Content Line Rule.** Whatever breaks out to the edges, its text starts on the same line as the section titles.
 
 ## Elevation & Depth
 
-Depth is physical: sheets lie on top of each other. Shadows are soft and directional (cast upward from a sheet onto the one beneath), used to sell the stack, not to lift UI. The pinned hero recedes (scale 0.92) and dims under a navy veil while a near-black backdrop fades in behind it, so the incoming sheet's corners stay visible in dark mode too. Inside cards, screenshots float with a hairline ring and a deep shadow tinted in the product's shadow color. Elsewhere surfaces are flat and separated by color, not shadow. The veil is **Hero Veil** and the backdrop **Stack Backdrop**; both appear only in this stack transition.
+Depth is physical: sheets lie on top of each other. Shadows are soft and cast upward onto the sheet beneath. The pinned hero recedes (scale 0.92) and dims under a soot veil while a near-black backdrop (#0b0b0d) fades in behind it, so the incoming sheet's corners stay visible in both themes.
 
 ### Shadow Vocabulary
-- **Sheet over sheet** (`box-shadow: 0 -1.25rem 3rem -1.5rem rgb(0 0 0 / 0.45)`): the sheet that slides over the hero.
-- **Card lift** (`box-shadow: 0 -0.5rem 2.5rem -0.75rem var(--shadow)`): product cards in the sticky stack.
-- **Edge lift** (`box-shadow: 0 -0.3rem 0.7rem -0.4rem rgb(0 0 0 / 0.3)`, 0.35 on the Contact sheet): the stepped edges of the closing stack.
-- **Screen float** (`box-shadow: 0 0 0 1px var(--line), 0 2rem 3.5rem -1.25rem var(--shadow)`): screenshots in cards.
+- **Sheet over sheet** (`0 -1.25rem 3rem -1.5rem rgb(0 0 0 / 0.45)`): the sheet that slides over the hero.
+- **Card lift** (`0 -0.5rem 2.5rem -0.75rem var(--shadow)`): product cards in the sticky stack.
+- **Edge lift** (`0 -0.3rem 0.7rem -0.4rem rgb(0 0 0 / 0.3)`): the closing stack edges.
+- **Screen float** (`0 0 0 1px var(--line), 0 2rem 3.5rem -1.25rem var(--shadow)`): screenshots in cards.
 
-### Named Rules
-**The Shadow Points Up Rule.** Stack shadows are cast upward onto the sheet below. A shadow means "this sheet is on top", never "this button is clickable".
+**The Shadow Points Up Rule.** A shadow means "this sheet is on top", never "this button is clickable".
 
 ## Shapes
 
-One family of soft rectangles, scaled by size: sheets and cards 1.5rem (2rem from 64rem), bento tiles 1.25rem, screenshots 0.75rem, matrix bars 0.4rem, tiny legend swatches 0.2rem, and everything interactive and small (buttons, chips, hero metadata) a full pill. Phones are drawn as real devices with a thick near-black bezel. Line drawings in interest tiles use a 0.9 stroke with round caps and sit under the text; most bleed off the tile edge as a fragment, but the gamepad is drawn whole (grips, d-pad, sticks, buttons), tilted slightly in the bottom-right corner beside the text, because a cropped pad stops reading as a pad. The Ferrari car is drawn in side profile, flipped so it drives towards the text, with its rear wing cut by the left edge and its wheels on the bottom edge.
-
-**The Pill Means Press Rule.** Full pill shape is reserved for small interactive or metadata elements; large surfaces never go pill, and buttons never go square.
+Soft rectangles, scaled by size: sheets and cards 1.5rem (2rem from 64rem), bento tiles 1.25rem, screenshots 0.75rem, matrix bars 0.4rem, swatches 0.2rem. Everything small and interactive (buttons, chips, the dock, the copy button) uses `--radius-control` (0.375rem), the softly squared key of the mark. Setting that token to 999px brings back pills site-wide. Phones are drawn as real devices with a thick near-black bezel. Interest-tile drawings use a 0.9 stroke with round caps.
 
 ## Components
 
 ### Buttons
-Tactile and confident: a solid pill paired with a plain underlined link.
-- **Shape:** full pill (999px).
-- **Primary:** on a colored sheet the pill is filled with the sheet's ink and labelled in the sheet's background color (cobalt on Sheet Ink in hero and Contact; card ink on card bg in product cards). Anybody 600, padding 0.6rem 1.1rem.
-- **Hover / Active:** hover brightens to white (or the card's accent), and the cobalt dock inverts to white with a cobalt label; active nudges down 1px. Every link and button is at least 44px tall. Focus is a 3px outline in the local ink or accent, offset 3px.
-- **Secondary:** a text link in the same label face with a 2px underline, colored by the local accent.
-- **Outline:** a second-rank action that sits next to filled pills (only "Kopiuj adres" today): transparent with a 2px ink ring, 2.75rem tall, filling with ink on hover. When its label changes for a moment (the copy confirmation), both labels share one grid cell so the pill keeps its width.
+- **Primary on paper:** crimson fill, paper label, `--radius-control`, Anybody 600; the hero version carries a drawn arrow that nudges right on hover. Hover deepens to Crimson Deep; active nudges down 1px.
+- **Primary on crimson** (Contact paths): paper fill, crimson label; hover turns soot with a paper label.
+- **Primary in product cards:** card ink fill with the card background as label; hover takes the card accent.
+- **Secondary:** a text link in the label face with a 2px crimson (or local accent) underline.
+- **Outline** ("Kopiuj adres"): transparent with a 2px ink ring, filling with ink on hover; both labels share one grid cell so the width never changes.
+- Every link and button is at least 44px tall. Focus is a 3px outline in the local accent, offset 3px.
 
 ### Chips
-- **Style:** hairline border in the local line color, pill, Anybody 0.85rem at width 92%, no fill. Used for tech stacks.
-- **Metadata variant:** the hero rail pairs a soft key (`dt`, width 90%) with a bold value in one bordered pill.
+Hairline border in the local line color, `--radius-control`, Anybody 0.85rem at width 92%, no fill. Used for tech stacks.
 
 ### Cards / Containers
-- **Product case card:** full-bleed sheet in the product's palette, radius 1.5rem / 2rem, padding clamp(1.25rem, 4.5vw, 4.5rem), radial product-colored glow behind the stage, header with a hairline rule, device-framed screenshots, traffic-light state list, chips, links. On entry the name rises from under its rule and the stage slides up and fades in, both on view timelines; the stage finishes once it is fully on screen, before the card sticks, so a stuck stage never freezes mid-move. Cards clip with `overflow: clip`, not `hidden`: `hidden` makes the card a scroll container and every `view()` entrance inside it would measure against the card instead of the window.
-- **Bento tile:** radius 1.25rem, padding clamp(1.25rem, 3vw, 2.25rem), solid themed background, no shadow. A tile on its own sheet color is separated by a 1px rule instead of a fill. Offer tiles carry an "outcome" line in the display face (what stays with the team) followed by a smaller "proof" line naming the tool or habit that backs the offer.
-- **Inverted sheet:** the AI section swaps paper and ink so it stands apart in both themes.
+- **Product case card:** full-bleed sheet in the product's palette, header with a hairline rule, device-framed screenshots, chips, links; the name rises from under its rule and the stage slides up on view timelines. Cards clip with `overflow: clip`, not `hidden`, so `view()` entrances measure against the window. The product glow sits where the stage leaves room (under the phone, near the bottom corner, mirrored on flipped cards) with a fainter pool under the text column. In dark mode every card gets a 1px ring in 24% of its own ink plus a faint top highlight, because dark cards (PlaceMates, widget) and the night page are almost the same lightness. PlaceMates carries the app's own wavy contour lines at 5.5% as its background texture.
+- **Bento tile:** radius 1.25rem, solid themed background, no shadow; a tile on its own sheet color is separated by a 1px rule. Offer tiles carry an outcome line in the display face followed by a smaller proof line.
+- **Inverted sheet:** the AI section swaps paper and ink (soot sheet in light mode, paper sheet in dark mode).
 
 ### Navigation
-One site header (`SiteHeader`) used everywhere: the brand mark plus the GitHub handle (DamianoCode, not the full name, which the hero already carries) in Anybody 800 at width 115% on the left, links on the right in Anybody 1rem at width 90% (78% under 30rem), each a 44px tall touch target with a 2px underline drawn just under the label on hover and for the current page. Blog and CV appear only once they have content; RSS is advertised only when there are posts. The header always sits on a cobalt sheet (the hero on the home page, the masthead on subpages), so it is drawn in Sheet Ink.
+One `SiteHeader` everywhere: the keyboard mark and the wordmark "damianocode" (Anybody 850 at width 62%, 1.6rem) on the left, links on the right in Anybody at width 90% (78% under 30rem), 44px targets, a 2px crimson underline on hover and for the current page. Blog and CV appear only once they have content.
 
 ### Brand mark (signature)
-Two rounded sheets, the back one in Blueprint Cobalt Night and stepped up behind the front one in Blueprint Cobalt, with a D cut from Sheet Ink: the page's sheet stack in one glyph. On cobalt sheets it inverts (Sheet Ink front, cobalt D) through the `--mark-*` variables. Geometry lives in `src/data/brand.ts`, generated by `scripts/brand/logo.py`, which also exports the lockup and lens wordmark in `public/brand/`. On load the back sheet settles once into place (0.7s, expo-out), the same gesture as the hero receding; no motion under reduced motion.
+A keyboard: a soot body with ten key cut-outs and a space bar, two of them crimson keys carrying a paper "d" and "c". Geometry lives in `public/brand/znak-klawiatura.svg` and is copied into `src/data/brand.ts`; `BrandMark` recolors it only through `--mark-body`, `--mark-key`, `--mark-letter` (on crimson: paper body, soot keys). On load someone types the signature once: the d key presses, then the c (0.32s each); no motion under reduced motion. The favicon is a simplified six-key version on a soot square (`public/favicon.svg`, `favicon.ico`, `apple-touch-icon.png`). The illustrated avatar signs off the Contact sheet; everywhere else it lives on social profiles.
 
 ### Subpage masthead
-Blog, CV and 404 open with a cobalt sheet holding the site header and the page title, mirroring the hero; content follows on paper below. The sheet is one shape built from two elements: the top part with the menu is the page's `<header>` (banner landmark), the part with the title opens `<main>`, so the title is the first thing in the content. On the home page the whole hero sheet is the `<header>` and stands before `<main>`. Colors inside are the hero's: Sheet Ink text, Sheet Ink focus rings.
+Blog, CV and 404 open with a crimson sheet holding the site header and the page title; content follows on paper. The top part is the page's `<header>` (banner landmark), the title part opens `<main>`.
 
 ### Floating dock
-After the visitor scrolls past the hero, two cobalt controls with a 2px Sheet Ink ring sit fixed in the bottom-right thumb zone: a round 48px "back to top" button with a drawn arrow, and a "Napisz do mnie" pill that jumps to Contact and disappears while Contact is on screen (the arrow stays to the very end). The contact pill remains available while scrolling in either direction; only the back-to-top arrow hides on scroll down and returns on scroll up. Hover inverts to Sheet Ink with a cobalt glyph. It fades and rises in 0.3s, without motion under reduced motion, and stays hidden without script.
+After the visitor scrolls past the hero, two crimson controls with a 2px paper ring sit in the bottom-right thumb zone: a 48px "back to top" key with a drawn arrow and a "Napisz do mnie" button that jumps to Contact and disappears while Contact is on screen. The contact button stays available while scrolling in either direction and carries a drawn envelope; only the back-to-top key hides on scroll down and returns on scroll up. Below 48rem, while scrolling down (reading), the contact button collapses to a 48px envelope key so it never covers card text; its label stays in the accessible name and returns on scroll up. Hover turns soot. It fades and rises in 0.3s, without motion under reduced motion, and stays hidden without script.
 
 ### Contact paths
-Right under the intro, before the big email, the Contact sheet splits into two paths, the project one first: "Masz projekt albo zespół do wdrożenia agentów?" and "Rekrutujesz?", each a subhead question, one line of soft text and a filled pill mail link with a prefilled subject. A hairline in Sheet Ink at 35% separates them (horizontal on phones, vertical side by side, as in the Collaboration sheet), and side by side they share subgrid rows, so both pills sit on one line even when one question wraps. The decision comes first; the email, an outlined "Kopiuj adres" pill and the secondary links follow. Mail subjects are shared site-wide (`subjects` in `profile.ts`), so the same intent always arrives with the same subject.
+Right under the intro the crimson Contact sheet splits into two paths, project first, each a subhead question, one line of Crimson Soft text and a paper button with a prefilled subject; side by side they share subgrid rows. The big email follows in the display voice with "Kopiuj adres" under it. Below a hairline the sheet signs off: the illustrated avatar (4.5rem circle, 2px paper ring) beside the name and "Odpisuję sam. Agenci czekają w kolejce.", with LinkedIn, GitHub and CV on the right. It is the payoff of the hero's empty chair: the human is back where people write to him. On the home page the footer drops its duplicate links, so the page ends on Contact. Mail subjects are shared site-wide (`subjects` in `profile.ts`).
 
 ### Closing stack (signature)
-Above the Contact sheet the edges of every product sheet peek out in the order the cards came, PlaceMates deepest and the last product right under Contact, each a strip about 1rem tall (clamp(0.6rem, 1.2vw, 1.05rem)) in the product's accent, stepped like the back sheet of the mark: every deeper sheet is one step (clamp(0.5rem, 2vw, 1.6rem)) narrower on each side. Claudius uses Blueprint Cobalt Night so it does not vanish into the cobalt Contact. Each edge and the Contact sheet cast the small upward stack shadow. As Contact rides in, a view timeline slides the edges out from under it, nearest first and deepest last; without scroll timelines and under reduced motion the stack is simply open. It is the page's closing line: everything you scrolled past now lies under the place to write.
+Above Contact the edges of every product sheet peek out in card order, stepped narrower with depth, each in the product's accent (Claudius in Crimson). A view timeline fans them out as Contact rides in; without scroll timelines and under reduced motion the stack is simply open.
 
 ### Collaboration sheet
-Right after Projects, a sheet in Morning Haze Paper Deep (it stands apart from the page like every sheet, without competing with the cobalt hero and Contact that bracket the page). Clients lead: a large display question "Masz pomysł na aplikację?" (step-4, 800, width 115%), a lead-size line on what gets built with PlaceMates as proof, a cobalt pill and an underlined link. Recruiters follow in a narrower column (8fr/4fr from 60rem) behind a 1px rule: a subhead question, one soft line, two underlined links. It sits one sheet gap above the next sheet.
+Right after Projects, a Paper Deep sheet: a large display question "Masz pomysł na aplikację?", a lead line with PlaceMates as proof, a crimson button and a link; recruiters follow in a narrower column (8fr/4fr from 60rem) behind a 1px rule.
 
 ### Typographic lens (signature)
-The hero name, every letter absolutely positioned and moved by transform, reacts to the cursor or scroll: letters near the focus go wide and heavy, far ones narrow and light, quantised to 100 pre-measured levels so nothing shifts layout.
+The hero name, every letter absolutely positioned and moved by transform, reacts to the cursor (or sweeps once on touch): near letters go wider and heavier, far ones narrower and lighter, quantised to 100 pre-measured levels so nothing shifts layout. The rest state is the display voice (58 / 850).
 
 ### Claudius track (signature)
-A vertical rail of process steps; the active step's rail fills over time while its name goes from width 70% / weight 400 to width 135% / weight 800. The name is not interpolated per frame: both cuts are set in the same cell, and the narrow one stretches out (scaleX 2.6, the measured ratio) and fades while the wide one grows from scaleX 0.385 and appears, so only opacity and transform run on the compositor. After the last step all rails drain upward together (0.7s) before the next pass. A mouse hover pins a step; touch never does, because a finger lands on the rail while scrolling. Without script every step is plainly readable.
+A vertical rail of process steps on the crimson Claudius card; the active step's rail fills while its name crossfades from width 70% / weight 400 to width 135% / weight 800 using two pre-set cuts (scaleX 2.6 and 0.385), so only opacity and transform animate. A mouse hover pins a step; touch never does.
 
 ### Small sheet moments
-- **Copy address:** a successful copy sends a soft light bar across the big email, like a photocopier lamp (0.75s, WAAPI on `::after`, faded top and bottom so it never draws a rectangle), and the outlined button shows a drawn tick with "Skopiowano" for 2.5s. Both labels share one grid cell, so the button keeps its width. Reduced motion keeps the label swap and the `aria-live` message, without the bar or tick drawing.
-- **404:** the middle zero slips out of the "404" like a sheet missing from the stack (rotate -6deg, 1.1s expo-out after 0.35s). Copy: "Tego arkusza nie ma w stosie."
-- **Selection:** text selection is cobalt on paper and inverts to Sheet Ink with cobalt text on cobalt sheets (`--select-bg`, `--select-ink` set on hero, masthead, Contact, the Claudius card and the review tile).
-- **Console:** a single pill-styled line points developers who open devtools to the public repository.
+- **Copy address:** a light bar sweeps across the email like a photocopier lamp, and the outline button shows a drawn tick with "Skopiowano" for 2.5s; reduced motion keeps the label swap and the `aria-live` message.
+- **404:** the middle zero slips out of the "404" like a sheet missing from the stack.
+- **Selection:** crimson on paper, inverted on crimson sheets (`--select-bg`, `--select-ink`).
+- **Console:** one crimson-labelled line points developers to the public repository.
 
 ### Anchor scroll
-In-page links (menu, dock, CTAs) glide instead of jumping: duration grows with distance (about 0.5s for one screen, capped at 1.1s), ease in-out cubic, and a trip longer than four screens is shortened to its last four so the card stack does not flicker past. Any wheel, touch or key stops it. The URL updates without a second native jump, and keyboard activation moves focus to the target. Targets are measured in normal document flow so earlier sticky cards are revealed correctly. Direct hashes and history navigation use the same correction after load. Reduced motion jumps to the corrected position without animation; the skip link keeps its native jump.
+In-page links (menu, dock, CTAs) glide: duration grows with distance (about 0.5s per screen, capped at 1.1s), ease in-out cubic, and a trip longer than four screens is shortened to its last four. Any wheel, touch or key stops it. Targets are measured in normal document flow so earlier sticky cards are revealed correctly; direct hashes and history navigation get the same correction. Reduced motion jumps to the corrected position; the skip link keeps its native jump.
 
 ### Interest tile (signature)
-A themed tile with a fitted condensed word (width 75%) that widens to 150% on hover (or at mid-screen on touch) and a thin line drawing that draws itself on entry and moves its subject on hover (wheels turn, buttons press, panels pop, the car rolls forward and opens DRS).
+A themed tile with a fitted condensed word (width 75%) that widens to 150% on hover (or at mid-screen on touch) and a thin line drawing that draws itself on entry and moves its subject on hover.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** give every new product its own sheet colored from its own screenshots, and add its accent to the skills matrix tone map.
-- **Do** put large surfaces on rounded sheets (1.5rem, 2rem from 64rem) that reach to the sheet gap from the window edge while their content stays on the title line.
-- **Do** use Anybody's width axis for hierarchy and meaningful motion; keep Literata for reading text at 1.125rem / 1.6, max 33em, and take sizes from the role tokens (`--lead`, `--step-small`, `--label-s`, `--label`, `--label-l`) instead of new literal values.
-- **Do** drive motion with scroll timelines in CSS, animate only transform and opacity on heavy paths, and give every effect a `prefers-reduced-motion` fallback and a readable no-script state.
+- **Do** keep brand surfaces in paper, soot and crimson, and give every new product its own sheet colored from its screenshots (plus its accent in `tones.ts`).
+- **Do** set names and titles in the display voice (`--tight`, `--heavy`) and subheads in `--tight-sub`; re-measure `--fit` when a fitted word or the axes change.
+- **Do** use `--radius-control` for anything small and pressable.
+- **Do** drive motion with scroll timelines, animate only transform and opacity on heavy paths, and give every effect a reduced-motion fallback and a readable no-script state.
 - **Do** show real screenshots in device frames.
-- **Do** keep colored sheets identical in light and dark mode.
-- **Do** keep repeating motion on the compositor: when a width or weight change repeats (the Claudius track), set both cuts in one cell and crossfade them with opacity and transform instead of interpolating the axis every frame.
-- **Do** route in-page links through `src/scripts/anchor-scroll.ts` so they glide; leave the skip link and reduced motion on the plain jump.
-- **Do** take the brand mark from `src/data/brand.ts` (regenerated by `scripts/brand/logo.py`) and recolor it only through `--mark-back`, `--mark-front`, `--mark-letter`.
+- **Do** take the mark from `public/brand/znak-klawiatura.svg` / `src/data/brand.ts` and recolor it only through the `--mark-*` variables.
+- **Do** route in-page links through `src/scripts/anchor-scroll.ts`.
 
 ### Don't:
-- **Don't** add a headshot or a placeholder portrait.
-- **Don't** use cobalt inside another product's card, or a product color outside its card, its matrix column and its stack edge.
+- **Don't** add a headshot; the illustrated avatar appears on the site only as the Contact sign-off, never as a hero portrait.
+- **Don't** use crimson inside another product's card, or a product color outside its card, matrix column and stack edge.
+- **Don't** bring back extended widths for static headings; extended widths live only in motion.
+- **Don't** add a third type family; narrow Anybody covers labels and metadata.
 - **Don't** use shadows as button affordances or on flat bento tiles.
-- **Don't** let fitted display lines wrap; re-measure `--fit` when the text changes.
-- **Don't** set labels, buttons, numbers or names in Literata.
-- **Don't** introduce square buttons or pill-shaped large surfaces.
-- **Don't** react to touch the way you react to hover: a finger on a moving element is usually a scroll, so pins and hover states listen to the mouse only.
-- **Don't** redraw or restyle the brand mark by hand; change it in `scripts/brand/logo.py` and regenerate.
+- **Don't** let fitted display lines wrap.
+- **Don't** react to touch the way you react to hover.
+- **Don't** put loaded symbols or emblems in the manga layer; agents, chairs, headphones and the city are enough.

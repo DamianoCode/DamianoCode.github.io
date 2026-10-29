@@ -10,7 +10,7 @@ const { repo, pilot, review } = aiWork.offers;
 <!-- Arkusz w odwróconych kolorach. Bento to trzy oferty dla zespołu; każda kończy się dowodem z mojej pracy. -->
 <section class="sheet ai" id="ai" aria-labelledby="ai-h">
   <div class="wrap block">
-    <h2 id="ai-h" class="block-title kinetic" style="--fit: 7.82">Agenci AI</h2>
+    <h2 id="ai-h" class="block-title kinetic" style="--fit: 2.93">Agenci AI</h2>
     <p class="lead">{aiWork.lead}</p>
 
     <div class="bento">
@@ -81,9 +81,9 @@ const { repo, pilot, review } = aiWork.offers;
     border-radius: 1.25rem;
   }
   h3 {
-    font-size: clamp(1.5rem, 3.2vw, 2.4rem);
-    font-weight: 800;
-    font-stretch: 115%;
+    font-size: clamp(1.75rem, 3.6vw, 2.8rem);
+    font-weight: var(--heavy);
+    font-stretch: var(--tight-sub);
     line-height: 1;
     /* Długie słowa („repozytorium”) dzielą się na wąskim kaflu zamiast wychodzić poza niego. */
     hyphens: auto;
@@ -107,9 +107,10 @@ const { repo, pilot, review } = aiWork.offers;
   /* Co zostaje w zespole: zdanie w kroju nagłówkowym, odróżnione od opisu i od dowodu pod nim. */
   .tile p.outcome {
     font-family: var(--display);
-    font-weight: 600;
-    font-size: var(--label-l);
-    line-height: 1.35;
+    font-weight: 750;
+    font-stretch: var(--tight-sub);
+    font-size: var(--lead);
+    line-height: 1.25;
     color: inherit;
   }
   .proof {
@@ -137,13 +138,13 @@ const { repo, pilot, review } = aiWork.offers;
   }
 
   .tile-review {
-    --select-bg: var(--brand-snow);
-    --select-ink: var(--brand-cobalt);
-    background: var(--brand-cobalt);
-    color: var(--brand-snow);
+    --select-bg: var(--brand-paper);
+    --select-ink: var(--brand-crimson);
+    background: var(--brand-crimson);
+    color: var(--brand-paper);
   }
   .tile-review p {
-    color: #d3d9ff;
+    color: var(--brand-crimson-soft);
   }
 
   /* Konfiguracja repozytorium: kafel na tle arkusza, oddzielony samą kreską. */
@@ -169,13 +170,13 @@ const { repo, pilot, review } = aiWork.offers;
     align-items: center;
     min-height: 2.75rem;
     padding: 0.6rem 1.1rem;
-    border-radius: 999px;
+    border-radius: var(--radius-control);
     background: var(--paper);
     color: var(--ink);
     text-decoration: none;
   }
   .ai-cta a:hover {
-    background: color-mix(in srgb, var(--paper) 85%, var(--cobalt));
+    background: color-mix(in srgb, var(--paper) 85%, var(--accent));
   }
   .ai-cta a:active {
     transform: translateY(1px);

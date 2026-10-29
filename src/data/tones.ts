@@ -8,6 +8,6 @@ export const projectTone: Record<ProjectId, string> = {
   placemates: '#e8834a',
   korepetytor: '#d4533d',
   widget: '#e3a21a',
-  claudius: 'var(--cobalt)',
+  claudius: 'var(--brand-crimson)',
   ecommerce: '#7d8aa5',
 };
