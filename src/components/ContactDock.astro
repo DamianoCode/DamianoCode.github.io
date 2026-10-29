@@ -1,3 +1,12 @@
+---
+import { localeOf } from '../i18n';
+
+const copy = {
+  pl: { top: 'Wróć na górę strony', write: 'Napisz do mnie' },
+  en: { top: 'Back to the top of the page', write: 'Write to me' },
+}[localeOf(Astro)];
+---
+
 <!--
   Pływające skróty w prawym dolnym rogu (w zasięgu kciuka), widoczne po zejściu z hero:
   - „Napisz do mnie” prowadzi do arkusza Kontakt i chowa się, gdy Kontakt jest już na ekranie;
@@ -8,12 +17,12 @@
   Bez skryptu się nie pokazują: zostaje menu i sam arkusz Kontakt.
 -->
 <div class="dock" data-dock hidden>
-  <a class="dock-up" href="#top" aria-label="Wróć na górę strony">
+  <a class="dock-up" href="#top" aria-label={copy.top}>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" /></svg>
   </a>
   <a class="dock-write" href="#kontakt" data-dock-write>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h17v11h-17zM4 7l8 6.5L20 7" /></svg>
-    <span class="dock-label">Napisz do mnie</span>
+    <span class="dock-label">{copy.write}</span>
   </a>
 </div>
 

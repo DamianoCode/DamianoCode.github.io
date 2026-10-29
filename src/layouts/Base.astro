@@ -5,7 +5,8 @@ import '../styles/global.css';
 import anybodyLatin from '@fontsource-variable/anybody/files/anybody-latin-standard-normal.woff2?url';
 import anybodyLatinExt from '@fontsource-variable/anybody/files/anybody-latin-ext-standard-normal.woff2?url';
 import SiteHeader from '../components/SiteHeader.astro';
-import { profile, seo } from '../data/profile';
+import { getProfile, getSeo } from '../data/profile';
+import { languageTag, localeOf, locales, ogLocale, type Localized } from '../i18n';
 import { getPublishedPosts } from '../lib/posts';
 
 interface Props {
@@ -19,22 +20,40 @@ interface Props {
   jsonLd?: Record<string, unknown>[];
   /** Strona sama wstawia nagłówek w slocie `banner` (strona główna: arkusz hero). */
   ownHeader?: boolean;
+  /** Adresy tej samej strony w obu językach (hreflang); tylko strony, które istnieją w obu. */
+  alternates?: Localized;
 }
+
+const locale = localeOf(Astro);
+const profile = getProfile(locale);
+const seo = getSeo(locale);
+
+const copy = {
+  pl: {
+    skip: 'Przejdź do treści',
+    imageAlt: 'agent z głową terminala siedzi nocą na murku nad miastem. Podpis: Człowiek w pętli.',
+  },
+  en: {
+    skip: 'Skip to content',
+    imageAlt: 'a terminal-headed agent sits on a parapet above the city at night. Caption: Human in the loop.',
+  },
+}[locale];
 
 const {
   title = seo.title,
   description = seo.description,
-  image = '/og.jpg',
+  image = locale === 'pl' ? '/og.jpg' : '/og-en.jpg',
   type = 'website',
   noindex = false,
   jsonLd = [],
   ownHeader = false,
+  alternates,
 } = Astro.props;
 
 const site = Astro.site!;
 const hasTitle = Astro.slots.has('masthead');
-// Pusty kanał RSS nie jest reklamowany ani w nagłówku, ani w stopce.
-const hasPosts = (await getPublishedPosts()).length > 0;
+// Pusty kanał RSS nie jest reklamowany ani w nagłówku, ani w stopce; wpisy są tylko po polsku.
+const hasPosts = locale === 'pl' && (await getPublishedPosts()).length > 0;
 // Przy build.format 'file' ścieżki kończą się na .html; adres kanoniczny ich nie zawiera.
 const cleanPath =
   Astro.url.pathname
@@ -43,10 +62,10 @@ const cleanPath =
 const canonical = new URL(cleanPath, site).href;
 const imageUrl = new URL(image, site).href;
 // Opis gotowego obrazka udostępniania (nocna scena z podpisem), nie samej osoby.
-const imageAlt =
-  image === '/og.jpg'
-    ? `${profile.fullName}, damianocode: agent z głową terminala siedzi nocą na murku nad miastem. Podpis: Człowiek w pętli.`
-    : profile.fullName;
+const imageAlt = image.startsWith('/og') ? `${profile.fullName}, damianocode: ${copy.imageAlt}` : profile.fullName;
+const alternateUrls = alternates
+  ? locales.map((l) => ({ lang: languageTag[l], href: new URL(alternates[l], site).href }))
+  : [];
 
 const person = {
   '@context': 'https://schema.org',
@@ -70,14 +89,14 @@ const website = {
   '@id': new URL('/#website', site).href,
   name: profile.fullName,
   url: site.href,
-  inLanguage: 'pl-PL',
+  inLanguage: locales.map((l) => languageTag[l]),
   author: { '@id': person['@id'] },
 };
 
 ---
 
 <!doctype html>
-<html lang="pl">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -85,10 +104,13 @@ const website = {
     <meta name="description" content={description} />
     <meta name="author" content={profile.fullName} />
     <link rel="canonical" href={canonical} />
+    {alternateUrls.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    {alternates && <link rel="alternate" hreflang="x-default" href={new URL(alternates.pl, site).href} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
 
     <meta property="og:type" content={type} />
-    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:locale" content={ogLocale[locale]} />
+    {alternates && locales.filter((l) => l !== locale).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
     <meta property="og:site_name" content={profile.fullName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -116,7 +138,7 @@ const website = {
     ))}
   </head>
   <body>
-    <a class="skip" href="#tresc">Przejdź do treści</a>
+    <a class="skip" href="#tresc">{copy.skip}</a>
     {/* Karminowy arkusz podstrony to jeden kształt z dwóch elementów: górna część z menu jest nagłówkiem strony
         (banner), dolna z tytułem otwiera <main>, żeby tytuł był pierwszą rzeczą w treści. */}
     {ownHeader ? (
@@ -156,8 +178,12 @@ const website = {
   initAnchorScroll();
 
   // Dla tych, którzy zaglądają w narzędzia deweloperskie: kod strony jest publiczny.
+  const [peek, open] =
+    document.documentElement.lang === 'en'
+      ? ['Looking under the hood?', 'The code of this site is public:']
+      : ['Zaglądasz pod spód?', 'Kod tej strony jest publiczny:'];
   console.log(
-    '%cZaglądasz pod spód?%c Kod tej strony jest publiczny: https://github.com/DamianoCode/DamianoCode.github.io',
+    `%c${peek}%c ${open} https://github.com/DamianoCode/DamianoCode.github.io`,
     'background:#be2337;color:#e9e5de;font:700 13px/1.6 sans-serif;padding:2px 8px;border-radius:4px',
     'font:13px/1.6 sans-serif',
   );

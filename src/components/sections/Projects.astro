@@ -6,7 +6,59 @@ import placematesMap from '../../assets/projects/placemates-map-telefon.png';
 import tutorWeek from '../../assets/projects/korepetytor-terminarz-desktop.png';
 import tutorToday from '../../assets/projects/korepetytor-dzis-telefon.png';
 import widgetStates from '../../assets/projects/widget-stany.png';
-import { archive, projects, type Project } from '../../data/projects';
+import { getArchive, getProjects, type Project } from '../../data/projects';
+import { localeOf } from '../../i18n';
+
+const locale = localeOf(Astro);
+const projects = getProjects(locale);
+const archive = getArchive(locale);
+
+const copy = {
+  pl: {
+    title: 'Projekty',
+    fit: 2.94,
+    intro: 'Od najnowszych: dwie aplikacje webowe i dwa narzędzia do pracy z agentami AI.',
+    states: 'Stany sygnalizatora',
+    tech: 'Technologie',
+    codeOf: 'projektu',
+    earlier: 'Wcześniej',
+    archive: 'Starsze repozytoria, 2021–2022',
+    widgetAlt:
+      'Wszystkie stany widżetu: pełny widok sygnalizatora w czterech stanach (czeka na Ciebie, pracuje, nowy wynik, nic nie czeka) z limitami konta, panel sesji po najechaniu, tryb mini, maskotka i wyspa przy krawędzi ekranu',
+    alts: {
+      placemates: [
+        'Ekran startowy PlaceMates: hasło „Wróć do wspólnego atlasu”, formularz logowania i karty kategorii miejsc',
+        'PlaceMates na telefonie: mapa miasta z filtrami miejsc i dolnym menu aplikacji',
+      ],
+      korepetytor: [
+        'Terminarz tygodnia: lekcje uczniów w kolorach, sprawdzian w piątek i linia bieżącej godziny',
+        'Ekran „Dziś” na telefonie: lekcja o 16:00 z planem, lekcja bez notatki i sprawdzian ucznia jutro',
+      ],
+    },
+  },
+  en: {
+    title: 'Projects',
+    fit: 2.91,
+    intro: 'Newest first: two web apps and two tools for working with AI agents.',
+    states: 'Signal states',
+    tech: 'Technologies',
+    codeOf: 'for',
+    earlier: 'Earlier',
+    archive: 'Older repositories, 2021–2022',
+    widgetAlt:
+      'Every state of the widget: the full signal view in four states (waiting for you, working, new result, nothing waiting) with account limits, the session panel on hover, mini mode, the mascot and the island at the screen edge',
+    alts: {
+      placemates: [
+        'PlaceMates start screen (in Polish): the line “Back to the shared atlas”, a sign-in form and place category cards',
+        'PlaceMates on a phone: a city map with place filters and the app’s bottom menu',
+      ],
+      korepetytor: [
+        'Weekly schedule (in Polish): students’ lessons in colors, a test on Friday and the current-time line',
+        'The “Today” screen on a phone (in Polish): a 4 pm lesson with its plan, a lesson without a note and a student’s test tomorrow',
+      ],
+    },
+  },
+}[locale];
 
 /** Karty w kolejności na stronie. `flip`: scena po lewej, tekst po prawej. */
 const cases = projects
@@ -18,25 +70,25 @@ const minor = projects.filter((p) => p.tier === 'minor');
 const duos = {
   placemates: {
     desk: placematesShot,
-    deskAlt: 'Ekran startowy PlaceMates: hasło „Wróć do wspólnego atlasu”, formularz logowania i karty kategorii miejsc',
+    deskAlt: copy.alts.placemates[0],
     phone: placematesMap,
-    phoneAlt: 'PlaceMates na telefonie: mapa miasta z filtrami miejsc i dolnym menu aplikacji',
+    phoneAlt: copy.alts.placemates[1],
   },
   korepetytor: {
     desk: tutorWeek,
-    deskAlt: 'Terminarz tygodnia: lekcje uczniów w kolorach, sprawdzian w piątek i linia bieżącej godziny',
+    deskAlt: copy.alts.korepetytor[0],
     phone: tutorToday,
-    phoneAlt: 'Ekran „Dziś” na telefonie: lekcja o 16:00 z planem, lekcja bez notatki i sprawdzian ucznia jutro',
+    phoneAlt: copy.alts.korepetytor[1],
   },
 } as const;
 
-const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
+const codeLink = (p: Project) => p.links.find((l) => l.code);
 ---
 
 <section class="block" id="projekty" aria-labelledby="projekty-h">
   <div class="wrap">
-    <h2 id="projekty-h" class="block-title kinetic" style="--fit: 2.94">Projekty</h2>
-    <p class="block-intro">Od najnowszych: dwie aplikacje webowe i dwa narzędzia do pracy z agentami AI.</p>
+    <h2 id="projekty-h" class="block-title kinetic" style={`--fit: ${copy.fit}`}>{copy.title}</h2>
+    <p class="block-intro">{copy.intro}</p>
   </div>
 
   <!--
@@ -87,7 +139,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
               <div class="rig rig-widget">
                 <Image
                   src={widgetStates}
-                  alt="Wszystkie stany widżetu: pełny widok sygnalizatora w czterech stanach (czeka na Ciebie, pracuje, nowy wynik, nic nie czeka) z limitami konta, panel sesji po najechaniu, tryb mini, maskotka i wyspa przy krawędzi ekranu"
+                  alt={copy.widgetAlt}
                   widths={[700, 1100, 1600, 2200]}
                   sizes="(min-width: 64rem) 46vw, 92vw"
                   loading="lazy"
@@ -101,7 +153,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
           <div class="case-text">
             <p class="summary">{p.summary}</p>
             {p.states && (
-              <ul class="states" aria-label="Stany sygnalizatora">
+              <ul class="states" aria-label={copy.states}>
                 {p.states.map((s) => (
                   <li>
                     <span class={`light light-${s.tone}`} aria-hidden="true" />
@@ -112,7 +164,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
               </ul>
             )}
             <p class="detail">{p.detail}</p>
-            <ul class="chips" aria-label="Technologie">
+            <ul class="chips" aria-label={copy.tech}>
               {p.stack.map((t) => <li>{t}</li>)}
             </ul>
             {p.links.length > 0 && (
@@ -120,7 +172,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
                 {p.links.map((l, k) => (
                   <a href={l.href} class:list={{ primary: k === 0 }}>
                     {l.label}
-                    {l.label === 'Kod' && <span class="visually-hidden"> projektu {p.name}</span>}
+                    {l.code && <span class="visually-hidden"> {copy.codeOf} {p.name}</span>}
                   </a>
                 ))}
               </p>
@@ -132,7 +184,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
   </div>
 
   <div class="wrap earlier" id="projekty-archiwum">
-    <h3 class="earlier-title">Wcześniej</h3>
+    <h3 class="earlier-title">{copy.earlier}</h3>
 
     {minor.map((p) => (
       <article class="minor" id={p.id}>
@@ -143,12 +195,12 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
         <div>
           <p class="minor-text">{p.summary} {p.detail}</p>
           <p class="minor-stack">
-            <span class="visually-hidden">Technologie: </span>
+            <span class="visually-hidden">{copy.tech}: </span>
             {p.stack.join(', ')}
           </p>
           {codeLink(p) && (
             <p class="actions minor-links">
-              <a href={codeLink(p)!.href}>Kod<span class="visually-hidden"> projektu {p.name}</span></a>
+              <a href={codeLink(p)!.href}>{codeLink(p)!.label}<span class="visually-hidden"> {copy.codeOf} {p.name}</span></a>
             </p>
           )}
         </div>
@@ -157,7 +209,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
 
     {/* Starsze repozytoria są pod ręką dla ciekawych, ale nie rozwadniają kart projektów. */}
     <details class="archive">
-      <summary>Starsze repozytoria, 2021–2022 ({archive.length})</summary>
+      <summary>{copy.archive} ({archive.length})</summary>
       <ul class="archive-list">
         {archive.map((a) => (
           <li>

@@ -28,7 +28,7 @@ Personal portfolio of Damian Ułaś, a fullstack developer from Zamość. It exi
 ## Capabilities and Constraints
 - Static Astro site, no backend, deployed to GitHub Pages from `main` (`damianocode.github.io`; a custom domain is possible via `public/CNAME`).
 - Sections: Hero, Projects, AI work ("Agenci AI"), Skills (skill-by-project matrix), latest blog posts (hidden while empty), "Po godzinach" (interests), Contact. Separate `/cv` page and blog.
-- Polish only today. **An English version is planned**: future work should keep copy out of markup where practical and leave room for a second locale and a language switch.
+- Polish at `/`, English at `/en` (home page only; shipped 2026-10-29). Copy lives as `{ pl, en }` in `src/data/*.ts` and in each component's `copy` object; the blog and the CV stay Polish-only. New copy needs both languages.
 - Undecided: whether and when the blog gets real posts, and when the full CV (PDF and experience entries) is published.
 
 ## Brand Commitments
@@ -47,7 +47,7 @@ Personal portfolio of Damian Ułaś, a fullstack developer from Zamość. It exi
 2. **Two readers, one page, projects first.** The client path leads; the recruiter path stays present and easy to find, never buried.
 3. **AI as method, not slogan.** Show how agents are used to deliver, in service of the products, never as the headline.
 4. **Contact is always close.** A visitor who is convinced can reach out in one step from anywhere.
-5. **Ready for a second language.** Structure and copy choices should not make the planned English version harder.
+5. **Two languages, one page.** Every visible string exists in Polish and English; neither version is allowed to lag.
 
 ## Accessibility & Inclusion
 The existing site carries `lang="pl"`, a skip link, labelled sections, `aria-live` feedback and `prefers-reduced-motion` handling; future work must keep these. No further product-specific standard has been set.

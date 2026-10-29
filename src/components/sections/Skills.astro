@@ -1,8 +1,36 @@
 ---
-import { alsoUsed, columns, skillGroups, skills } from '../../data/skills';
+import { alsoUsed, getColumns, getGroupName, getSkills, skillGroups } from '../../data/skills';
 import { projectTone } from '../../data/tones';
+import { localeOf } from '../../i18n';
 
-const grouped = skillGroups.map((group) => ({ group, items: skills.filter((s) => s.group === group) }));
+const locale = localeOf(Astro);
+const columns = getColumns(locale);
+const skills = getSkills(locale);
+const grouped = skillGroups.map((group) => ({
+  group: getGroupName(group, locale),
+  items: skills.filter((s) => s.group === group),
+}));
+
+const copy = {
+  pl: {
+    title: 'Umiejętności',
+    fit: 4.31,
+    intro:
+      'Zamiast deklaracji: tabela pokazuje, gdzie naprawdę czego użyłem. Wiersz to umiejętność, kolumna to projekt. Ostatnia kolumna zbiera wcześniejsze repozytoria.',
+    yes: 'tak',
+    no: 'nie',
+    also: 'Poza tabelą',
+  },
+  en: {
+    title: 'Skills',
+    fit: 1.8,
+    intro:
+      'Instead of claims: the table shows where I actually used what. A row is a skill, a column is a project. The last column collects earlier repositories.',
+    yes: 'yes',
+    no: 'no',
+    also: 'Outside the table',
+  },
+}[locale];
 
 /** Kolor kolumny = kolor karty projektu: tabela łączy się wzrokowo z projektami wyżej. */
 const tone: Record<string, string> = { ...projectTone, wczesniej: 'var(--ink-soft)' };
@@ -11,11 +39,8 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
 ---
 
 <section class="wrap block" id="umiejetnosci" aria-labelledby="umiejetnosci-h">
-  <h2 id="umiejetnosci-h" class="block-title kinetic" style="--fit: 4.31">Umiejętności</h2>
-  <p class="block-intro">
-    Zamiast deklaracji: tabela pokazuje, gdzie naprawdę czego użyłem. Wiersz to umiejętność, kolumna to projekt.
-    Ostatnia kolumna zbiera wcześniejsze repozytoria.
-  </p>
+  <h2 id="umiejetnosci-h" class="block-title kinetic" style={`--fit: ${copy.fit}`}>{copy.title}</h2>
+  <p class="block-intro">{copy.intro}</p>
 
   <!-- Szerokie ekrany: tabela. Wąskie: lista z nazwami projektów. -->
   <table class="matrix" aria-labelledby="umiejetnosci-h">
@@ -43,9 +68,9 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
           {columns.map((c) => (
             <td style={`--c: ${tone[c.id]}`}>
               {s.usedIn.includes(c.id) ? (
-                <span class="hit" role="img" aria-label="tak" />
+                <span class="hit" role="img" aria-label={copy.yes} />
               ) : (
-                <span class="visually-hidden">nie</span>
+                <span class="visually-hidden">{copy.no}</span>
               )}
             </td>
           ))}
@@ -76,7 +101,7 @@ const columnHref = (id: string) => (id === 'wczesniej' ? '#projekty-archiwum' : 
   </div>
   ))}
 
-  <p class="also">Poza tabelą: {alsoUsed.join(', ')}.</p>
+  <p class="also">{copy.also}: {alsoUsed.join(', ')}.</p>
 </section>
 
 <style>

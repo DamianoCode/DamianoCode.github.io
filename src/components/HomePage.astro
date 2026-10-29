@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from './Hero.astro';
+import Collab from './sections/Collab.astro';
+import AiWork from './sections/AiWork.astro';
+import Contact from './sections/Contact.astro';
+import ContactDock from './ContactDock.astro';
+import Interests from './sections/Interests.astro';
+import LatestPosts from './sections/LatestPosts.astro';
+import Projects from './sections/Projects.astro';
+import Skills from './sections/Skills.astro';
+import { getProjects } from '../data/projects';
+import { home, languageTag, localeOf } from '../i18n';
+
+/**
+ * Strona główna w bieżącym języku. Renderują ją src/pages/index.astro (polski) i src/pages/en/index.astro
+ * (angielski); język bierze się z adresu.
+ */
+const locale = localeOf(Astro);
+const projects = getProjects(locale);
+const root = home(locale);
+
+const site = Astro.site!;
+
+/** Projekty jako lista dzieł autora: wyszukiwarki wiążą je z osobą. */
+const projectList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: locale === 'pl' ? 'Projekty' : 'Projects',
+  itemListOrder: 'https://schema.org/ItemListOrderDescending',
+  itemListElement: projects.map((project, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'SoftwareSourceCode',
+      name: project.name,
+      description: project.summary,
+      url: new URL(`${root}#${project.id}`, site).href,
+      codeRepository: project.links.find((link) => link.code)?.href,
+      programmingLanguage: project.stack,
+      author: { '@id': new URL('/#person', site).href },
+    },
+  })),
+};
+
+const profilePage = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: { '@id': new URL('/#person', site).href },
+  inLanguage: languageTag[locale],
+};
+---
+
+<Base jsonLd={[profilePage, projectList]} ownHeader alternates={{ pl: home('pl'), en: home('en') }}>
+  <Hero slot="banner" />
+  <Projects />
+  <Collab />
+  <AiWork />
+  <Skills />
+  <LatestPosts />
+  <Interests />
+  <Contact />
+  <ContactDock />
+</Base>

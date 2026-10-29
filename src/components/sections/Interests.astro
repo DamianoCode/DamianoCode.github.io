@@ -1,11 +1,19 @@
 ---
 import InterestArt from '../InterestArt.astro';
-import { interests } from '../../data/profile';
+import { getInterests } from '../../data/profile';
+import { localeOf } from '../../i18n';
+
+const locale = localeOf(Astro);
+const interests = getInterests(locale);
+const copy = {
+  pl: { title: 'Po godzinach', fit: 4.21, intro: 'Kod to nie wszystko. Tym zajmuję się, kiedy laptop jest zamknięty.' },
+  en: { title: 'After hours', fit: 3.92, intro: 'Code is not everything. This is what I do when the laptop is closed.' },
+}[locale];
 ---
 
 <section class="wrap block" id="po-godzinach" aria-labelledby="po-godzinach-h">
-  <h2 id="po-godzinach-h" class="block-title kinetic" style="--fit: 4.21">Po godzinach</h2>
-  <p class="block-intro">Kod to nie wszystko. Tym zajmuję się, kiedy laptop jest zamknięty.</p>
+  <h2 id="po-godzinach-h" class="block-title kinetic" style={`--fit: ${copy.fit}`}>{copy.title}</h2>
+  <p class="block-intro">{copy.intro}</p>
 
   <!-- Bento: każdy kafel ma własne kolory, a jego grafiką jest samo hasło; rysunek w rogu tylko je podpisuje. -->
   <ul class="interests">

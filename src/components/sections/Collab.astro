@@ -1,6 +1,38 @@
 ---
 import { cvReady } from '../../data/cv';
-import { mailto, profile, subjects } from '../../data/profile';
+import { getProfile, getSubjects, mailto } from '../../data/profile';
+import { localeOf } from '../../i18n';
+
+const locale = localeOf(Astro);
+const profile = getProfile(locale);
+const subjects = getSubjects(locale);
+// CV jest tylko po polsku, więc angielska strona zawsze prosi o nie mailem.
+const showCv = cvReady && locale === 'pl';
+
+const copy = {
+  pl: {
+    title: 'Masz pomysł na aplikację?',
+    text: 'Zbuduję ją od bazy danych po interfejs: Next.js, TypeScript i PostgreSQL, z wersją na telefon jako PWA. Tak powstało PlaceMates, które działa na placemates.pl.',
+    write: 'Napisz o projekcie',
+    see: 'Zobacz PlaceMates',
+    team: 'Szukasz developera do zespołu?',
+    forms: 'B2B albo etat',
+    cv: 'Zobacz CV',
+    askCv: 'Poproś o CV',
+    job: 'Napisz w sprawie pracy',
+  },
+  en: {
+    title: 'Have an idea for an app?',
+    text: 'I will build it from the database to the interface: Next.js, TypeScript and PostgreSQL, with a phone version as a PWA. That is how PlaceMates was made, and it runs at placemates.pl.',
+    write: 'Write about a project',
+    see: 'See PlaceMates',
+    team: 'Looking for a developer for your team?',
+    forms: 'B2B or full-time',
+    cv: 'See my CV',
+    askCv: 'Ask for my CV',
+    job: 'Write about a job',
+  },
+}[locale];
 ---
 
 <!--
@@ -11,23 +43,20 @@ import { mailto, profile, subjects } from '../../data/profile';
 <section class="sheet collab" id="wspolpraca" aria-labelledby="wspolpraca-h">
   <div class="wrap collab-inner">
     <div class="pitch">
-      <h2 id="wspolpraca-h" class="pitch-title">Masz pomysł na aplikację?</h2>
-      <p class="pitch-text">
-        Zbuduję ją od bazy danych po interfejs: Next.js, TypeScript i PostgreSQL, z wersją na telefon jako PWA.
-        Tak powstało PlaceMates, które działa na placemates.pl.
-      </p>
+      <h2 id="wspolpraca-h" class="pitch-title">{copy.title}</h2>
+      <p class="pitch-text">{copy.text}</p>
       <p class="actions pitch-actions">
-        <a class="primary" href={mailto(subjects.project)}>Napisz o projekcie</a>
-        <a href="#placemates">Zobacz PlaceMates</a>
+        <a class="primary" href={mailto(subjects.project)}>{copy.write}</a>
+        <a href="#placemates">{copy.see}</a>
       </p>
     </div>
 
     <div class="team">
-      <h3 class="team-title">Szukasz developera do zespołu?</h3>
-      <p>B2B albo etat, {profile.remote}.</p>
+      <h3 class="team-title">{copy.team}</h3>
+      <p>{copy.forms}, {profile.remote}.</p>
       <p class="actions team-actions">
-        {cvReady ? <a href="/cv">Zobacz CV</a> : <a href={mailto(subjects.cv)}>Poproś o CV</a>}
-        <a href={mailto(subjects.job)}>Napisz w sprawie pracy</a>
+        {showCv ? <a href="/cv">{copy.cv}</a> : <a href={mailto(subjects.cv)}>{copy.askCv}</a>}
+        <a href={mailto(subjects.job)}>{copy.job}</a>
       </p>
     </div>
   </div>

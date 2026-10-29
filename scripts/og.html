@@ -23,5 +23,12 @@
   <div class="name">Damian<br />Ułaś</div>
   <div class="loop">Człowiek w pętli.</div>
 </div>
+<script>
+  // og.html?lang=en daje angielski podpis do public/og-en.jpg.
+  if (new URLSearchParams(location.search).get('lang') === 'en') {
+    document.documentElement.lang = 'en';
+    document.querySelector('.loop').textContent = 'Human in the loop.';
+  }
+</script>
 </body>
 </html>

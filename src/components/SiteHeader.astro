@@ -1,36 +1,56 @@
 ---
 import BrandMark from './BrandMark.astro';
 import { cvReady } from '../data/cv';
-import { profile } from '../data/profile';
+import { getProfile } from '../data/profile';
+import { home, localeOf } from '../i18n';
 import { getPublishedPosts } from '../lib/posts';
 
 /**
- * Pasek nagłówka: znak i menu. Zwykle renderuje go Base; strona główna wstawia go do arkusza hero,
- * żeby poruszał się razem z nim. Element <header> (landmark banner) daje arkusz, w którym pasek leży.
+ * Pasek nagłówka: znak, menu i przełącznik języka. Zwykle renderuje go Base; strona główna wstawia go do
+ * arkusza hero, żeby poruszał się razem z nim. Element <header> (landmark banner) daje arkusz, w którym
+ * pasek leży.
  */
+const locale = localeOf(Astro);
+const profile = getProfile(locale);
 const path = Astro.url.pathname;
-const hasPosts = (await getPublishedPosts()).length > 0;
+const root = home(locale);
+// Blog jest po polsku: angielska strona go nie zapowiada, dopóki nie ma wpisów w tym języku.
+const hasPosts = locale === 'pl' && (await getPublishedPosts()).length > 0;
+
+const labels = {
+  pl: { nav: 'Główna', projects: 'Projekty', ai: 'Agenci AI', skills: 'Umiejętności', contact: 'Kontakt' },
+  en: { nav: 'Main', projects: 'Projects', ai: 'AI agents', skills: 'Skills', contact: 'Contact' },
+}[locale];
+
+// Kotwice sekcji są takie same w obu językach; zmienia się tylko strona, na której leżą.
+const anchor = (id: string) => `${root === '/' ? '/' : root}#${id}`;
 
 // Blog i CV trafiają do menu dopiero wtedy, gdy mają treść: link do pustej strony to ślepy zaułek.
 const nav = [
-  { href: '/#projekty', label: 'Projekty' },
-  { href: '/#ai', label: 'Agenci AI' },
-  { href: '/#umiejetnosci', label: 'Umiejętności' },
+  { href: anchor('projekty'), label: labels.projects },
+  { href: anchor('ai'), label: labels.ai },
+  { href: anchor('umiejetnosci'), label: labels.skills },
   { href: '/blog', label: 'Blog', current: path.startsWith('/blog'), hidden: !hasPosts },
-  { href: '/cv', label: 'CV', current: path.startsWith('/cv'), hidden: !cvReady },
-  { href: '/#kontakt', label: 'Kontakt' },
+  { href: '/cv', label: 'CV', current: path.startsWith('/cv'), hidden: !cvReady || locale !== 'pl' },
+  { href: anchor('kontakt'), label: labels.contact },
 ].filter((item) => !item.hidden);
+
+// Przełącznik prowadzi na stronę główną drugiego języka (podstrony są tylko po polsku).
+const other = locale === 'pl'
+  ? { href: home('en'), short: 'EN', name: 'English version', lang: 'en' }
+  : { href: home('pl'), short: 'PL', name: 'Wersja polska', lang: 'pl' };
 ---
 
 <div class="wrap site-head" id="top">
-  <a class="home" href="/"><BrandMark />{profile.wordmark}</a>
-  <nav aria-label="Główna">
+  <a class="home" href={root}><BrandMark />{profile.wordmark}</a>
+  <nav aria-label={labels.nav}>
     {nav.map((item) => (
       <a href={item.href} aria-current={item.current ? 'page' : undefined}>
         {item.label}
       </a>
     ))}
   </nav>
+  <a class="lang" href={other.href} hreflang={other.lang} lang={other.lang} aria-label={other.name}>{other.short}</a>
 </div>
 
 <style>
@@ -38,9 +58,28 @@ const nav = [
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 0 2rem;
     padding-block: 0.5rem;
+  }
+  .site-head nav {
+    margin-left: auto;
+    padding-left: 2rem;
+  }
+  /* Telefon: znak i przełącznik języka w pierwszym wierszu, menu sekcji w całej szerokości pod nimi. */
+  @media (max-width: 47.99rem) {
+    .site-head .lang {
+      order: 1;
+      margin-left: auto;
+      padding-left: 0;
+    }
+    .site-head .lang::before {
+      display: none;
+    }
+    .site-head nav {
+      order: 2;
+      flex-basis: 100%;
+      margin-left: 0;
+      padding-left: 0;
+    }
   }
   .home {
     display: inline-flex;
@@ -72,9 +111,39 @@ const nav = [
     text-decoration: none;
     background: linear-gradient(transparent, transparent) no-repeat 0 calc(50% + 0.85em) / 100% 2px;
   }
+  .lang:hover,
   nav a:hover,
   nav a[aria-current='page'] {
     background-image: linear-gradient(var(--accent), var(--accent));
+  }
+  /* Przełącznik języka: skrót w grubszym kroju, oddzielony od menu cienką kreską. Na komputerze stoi za menu,
+     na telefonie w pierwszym wierszu obok znaku, żeby menu sekcji zmieściło się w jednym wierszu pod nim. */
+  .lang {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: var(--label-l);
+    text-decoration: none;
+    background: linear-gradient(transparent, transparent) no-repeat 0 calc(50% + 0.85em) / 100% 2px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    /* Kreska po najechaniu tylko pod skrótem, nie pod odstępem od separatora. */
+    background-origin: content-box;
+    background-clip: content-box;
+  }
+  .lang::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 1em;
+    border-left: 1px solid color-mix(in srgb, var(--ink) 40%, transparent);
+    translate: 0 -50%;
   }
   @media (max-width: 30rem) {
     nav {

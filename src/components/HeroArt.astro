@@ -8,13 +8,22 @@
  * z pasem nad rysunkiem na dymek i karteczkę (na niskim kadrze nie ma nad głowami miejsca). `<picture>` pobiera
  * tylko kadr, który jest widoczny. Pliki w public/illustrations mają przezroczyste tło i leżą na papierze.
  */
+import { localeOf } from '../i18n';
+
 const copy = {
-  alt: 'Trzej agenci z głowami terminali czekają z pustymi biletami obok pustego fotela, na którym wiszą czerwone słuchawki.',
-  bubble: 'Czekamy na człowieka.',
-  note: 'brb',
-  noteSpoken: 'Zaraz wracam.',
-};
----
+  pl: {
+    alt: 'Trzej agenci z głowami terminali czekają z pustymi biletami obok pustego fotela, na którym wiszą czerwone słuchawki.',
+    bubble: 'Czekamy na człowieka.',
+    note: 'brb',
+    noteSpoken: 'Zaraz wracam.',
+  },
+  en: {
+    alt: 'Three terminal-headed agents wait with blank tickets beside an empty chair with red headphones hanging on it.',
+    bubble: 'Waiting for the human.',
+    note: 'brb',
+    noteSpoken: 'Be right back.',
+  },
+}[localeOf(Astro)];---
 
 <figure class="hero-art">
   <picture>

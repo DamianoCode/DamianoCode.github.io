@@ -2,9 +2,52 @@
 import { Image } from 'astro:assets';
 import avatar from '../../assets/brand/awatar.webp';
 import { cvReady } from '../../data/cv';
-import { mailto, profile, subjects } from '../../data/profile';
-import { projects } from '../../data/projects';
+import { getProfile, getSubjects, mailto } from '../../data/profile';
+import { getProjects } from '../../data/projects';
 import { projectTone } from '../../data/tones';
+import { localeOf } from '../../i18n';
+
+const locale = localeOf(Astro);
+const profile = getProfile(locale);
+const subjects = getSubjects(locale);
+const projects = getProjects(locale);
+// CV jest tylko po polsku, więc angielska strona zawsze prosi o nie mailem.
+const showCv = cvReady && locale === 'pl';
+
+const copy = {
+  pl: {
+    title: 'Kontakt',
+    fit: 2.63,
+    intro: 'Wybierz, w jakiej sprawie piszesz: temat maila uzupełni się sam. Możesz też napisać prosto na adres poniżej.',
+    projectQ: 'Masz projekt albo zespół do wdrożenia agentów?',
+    projectText: 'Aplikacja od bazy po interfejs albo Claude Code w waszym repozytorium.',
+    projectCta: 'Napisz o projekcie',
+    jobQ: 'Rekrutujesz?',
+    jobText: ['B2B albo etat', 'Napisz, czego szuka zespół.'],
+    jobCta: 'Napisz w sprawie pracy',
+    copy: 'Kopiuj adres',
+    copied: 'Skopiowano',
+    failed: 'Nie udało się skopiować. Zaznacz adres powyżej i skopiuj go ręcznie.',
+    note: 'Odpisuję sam. Agenci czekają w kolejce.',
+    askCv: 'Poproś o CV',
+  },
+  en: {
+    title: 'Contact',
+    fit: 2.62,
+    intro: 'Pick what you are writing about and the email subject fills itself in. You can also write straight to the address below.',
+    projectQ: 'Have a project, or a team that wants to work with agents?',
+    projectText: 'An app from the database to the interface, or Claude Code in your repository.',
+    projectCta: 'Write about a project',
+    jobQ: 'Hiring?',
+    jobText: ['B2B or full-time', 'Tell me what the team is looking for.'],
+    jobCta: 'Write about a job',
+    copy: 'Copy address',
+    copied: 'Copied',
+    failed: 'Could not copy. Select the address above and copy it by hand.',
+    note: 'I reply myself. The agents wait in line.',
+    askCv: 'Ask for my CV',
+  },
+}[locale];
 
 // Stos domyka się nad Kontaktem: krawędzie arkuszy produktów w kolejności z góry strony. Pierwszy leży najgłębiej,
 // ostatni tuż pod Kontaktem.
@@ -21,32 +64,37 @@ const [emailUser, emailDomain] = profile.email.split('@');
 </div>
 <section class="sheet contact" id="kontakt" aria-labelledby="kontakt-h">
   <div class="wrap block">
-  <h2 id="kontakt-h" class="block-title kinetic" style="--fit: 2.63">Kontakt</h2>
-  <p class="intro">
-    Wybierz, w jakiej sprawie piszesz: temat maila uzupełni się sam. Możesz też napisać prosto na adres poniżej.
-  </p>
+  <h2 id="kontakt-h" class="block-title kinetic" style={`--fit: ${copy.fit}`}>{copy.title}</h2>
+  <p class="intro">{copy.intro}</p>
 
   <!-- Najpierw decyzja: dwie ścieżki z gotowym tematem maila. Adres i reszta linków są pod nimi. -->
   <ul class="paths">
     <li>
-      <h3 class="path-q">Masz projekt albo zespół do wdrożenia agentów?</h3>
-      <p>Aplikacja od bazy po interfejs albo Claude Code w waszym repozytorium.</p>
-      <a href={mailto(subjects.project)}>Napisz o projekcie</a>
+      <h3 class="path-q">{copy.projectQ}</h3>
+      <p>{copy.projectText}</p>
+      <a href={mailto(subjects.project)}>{copy.projectCta}</a>
     </li>
     <li>
-      <h3 class="path-q">Rekrutujesz?</h3>
-      <p>B2B albo etat, {profile.remote}. Napisz, czego szuka zespół.</p>
-      <a href={mailto(subjects.job)}>Napisz w sprawie pracy</a>
+      <h3 class="path-q">{copy.jobQ}</h3>
+      <p>{copy.jobText[0]}, {profile.remote}. {copy.jobText[1]}</p>
+      <a href={mailto(subjects.job)}>{copy.jobCta}</a>
     </li>
   </ul>
 
   <a class="email" href={mailto()}><span>{emailUser}@</span><span>{emailDomain}</span></a>
   <p class="actions more">
-    <button class="copy" type="button" data-copy={profile.email} hidden>
-      <span class="copy-idle">Kopiuj adres</span>
+    <button
+      class="copy"
+      type="button"
+      data-copy={profile.email}
+      data-done={copy.copied}
+      data-failed={copy.failed}
+      hidden
+    >
+      <span class="copy-idle">{copy.copy}</span>
       <span class="copy-done" aria-hidden="true">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5 9.5 17.5 19.5 7" pathLength="1" /></svg>
-        Skopiowano
+        {copy.copied}
       </span>
     </button>
   </p>
@@ -59,13 +107,13 @@ const [emailUser, emailDomain] = profile.email.split('@');
       <Image class="avatar" src={avatar} alt="" width={88} height={88} densities={[1, 2]} loading="lazy" />
       <span>
         <span class="sign-name">{profile.fullName}</span>
-        <span class="sign-note">Odpisuję sam. Agenci czekają w kolejce.</span>
+        <span class="sign-note">{copy.note}</span>
       </span>
     </p>
     <p class="actions elsewhere">
       <a href={profile.linkedin} rel="me">LinkedIn</a>
       <a href={profile.github} rel="me">GitHub</a>
-      {cvReady ? <a href="/cv">CV</a> : <a href={mailto(subjects.cv)}>Poproś o CV</a>}
+      {showCv ? <a href="/cv">CV</a> : <a href={mailto(subjects.cv)}>{copy.askCv}</a>}
     </p>
   </div>
   </div>
@@ -86,9 +134,9 @@ const [emailUser, emailDomain] = profile.email.split('@');
       try {
         await navigator.clipboard.writeText(button.dataset.copy!);
         copied = true;
-        status.textContent = 'Skopiowano';
+        status.textContent = button.dataset.done!;
       } catch {
-        status.textContent = 'Nie udało się skopiować. Zaznacz adres powyżej i skopiuj go ręcznie.';
+        status.textContent = button.dataset.failed!;
       }
       button.toggleAttribute('data-done', copied);
       if (copied && email && !reduced.matches) {
