@@ -1,4 +1,5 @@
 ---
+import HeroArt from './HeroArt.astro';
 import SiteHeader from './SiteHeader.astro';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
@@ -58,6 +59,8 @@ const lines = [
           <a href="#kontakt">Napisz do mnie</a>
         </p>
       </div>
+
+      <HeroArt />
 
       <dl class="rail">
         <div>
@@ -312,6 +315,45 @@ const lines = [
     border-radius: 50%;
     background: #1e6b47;
     box-shadow: 0 0 0 0 color-mix(in srgb, #1e6b47 50%, transparent);
+  }
+
+  /* Komputer: tekst w lewej kolumnie, ilustracja w prawej, oparta o kreskę nad paskiem na dole. */
+  @media (min-width: 64rem) {
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-template-areas:
+        'stage art'
+        'intro art'
+        'rail rail';
+      column-gap: clamp(1.5rem, 3vw, 3rem);
+      align-items: end;
+    }
+    .stage {
+      grid-area: stage;
+    }
+    .intro {
+      grid-area: intro;
+    }
+    .rail {
+      grid-area: rail;
+    }
+    .hero-inner > :global(.hero-art) {
+      grid-area: art;
+      margin-bottom: -0.25rem;
+    }
+  }
+  /* Telefon i tablet: niski kadr między przyciskami a paskiem. */
+  @media (max-width: 63.99rem) {
+    .hero-inner > :global(.hero-art) {
+      margin-top: clamp(1.5rem, 5vw, 2.5rem);
+    }
+  }
+  /* Na telefonie każdy piksel szerokości to czytelniejsze postacie: rysunek sięga do krawędzi arkusza. */
+  @media (max-width: 47.99rem) {
+    .hero-inner > :global(.hero-art) {
+      margin-inline: calc(-1 * var(--gutter) + 0.25rem);
+    }
   }
 
   /* Telefon: wąski krój czyta się dobrze w dużym rozmiarze, ale przy 28 px prześwity w a, e, s się zamykają.

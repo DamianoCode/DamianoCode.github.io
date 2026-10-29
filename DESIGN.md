@@ -152,7 +152,7 @@ The site is a stack of printed sheets: mineral paper, soot-black ink and one cri
 
 The voice is the typeface pushed to one end of its range: Anybody at width 58 and weight 850 for every name and title, a heavy, narrow, poster-like cut. Literata, an optical-size serif, carries the reading text so the display never has to explain anything. Width is still the motion axis: section titles fill with ink as they enter, the hero name breathes under a lens.
 
-The identity is meant to carry a hand-inked manga layer (agents with terminal heads waiting by an empty chair with red headphones, in black ink and screentone, red used only on the headphones). That illustration is the next stage; until it ships the hero is purely typographic, and nothing on the page imitates it.
+The identity carries a hand-inked manga layer: agents with terminal heads waiting with blank tickets by an empty chair with red headphones, in black ink and screentone on paper, red used only on the headphones. It appears three times: in the hero, as a waiting room on the 404 page, and as a night scene (one agent on a parapet above the city, "Człowiek w pętli.") in the share image. The drawings contain no text at all; speech bubble, note, captions and numbers are HTML or composed in the share-image template, so they can be translated and read aloud.
 
 **Key Characteristics:**
 - Paper, soot and crimson, everywhere the brand appears, in both themes on brand surfaces.
@@ -224,7 +224,7 @@ The fallbacks are local Arial and Georgia with `size-adjust` (108% and 105%), so
 
 ## Layout
 
-Content sits in a centered column (`.wrap`, max 88rem, gutter clamp(1rem, 4vw, 3.5rem)). Sheets break out to almost the full window (a sheet gap from the edges, capped at 90rem so their content lines up with section titles). The hero fills the first viewport inside its soot frame: header on top, then the name, the crimson statement, a short intro, the two actions and a bottom rail (hairline, "Zamość · zdalnie" on the left, availability on the right). On a 375×667 phone the primary action stays in the first screen. The right side of the desktop hero is reserved for the illustration that comes next. The body is a full-height column, so the footer sits at the bottom of short subpages.
+Content sits in a centered column (`.wrap`, max 88rem, gutter clamp(1rem, 4vw, 3.5rem)). Sheets break out to almost the full window (a sheet gap from the edges, capped at 90rem so their content lines up with section titles). The hero fills the first viewport inside its soot frame: header on top, then the name, the crimson statement, a short intro, the two actions and a bottom rail (hairline, "Zamość · zdalnie" on the left, availability on the right). On a 375×667 phone the primary action stays in the first screen. From 64rem the hero is a 5fr/7fr grid: name, statement, intro and actions on the left, the 3:2 illustration on the right resting on the rail's hairline, its width capped at (100svh − 13rem) × 1.5 so the hero still fits the first screen. Below 64rem a separate low 3:1 composition sits between the actions and the rail, with a strip above it for the bubble and note; below 48rem it bleeds almost to the sheet edge. The body is a full-height column, so the footer sits at the bottom of short subpages.
 
 Sections are generous (block padding clamp(3rem, 9vh, 6.5rem)). Product cards stack: from 64rem wide and 44rem tall they stick to the top with a growing offset, a denser variant between 44rem and 50rem of height; on phones and short windows they keep their natural height and slide over each other. Bentos use 7fr/5fr or a 12-column grid from 60rem. Key breakpoints: 30rem, 40rem, 48rem, 52rem, 60rem, 64rem.
 
@@ -270,6 +270,13 @@ One `SiteHeader` everywhere: the keyboard mark and the wordmark "damianocode" (A
 ### Brand mark (signature)
 A keyboard: a soot body with ten key cut-outs and a space bar, two of them crimson keys carrying a paper "d" and "c". Geometry lives in `public/brand/znak-klawiatura.svg` and is copied into `src/data/brand.ts`; `BrandMark` recolors it only through `--mark-body`, `--mark-key`, `--mark-letter` (on crimson: paper body, soot keys). On load someone types the signature once: the d key presses, then the c (0.32s each); no motion under reduced motion. The favicon is a simplified six-key version on a soot square (`public/favicon.svg`, `favicon.ico`, `apple-touch-icon.png`). The illustrated avatar signs off the Contact sheet; everywhere else it lives on social profiles.
 
+### Illustrations (signature)
+- **Files:** `public/illustrations/` (hero and 404, desktop 3:2 and mobile 3:1, 768/1536 and 720/1440 WebP) with true alpha; they always sit on a paper surface (the hero sheet, the 404 sheet), never directly on soot. `<picture>` picks one crop, so only the visible one downloads; the hero image loads with high priority, width and height reserve its box.
+- **Hero overlays** (`HeroArt.astro`): a speech bubble "Czekamy na człowieka." (paper, 1.5px ink border, 1.25rem radius, a drawn tail toward the agents, Anybody 600 at width 90) centred at 37% / 31% of the desktop art, and a "brb" note (lighter paper, display voice, rotated 6°, translucent soot tape, small soft shadow) above the empty chair at 88% / 22%; its spoken text is "Zaraz wracam.". On the low crop both sit in the strip above the drawing. After the mark types its signature the bubble pops in (0.5s at 1s) and the note settles (0.9s at 1.35s); no motion under reduced motion.
+- **404:** the crimson masthead keeps the slipping zero; below it a fixed paper sheet holds "Ta strona odeszła do lepszego brancha." in the display voice, a short hint, a crimson "Wróć do projektów" button and the waiting room (one agent, three empty seats; decorative, `alt=""`).
+- **One crimson:** the drawings and the avatar were made in a warmer, purer red (hue about 26° in OKLCH) than the site crimson (20.8°), which showed as two reds next to each other in Contact. `scripts/recolor-crimson.mjs` moves only the red pixels of the site copies (headphones in the hero crops, the avatar) to crimson's hue and chroma, keeping their light and shade; it recolors at full resolution and resizes afterwards, so every srcset variant matches. Originals and the avatar on profiles stay as drawn. Re-run it on any new drawing that carries red.
+- **Share image:** `scripts/og.html` lays the wordmark, the name and "Człowiek w pętli." over the night scene's empty sky (`scripts/assets/noc.webp`), rendered to `public/og.jpg` by `npm run images`.
+
 ### Subpage masthead
 Blog, CV and 404 open with a crimson sheet holding the site header and the page title; content follows on paper. The top part is the page's `<header>` (banner landmark), the title part opens `<main>`.
 
@@ -293,7 +300,7 @@ A vertical rail of process steps on the crimson Claudius card; the active step's
 
 ### Small sheet moments
 - **Copy address:** a light bar sweeps across the email like a photocopier lamp, and the outline button shows a drawn tick with "Skopiowano" for 2.5s; reduced motion keeps the label swap and the `aria-live` message.
-- **404:** the middle zero slips out of the "404" like a sheet missing from the stack.
+- **404:** the middle zero slips out of the "404" like a sheet missing from the stack, above the waiting room.
 - **Selection:** crimson on paper, inverted on crimson sheets (`--select-bg`, `--select-ink`).
 - **Console:** one crimson-labelled line points developers to the public repository.
 

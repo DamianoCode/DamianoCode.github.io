@@ -1,0 +1,166 @@
+---
+/**
+ * Ilustracja w hero: trzej agenci z głowami terminali czekają z pustymi biletami przy pustym fotelu, na którym
+ * wiszą czerwone słuchawki człowieka. Rysunek nie ma żadnych napisów: dymek i karteczka są w HTML, więc da się
+ * je przetłumaczyć i czytnik ekranu je przeczyta.
+ *
+ * Dwa osobne kadry, nie przycięcia: na komputerze 3:2 obok tekstu, poniżej 64rem niski 3:1 pod przyciskami,
+ * z pasem nad rysunkiem na dymek i karteczkę (na niskim kadrze nie ma nad głowami miejsca). `<picture>` pobiera
+ * tylko kadr, który jest widoczny. Pliki w public/illustrations mają przezroczyste tło i leżą na papierze.
+ */
+const copy = {
+  alt: 'Trzej agenci z głowami terminali czekają z pustymi biletami obok pustego fotela, na którym wiszą czerwone słuchawki.',
+  bubble: 'Czekamy na człowieka.',
+  note: 'brb',
+  noteSpoken: 'Zaraz wracam.',
+};
+---
+
+<figure class="hero-art">
+  <picture>
+    <source
+      media="(max-width: 63.99rem)"
+      srcset="/illustrations/hero-mobile-720.webp 720w, /illustrations/hero-mobile-1440.webp 1440w"
+      sizes="calc(100vw - 2rem)"
+      width="1440"
+      height="480"
+    />
+    <img
+      src="/illustrations/hero-desktop-1536.webp"
+      srcset="/illustrations/hero-desktop-768.webp 768w, /illustrations/hero-desktop-1536.webp 1536w"
+      sizes="(min-width: 64rem) 50vw, 100vw"
+      width="1536"
+      height="1024"
+      alt={copy.alt}
+      fetchpriority="high"
+      decoding="async"
+    />
+  </picture>
+  <p class="bubble">{copy.bubble}</p>
+  <p class="note"><span aria-hidden="true">{copy.note}</span><span class="visually-hidden">{copy.noteSpoken}</span></p>
+</figure>
+
+<style>
+  .hero-art {
+    position: relative;
+    margin: 0;
+    /* Pas na dymek i karteczkę nad niskim kadrem. */
+    padding-top: 3.75rem;
+  }
+  .hero-art img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Dymek: papier z tuszową kreską, ogonek wskazuje agentów pod spodem. */
+  .bubble {
+    position: absolute;
+    z-index: 1;
+    left: 4%;
+    top: 0;
+    max-width: none;
+    margin: 0;
+    padding: 0.55rem 0.9rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 1.25rem;
+    background: var(--brand-paper);
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: var(--label);
+    font-weight: 600;
+    font-stretch: 90%;
+    line-height: 1.25;
+    white-space: nowrap;
+    transform-origin: 25% 100%;
+  }
+  .bubble::after {
+    content: '';
+    position: absolute;
+    left: 22%;
+    bottom: -0.45rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-right: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+    background: inherit;
+    transform: skewX(-20deg) rotate(45deg);
+  }
+
+  /* Karteczka przyklejona nad pustym fotelem, jaśniejsza od papieru strony, z półprzezroczystą taśmą.
+     Jedyną czerwienią w scenie zostają słuchawki. */
+  .note {
+    position: absolute;
+    z-index: 1;
+    right: 6%;
+    top: 0.2rem;
+    margin: 0;
+    padding: 0.45rem 0.8rem 0.5rem;
+    background: color-mix(in srgb, var(--brand-paper) 45%, #ffffff);
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: var(--step-1);
+    font-weight: var(--heavy);
+    font-stretch: var(--tight-sub);
+    line-height: 1;
+    box-shadow: 0 0.35rem 0.6rem -0.3rem rgb(23 23 26 / 0.35);
+    transform: rotate(6deg);
+  }
+  .note::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -0.45rem;
+    width: 2.2rem;
+    height: 0.8rem;
+    background: color-mix(in srgb, var(--brand-ink) 16%, transparent);
+    transform: translateX(-50%) rotate(-4deg);
+  }
+
+  /* Komputer: wysoki kadr obok tekstu. Szerokość ograniczona wysokością okna, żeby hero dalej mieściło się
+     w pierwszym ekranie; dymek i karteczka stoją w pustych miejscach rysunku (nad agentami, nad fotelem). */
+  @media (min-width: 64rem) {
+    .hero-art {
+      width: min(100%, (100svh - 13rem) * 1.5);
+      justify-self: end;
+      padding-top: 0;
+    }
+    .bubble {
+      left: 37%;
+      top: 31%;
+      font-size: clamp(0.95rem, 1vw, 1.1rem);
+      transform: translate(-50%, -50%);
+      transform-origin: 30% 100%;
+    }
+    .note {
+      right: auto;
+      left: 88%;
+      top: 22%;
+      font-size: clamp(1.4rem, 1.8vw, 2rem);
+      transform: translate(-50%, -50%) rotate(6deg);
+    }
+  }
+
+  /* Jedna chwila po wczytaniu, po wystukaniu podpisu w znaku: najpierw dymek, potem karteczka opada na miejsce. */
+  @media (prefers-reduced-motion: no-preference) {
+    .bubble {
+      animation: say 0.5s cubic-bezier(0.16, 1, 0.3, 1) 1s both;
+    }
+    .note {
+      animation: settle 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.35s both;
+    }
+  }
+  @keyframes say {
+    from {
+      opacity: 0;
+      scale: 0.6;
+    }
+  }
+  @keyframes settle {
+    from {
+      opacity: 0;
+      rotate: 10deg;
+      translate: 0 -0.6rem;
+    }
+  }
+</style>

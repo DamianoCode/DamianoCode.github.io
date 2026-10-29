@@ -6,7 +6,7 @@ Strona na Astro. Treść pochodzi z publicznego profilu github.com/DamianoCode.
 npm install
 npm run dev      # http://localhost:4321
 npm run build    # statyczne pliki w dist/
-npm run images   # renderuje public/og.png i apple-touch-icon.png (wymaga Chrome)
+npm run images   # renderuje public/og.jpg (wymaga Chrome)
 ```
 
 ## Treść
@@ -33,7 +33,9 @@ to tekst złożony krojem Anybody (szerokość 62%, grubość 850), nie osobny p
 Awatar (rysunek w słuchawkach) jest na profilach (GitHub, LinkedIn), a na stronie tylko jako podpis w Kontakcie (`src/assets/brand/awatar.webp`).
 
 ```bash
-npm run images   # odświeża public/og.png z scripts/og.html (wymaga Chrome)
+npm run images   # odświeża public/og.jpg z scripts/og.html i nocnej sceny scripts/assets/noc.webp (wymaga Chrome)
+# czerwień w nowej grafice do karminu strony (#BE2337), np. awatar 512 px:
+node scripts/recolor-crimson.mjs awatar.png src/assets/brand/awatar.webp 512 90
 ```
 
 ## Publikacja

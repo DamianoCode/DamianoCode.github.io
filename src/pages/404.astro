@@ -1,5 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+
+// Teksty strony poza znacznikami, pod przyszłą wersję angielską.
+const copy = {
+  line: 'Ta strona odeszła do lepszego brancha.',
+  hint: 'Sprawdź adres albo wróć do tego, co na pewno działa.',
+  back: 'Wróć do projektów',
+};
 ---
 
 <Base title="Nie ma takiej strony" description="Ta strona nie istnieje albo została przeniesiona." noindex>
@@ -7,18 +14,42 @@ import Base from '../layouts/Base.astro';
   <h1 slot="masthead" aria-label="404">
     <span aria-hidden="true">4</span><span class="slipped" aria-hidden="true">0</span><span aria-hidden="true">4</span>
   </h1>
-  <section class="wrap page">
-    <p>Tego arkusza nie ma w stosie. Sprawdź adres albo wróć na stronę główną.</p>
-    <a href="/">Strona główna</a>
+
+  <!-- Poczekalnia: jeden agent z pustym biletem i trzy wolne miejsca. Rysunek ma przezroczyste tło, więc leży
+       na papierowym arkuszu w obu motywach, jak ilustracja w hero. Tekst i przycisk są w HTML. -->
+  <section class="sheet lost">
+    <div class="wrap lost-inner">
+      <div class="lost-text">
+        <p class="lost-line">{copy.line}</p>
+        <p class="lost-hint">{copy.hint}</p>
+        <a class="lost-back" href="/#projekty">
+          {copy.back}
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
+        </a>
+      </div>
+      <picture class="lost-art">
+        <source
+          media="(max-width: 47.99rem)"
+          srcset="/illustrations/404-mobile-720.webp 720w, /illustrations/404-mobile-1440.webp 1440w"
+          sizes="100vw"
+          width="1440"
+          height="480"
+        />
+        <img
+          src="/illustrations/404-desktop-1536.webp"
+          srcset="/illustrations/404-desktop-768.webp 768w, /illustrations/404-desktop-1536.webp 1536w"
+          sizes="(min-width: 48rem) 55vw, 100vw"
+          width="1536"
+          height="1024"
+          alt=""
+          decoding="async"
+        />
+      </picture>
+    </div>
   </section>
 </Base>
 
 <style>
-  .page {
-    display: grid;
-    gap: 1.25rem;
-    justify-items: start;
-  }
   h1 {
     display: flex;
     gap: 0.05em;
@@ -45,8 +76,93 @@ import Base from '../layouts/Base.astro';
       transform: none;
     }
   }
-  a {
+
+  /* Arkusz papieru stały w obu motywach: rysunek ma przezroczyste tło i papierowe wypełnienia. */
+  .lost {
+    --ink: var(--brand-ink);
+    --ink-soft: #5a564f;
+    --accent: var(--brand-crimson);
+    --select-bg: var(--brand-crimson);
+    --select-ink: var(--brand-paper);
+    margin-top: var(--sheet-gap);
+    background: var(--brand-paper);
+    color: var(--ink);
+  }
+  .lost :focus-visible {
+    outline-color: var(--accent);
+  }
+  .lost-inner {
+    display: grid;
+    gap: 1.5rem;
+    padding-block: clamp(2rem, 6vh, 4rem) clamp(1rem, 3vh, 2rem);
+  }
+  .lost-text {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    align-content: start;
+  }
+  .lost-line {
+    font-family: var(--display);
+    font-weight: var(--heavy);
+    font-stretch: var(--tight);
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+  .lost-hint {
+    color: var(--ink-soft);
+  }
+  .lost-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    margin-top: 0.5rem;
+    padding: 0.7rem 1.35rem;
+    border-radius: var(--radius-control);
+    background: var(--accent);
+    color: var(--brand-paper);
     font-family: var(--display);
     font-weight: 600;
+    font-size: var(--label-l);
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  .lost-back svg {
+    width: 1.2em;
+    height: 1.2em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .lost-back:hover {
+    background: var(--brand-crimson-deep);
+  }
+  .lost-back:active {
+    transform: translateY(1px);
+  }
+  .lost-art img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* Na telefonie niski kadr sięga krawędzi arkusza. */
+  @media (max-width: 47.99rem) {
+    .lost-art {
+      margin-inline: calc(-1 * var(--gutter) + 0.25rem);
+    }
+  }
+  @media (min-width: 48rem) {
+    .lost-inner {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: end;
+      column-gap: clamp(1.5rem, 4vw, 4rem);
+    }
+    .lost-text {
+      align-self: center;
+    }
   }
 </style>
