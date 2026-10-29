@@ -2,48 +2,53 @@
 import { brandMark } from '../data/brand';
 
 /**
- * Znak strony: dwa arkusze z literą D, jak stos sekcji na stronie głównej. Kolory biorą się ze zmiennych
- * `--mark-back`, `--mark-front`, `--mark-letter`, więc na kobaltowym arkuszu hero znak może się odwrócić.
- * Geometria pochodzi z scripts/brand/logo.py.
+ * Znak strony: klawiatura, na której karminowe są tylko klawisze d i c (damianocode). Kolory biorą się ze zmiennych
+ * `--mark-body`, `--mark-key`, `--mark-letter`, więc na ciemnym albo karminowym tle znak może się odwrócić.
+ * Geometria pochodzi z public/brand/znak-klawiatura.svg.
  */
-const { back, front, letter, viewBox } = brandMark;
+const { body, keys, viewBox } = brandMark;
 ---
 
 <svg class="brand-mark" viewBox={viewBox} aria-hidden="true" focusable="false">
-  <rect class="back" {...back} />
-  <rect class="front" {...front} />
-  <path class="letter" d={letter} />
+  <path class="body" fill-rule="evenodd" d={body} />
+  {keys.map(({ name, key, letter }) => (
+    <g class={`key key-${name}`}>
+      <rect class="cap" {...key} />
+      <path class="letter" fill-rule="evenodd" d={letter} />
+    </g>
+  ))}
 </svg>
 
 <style>
   .brand-mark {
     display: block;
     flex: none;
-    width: 2rem;
+    width: 3rem;
     height: 2rem;
-    overflow: visible;
   }
-  .back {
-    fill: var(--mark-back, var(--brand-cobalt-light));
+  .body {
+    fill: var(--mark-body, var(--ink));
   }
-  .front {
-    fill: var(--mark-front, var(--brand-cobalt));
+  .cap {
+    fill: var(--mark-key, var(--brand-crimson));
   }
   .letter {
-    fill: var(--mark-letter, var(--brand-snow));
+    fill: var(--mark-letter, var(--brand-paper));
   }
 
-  /* Po wczytaniu tylny arkusz raz odsuwa się w głąb, tak jak arkusz hero przy przewijaniu. */
+  /* Po wczytaniu ktoś raz wystukuje podpis: najpierw d, potem c. */
   @media (prefers-reduced-motion: no-preference) {
-    .back {
-      transform-box: fill-box;
-      transform-origin: 50% 100%;
-      animation: recede 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+    .key {
+      animation: press 0.32s cubic-bezier(0.3, 0, 0.2, 1) 0.45s both;
+    }
+    .key-c {
+      animation-delay: 0.68s;
     }
   }
-  @keyframes recede {
-    from {
-      transform: translateY(16%) scale(1.12, 1);
+  @keyframes press {
+    40% {
+      transform: translateY(1.6px);
+      filter: brightness(0.82);
     }
   }
 </style>

@@ -94,10 +94,10 @@ const website = {
     <meta property="og:image:alt" content={`${profile.fullName}, ${profile.role.toLowerCase()}`} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <meta name="theme-color" content="#dce2e8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#131c2e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#17171a" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     {hasPosts && (
       <link rel="alternate" type="application/rss+xml" title={`Blog, ${profile.fullName}`} href="/rss.xml" />
@@ -112,7 +112,7 @@ const website = {
   </head>
   <body>
     <a class="skip" href="#tresc">Przejdź do treści</a>
-    {/* Kobaltowy arkusz podstrony to jeden kształt z dwóch elementów: górna część z menu jest nagłówkiem strony
+    {/* Karminowy arkusz podstrony to jeden kształt z dwóch elementów: górna część z menu jest nagłówkiem strony
         (banner), dolna z tytułem otwiera <main>, żeby tytuł był pierwszą rzeczą w treści. */}
     {ownHeader ? (
       <slot name="banner" />
@@ -133,11 +133,14 @@ const website = {
     </main>
     <footer class="wrap site-foot">
       <p>{profile.fullName}, {profile.role.toLowerCase()}, {profile.city}</p>
-      <p class="foot-links">
-        <a href={profile.github} rel="me">GitHub</a>
-        <a href={profile.linkedin} rel="me">LinkedIn</a>
-        {hasPosts && <a href="/rss.xml">RSS</a>}
-      </p>
+      {/* Na stronie głównej te linki są już w Kontakcie tuż nad stopką; strona kończy się na Kontakcie. */}
+      {(!ownHeader || hasPosts) && (
+        <p class="foot-links">
+          {!ownHeader && <a href={profile.github} rel="me">GitHub</a>}
+          {!ownHeader && <a href={profile.linkedin} rel="me">LinkedIn</a>}
+          {hasPosts && <a href="/rss.xml">RSS</a>}
+        </p>
+      )}
     </footer>
   </body>
 </html>
@@ -150,23 +153,25 @@ const website = {
   // Dla tych, którzy zaglądają w narzędzia deweloperskie: kod strony jest publiczny.
   console.log(
     '%cZaglądasz pod spód?%c Kod tej strony jest publiczny: https://github.com/DamianoCode/DamianoCode.github.io',
-    'background:#2f45e0;color:#f4f6ff;font:700 13px/1.6 sans-serif;padding:2px 8px;border-radius:999px',
+    'background:#be2337;color:#e9e5de;font:700 13px/1.6 sans-serif;padding:2px 8px;border-radius:4px',
     'font:13px/1.6 sans-serif',
   );
 </script>
 
 <style>
-  /* Podstrony zaczynają się kobaltowym arkuszem, jak strona główna: nagłówek i tytuł strony w środku. */
+  /* Podstrony zaczynają się karminowym arkuszem, jak Kontakt na stronie głównej: nagłówek i tytuł strony w środku.
+     Znak na karminie: papierowy korpus, klawisze d i c w sadzy. */
   .masthead {
-    --ink: var(--brand-snow);
-    --ink-soft: #c9d0ff;
-    --cobalt: var(--brand-snow);
-    --select-bg: var(--brand-snow);
-    --select-ink: var(--brand-cobalt);
-    --mark-front: var(--brand-snow);
-    --mark-letter: var(--brand-cobalt);
+    --ink: var(--brand-paper);
+    --ink-soft: var(--brand-crimson-soft);
+    --accent: var(--brand-paper);
+    --select-bg: var(--brand-paper);
+    --select-ink: var(--brand-crimson);
+    --mark-body: var(--brand-paper);
+    --mark-key: var(--brand-ink);
+    --mark-letter: var(--brand-paper);
     margin-top: var(--sheet-gap);
-    background: var(--brand-cobalt);
+    background: var(--brand-crimson);
     color: var(--ink);
   }
   .masthead-top {

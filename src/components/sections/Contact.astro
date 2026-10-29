@@ -1,15 +1,14 @@
 ---
+import { Image } from 'astro:assets';
+import avatar from '../../assets/brand/awatar.webp';
 import { cvReady } from '../../data/cv';
 import { mailto, profile, subjects } from '../../data/profile';
 import { projects } from '../../data/projects';
 import { projectTone } from '../../data/tones';
 
 // Stos domyka się nad Kontaktem: krawędzie arkuszy produktów w kolejności z góry strony. Pierwszy leży najgłębiej,
-// ostatni tuż pod Kontaktem. Arkusze mają stałe kolory w obu motywach, więc Claudius bierze jasny kobalt ze znaku,
-// a nie motywowy, który na kobaltowym Kontakcie by zniknął.
-const edges = projects.map((project) =>
-  project.id === 'claudius' ? 'var(--brand-cobalt-light)' : projectTone[project.id],
-);
+// ostatni tuż pod Kontaktem.
+const edges = projects.map((project) => projectTone[project.id]);
 
 // Na wąskich ekranach adres łamie się tylko po „@”, nigdy w środku domeny.
 const [emailUser, emailDomain] = profile.email.split('@');
@@ -22,7 +21,7 @@ const [emailUser, emailDomain] = profile.email.split('@');
 </div>
 <section class="sheet contact" id="kontakt" aria-labelledby="kontakt-h">
   <div class="wrap block">
-  <h2 id="kontakt-h" class="block-title kinetic" style="--fit: 6.78">Kontakt</h2>
+  <h2 id="kontakt-h" class="block-title kinetic" style="--fit: 2.63">Kontakt</h2>
   <p class="intro">
     Wybierz, w jakiej sprawie piszesz: temat maila uzupełni się sam. Możesz też napisać prosto na adres poniżej.
   </p>
@@ -50,11 +49,25 @@ const [emailUser, emailDomain] = profile.email.split('@');
         Skopiowano
       </span>
     </button>
-    <a href={profile.linkedin} rel="me">LinkedIn</a>
-    <a href={profile.github} rel="me">GitHub</a>
-    {cvReady ? <a href="/cv">CV</a> : <a href={mailto(subjects.cv)}>Poproś o CV</a>}
   </p>
   <p class="copied" role="status" aria-live="polite"></p>
+
+  <!-- Podpis pod listem: w hero agenci czekają przy pustym fotelu, a tutaj człowiek wraca na swoje miejsce.
+       Awatar jest tym samym rysunkiem co na profilach; imię stoi obok jako tekst, więc obraz nie potrzebuje opisu. -->
+  <div class="sign">
+    <p class="signature">
+      <Image class="avatar" src={avatar} alt="" width={88} height={88} densities={[1, 2]} loading="lazy" />
+      <span>
+        <span class="sign-name">{profile.fullName}</span>
+        <span class="sign-note">Odpisuję sam. Agenci czekają w kolejce.</span>
+      </span>
+    </p>
+    <p class="actions elsewhere">
+      <a href={profile.linkedin} rel="me">LinkedIn</a>
+      <a href={profile.github} rel="me">GitHub</a>
+      {cvReady ? <a href="/cv">CV</a> : <a href={mailto(subjects.cv)}>Poproś o CV</a>}
+    </p>
+  </div>
   </div>
 </section>
 
@@ -75,7 +88,7 @@ const [emailUser, emailDomain] = profile.email.split('@');
         copied = true;
         status.textContent = 'Skopiowano';
       } catch {
-        status.textContent = 'Nie udało się skopiować';
+        status.textContent = 'Nie udało się skopiować. Zaznacz adres powyżej i skopiuj go ręcznie.';
       }
       button.toggleAttribute('data-done', copied);
       if (copied && email && !reduced.matches) {
@@ -98,13 +111,13 @@ const [emailUser, emailDomain] = profile.email.split('@');
 
 <style>
   .contact {
-    --ink: var(--brand-snow);
-    --soft: #d3d9ff;
-    --select-bg: var(--brand-snow);
-    --select-ink: var(--brand-cobalt);
+    --ink: var(--brand-paper);
+    --soft: var(--brand-crimson-soft);
+    --select-bg: var(--brand-paper);
+    --select-ink: var(--brand-crimson);
     position: relative;
     z-index: 1;
-    background: var(--brand-cobalt);
+    background: var(--brand-crimson);
     color: var(--ink);
     /* Kontakt leży na wierzchu stosu: cień pada w górę, na krawędzie pod nim. */
     box-shadow: 0 -0.4rem 1rem -0.5rem rgb(0 0 0 / 0.35);
@@ -166,15 +179,15 @@ const [emailUser, emailDomain] = profile.email.split('@');
   }
 
   /* Adres wypełnia szerokość: na telefonie w dwóch liniach (łamanie po „@”), na szerszych ekranach w jednej.
-     Rozmiar wynika ze zmierzonej szerokości napisu w em (Anybody, grubość 800). */
+     Rozmiar wynika ze zmierzonej szerokości napisu w em (Anybody, szerokość 58%, grubość 850). */
   .email {
     --space: calc(min(100vw, 88rem) - 2 * var(--gutter) - 2 * var(--sheet-gap));
     display: block;
     margin-top: clamp(2rem, 5vw, 3.5rem);
     font-family: var(--display);
-    font-weight: 800;
-    font-stretch: 100%;
-    font-size: calc(var(--space) / (7.48 * 1.06));
+    font-weight: var(--heavy);
+    font-stretch: var(--tight);
+    font-size: calc(var(--space) / (4.4 * 1.06));
     line-height: 0.95;
     letter-spacing: -0.01em;
     color: var(--ink);
@@ -213,8 +226,7 @@ const [emailUser, emailDomain] = profile.email.split('@');
   }
   @media (min-width: 48rem) {
     .email {
-      font-stretch: 125%;
-      font-size: min(7.5rem, calc(var(--space) / (16.43 * 1.05)));
+      font-size: min(8rem, calc(var(--space) / (7.79 * 1.05)));
     }
     .email span {
       display: inline;
@@ -222,27 +234,64 @@ const [emailUser, emailDomain] = profile.email.split('@');
   }
 
   .more {
-    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+    margin-top: clamp(1.25rem, 3vw, 2rem);
     align-items: center;
   }
-  .more a {
+
+  /* Podpis i linki poza mailem: jeden wiersz pod kreską, na telefonie jeden pod drugim. */
+  .sign {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2.5rem;
+    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+  }
+  .signature {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: none;
+  }
+  .avatar {
+    flex: none;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--ink);
+  }
+  .sign-name {
+    display: block;
+    font-family: var(--display);
+    font-weight: var(--heavy);
+    font-stretch: var(--tight-sub);
+    font-size: var(--step-1);
+    line-height: 1.1;
+  }
+  .sign-note {
+    display: block;
+    color: var(--soft);
+  }
+  .elsewhere a {
     color: var(--ink);
     text-decoration-thickness: 2px;
   }
-  /* Kopiowanie jest akcją drugiego planu: obrys zamiast wypełnienia, bo pełne pigułki należą do ścieżek wyżej. */
+  /* Kopiowanie jest akcją drugiego planu: obrys zamiast wypełnienia, bo pełne przyciski należą do ścieżek wyżej. */
   .copy {
     font: inherit;
     min-height: 2.75rem;
     color: var(--ink);
     background: transparent;
     border: 2px solid var(--ink);
-    border-radius: 999px;
+    border-radius: var(--radius-control);
     padding: 0.5rem 1.1rem;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
   }
   .copy:hover {
-    color: var(--brand-cobalt);
+    color: var(--brand-crimson);
     background: var(--ink);
   }
   /* Obie etykiety leżą w jednej komórce, więc zmiana napisu nie zmienia szerokości przycisku. */
@@ -316,30 +365,37 @@ const [emailUser, emailDomain] = profile.email.split('@');
   .path-q {
     hyphens: auto;
     overflow-wrap: break-word;
-    font-weight: 700;
-    font-stretch: 112%;
-    font-size: var(--step-1);
+    font-weight: var(--heavy);
+    font-stretch: var(--tight-sub);
+    font-size: var(--step-2);
     line-height: 1.1;
   }
-  /* Dwie główne akcje sekcji: pigułki w kolorach arkusza, jak przycisk w hero. */
+  /* Dwie główne akcje sekcji: pełne przyciski w kolorach arkusza. */
   .paths a {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
     margin-top: 0.5rem;
     padding: 0.6rem 1.15rem;
-    border-radius: 999px;
+    border-radius: var(--radius-control);
     background: var(--ink);
-    color: var(--brand-cobalt);
+    color: var(--brand-crimson);
     font-family: var(--display);
     font-weight: 600;
     text-decoration: none;
   }
   .paths a:hover {
-    background: #ffffff;
+    background: var(--brand-ink);
+    color: var(--brand-paper);
   }
   .paths a:active {
     transform: translateY(1px);
+  }
+  /* Najwęższe telefony: pytanie o projekt miało cztery wiersze. */
+  @media (max-width: 22rem) {
+    .path-q {
+      font-size: var(--step-1);
+    }
   }
   /* Obok siebie ścieżki dzielą wiersze siatki: pytanie, opis i przycisk stoją na tej samej wysokości,
      nawet gdy jedno pytanie zajmuje dwa wiersze, a drugie jeden. */

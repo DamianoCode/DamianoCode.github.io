@@ -35,7 +35,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
 
 <section class="block" id="projekty" aria-labelledby="projekty-h">
   <div class="wrap">
-    <h2 id="projekty-h" class="block-title kinetic" style="--fit: 7.39">Projekty</h2>
+    <h2 id="projekty-h" class="block-title kinetic" style="--fit: 2.94">Projekty</h2>
     <p class="block-intro">Od najnowszych: dwie aplikacje webowe i dwa narzędzia do pracy z agentami AI.</p>
   </div>
 
@@ -209,16 +209,17 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
 
 <style>
   /*
-    Kształty: karty 1.5-2rem, ekrany w kartach 0.75rem, telefon jak urządzenie, przyciski i tagi w pigułce.
-    Kolory kart pochodzą z produktów (ze zrzutów); cobalt zostaje akcentem reszty strony.
+    Kształty: karty 1.5-2rem, ekrany w kartach 0.75rem, telefon jak urządzenie, przyciski i tagi w kształcie
+    --radius-control. Kolory kart pochodzą z produktów (ze zrzutów); karmin to kolor strony i własnego Claudiusa.
   */
   .case-placemates {
     --bg: #17110d;
-    --glow: rgb(232 131 74 / 0.3);
+    --glow: rgb(238 143 87 / 0.3);
     --ink: #f4ece3;
     --soft: #bcae9f;
     --accent: #ee8f57;
-    --line: rgb(244 236 227 / 0.16);
+    /* Zrzut ma to samo tło co karta: obwódka ekranu musi być wyraźniejsza niż w innych kartach. */
+    --line: rgb(244 236 227 / 0.22);
     --shadow: rgb(0 0 0 / 0.55);
   }
   .case-korepetytor {
@@ -241,15 +242,15 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     --shadow: rgb(0 0 0 / 0.6);
   }
   .case-claudius {
-    --bg: var(--brand-cobalt);
-    --select-bg: var(--brand-snow);
-    --select-ink: var(--brand-cobalt);
-    --glow: rgb(255 255 255 / 0.16);
-    --ink: var(--brand-snow);
-    --soft: #d3d9ff;
-    --accent: #ffffff;
-    --line: rgb(255 255 255 / 0.28);
-    --shadow: rgb(10 20 90 / 0.5);
+    --bg: var(--brand-crimson);
+    --select-bg: var(--brand-paper);
+    --select-ink: var(--brand-crimson);
+    --glow: rgb(255 255 255 / 0.14);
+    --ink: var(--brand-paper);
+    --soft: var(--brand-crimson-soft);
+    --accent: var(--brand-paper);
+    --line: rgb(233 229 222 / 0.3);
+    --shadow: rgb(70 10 20 / 0.5);
   }
 
   /* Karty sięgają prawie krawędzi okna, jak arkusze innych sekcji; na bardzo szerokim ekranie
@@ -279,14 +280,41 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     box-shadow: 0 -0.5rem 2.5rem -0.75rem var(--shadow);
     scroll-margin-top: 1rem;
   }
-  /* Poświata w kolorze produktu za sceną. */
+  /* Zapisane przy .case, bo skrót `background` w .case zeruje obraz tła ustawiony w samym .case-placemates. */
+  .case.case-placemates {
+    /* Poziomice z ekranu logowania aplikacji: tło karty należy do PlaceMates, a nie do „ciemnej karty z poświatą”. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800' preserveAspectRatio='xMidYMid slice'%3E%3Cg fill='none' stroke='%23f4ece3' stroke-opacity='0.055' stroke-width='1.2'%3E%3Cpath d='M-20 120C180 70 320 190 520 140S860 40 1220 110'/%3E%3Cpath d='M-20 230C200 170 330 300 560 250S900 160 1220 230'/%3E%3Cpath d='M-20 350C160 300 360 420 600 360S940 290 1220 360'/%3E%3Cpath d='M-20 470C220 430 380 540 620 480S960 410 1220 490'/%3E%3Cpath d='M-20 590C190 540 400 660 640 600S980 530 1220 610'/%3E%3Cpath d='M-20 710C230 670 420 780 660 720S1000 650 1220 730'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover;
+  }
+
+  /* Poświata w kolorze produktu: główna plama tam, gdzie wystaje ze sceny (pod telefonem, przy dolnym rogu),
+     i słabsza pod tekstem, żeby druga kolumna nie stała na płaskim tle. Na komputerze strony się zamieniają
+     razem z układem karty. */
+  .case {
+    --glow-x: 70%;
+    --glow-y: 55%;
+    --pool-x: 12%;
+  }
   .case::before {
     content: '';
     position: absolute;
     z-index: -1;
     inset: 0;
-    background: radial-gradient(60% 70% at 70% 60%, var(--glow), transparent 70%);
+    background:
+      radial-gradient(48% 55% at var(--glow-x) var(--glow-y), var(--glow), transparent 70%),
+      radial-gradient(40% 45% at var(--pool-x) 96%, color-mix(in srgb, var(--glow) 40%, transparent), transparent 70%);
     pointer-events: none;
+  }
+  /* W ciemnym motywie strona i ciemne karty (PlaceMates, widżet) mają prawie tę samą jasność, a czarny cień
+     na czarnym nie istnieje: karta traciła krawędzie. Obwódka w kolorze tekstu karty i jasna górna krawędź
+     przywracają kształt arkusza bez zmiany jego kolorów. */
+  @media (prefers-color-scheme: dark) {
+    .case {
+      box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--ink) 24%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--ink) 14%, transparent),
+        0 -0.5rem 2.5rem -0.75rem var(--shadow);
+    }
   }
 
   /* Nagłówek karty */
@@ -301,10 +329,11 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     border-bottom: 1px solid var(--line);
   }
   .case-name {
-    /* Na telefonie najdłuższe słowo („korepetytora”) mieści się w karcie bez łamania. */
-    font-size: clamp(2rem, 8.4vw, 6rem);
-    font-weight: 800;
-    font-stretch: 112%;
+    /* Na telefonie najdłuższe słowo („korepetytora”, 4.65em) mieści się w karcie bez łamania, a nazwa nie ginie
+       pod tytułem sekcji (ok. 47 px przy 88 px tytułu). */
+    font-size: clamp(2.75rem, 12.5vw, 7rem);
+    font-weight: var(--heavy);
+    font-stretch: var(--tight);
     line-height: 0.95;
     letter-spacing: -0.01em;
     text-wrap: balance;
@@ -458,7 +487,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
   .chips li {
     padding: 0.2rem 0.7rem;
     border: 1px solid var(--line);
-    border-radius: 999px;
+    border-radius: var(--radius-control);
     font-family: var(--display);
     font-size: var(--label-s);
     font-stretch: 92%;
@@ -484,7 +513,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     color: var(--bg);
     background: var(--ink);
     padding: 0.6rem 1.15rem;
-    border-radius: 999px;
+    border-radius: var(--radius-control);
     text-decoration: none;
     transition: background-color 0.2s ease, transform 0.1s ease;
   }
@@ -504,8 +533,9 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     scroll-margin-top: 1rem;
   }
   .earlier-title {
-    font-size: var(--step-2);
-    font-stretch: 110%;
+    font-size: var(--step-3);
+    font-weight: var(--heavy);
+    font-stretch: var(--tight-sub);
     padding-top: 1.25rem;
     border-top: 2px solid var(--ink);
     margin-bottom: 1.5rem;
@@ -579,7 +609,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
     rotate: 45deg;
   }
   .archive summary:hover {
-    color: var(--cobalt);
+    color: var(--accent);
   }
   .archive-list {
     list-style: none;
@@ -673,11 +703,16 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
       grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
       grid-template-areas: 'head head' 'stage text';
     }
-    .case.flip::before {
-      background: radial-gradient(60% 70% at 30% 60%, var(--glow), transparent 70%);
+    .case {
+      --glow-x: 80%;
+      --glow-y: 80%;
+    }
+    .case.flip {
+      --glow-x: 20%;
+      --pool-x: 88%;
     }
     .case-name {
-      font-size: min(6rem, 5.4vw);
+      font-size: min(7.5rem, 6.6vw);
     }
     .case-meta {
       margin-left: auto;
@@ -747,7 +782,7 @@ const codeLink = (p: Project) => p.links.find((l) => l.label === 'Kod');
       padding-bottom: 0.75rem;
     }
     .case-name {
-      font-size: min(3.75rem, 4.2vw);
+      font-size: min(4.25rem, 4.8vw);
     }
     .summary {
       font-size: 1.15rem;

@@ -12,18 +12,21 @@
 }
 
 :root {
-  --paper: #dce2e8;
-  --paper-deep: #c9d1db;
-  --ink: #16223a;
-  --ink-soft: #4e5b72;
-  --cobalt: #2f45e0;
-  --rule: #b3bdca;
+  --paper: #e9e5de;
+  --paper-deep: #ded8ce;
+  --ink: #17171a;
+  --ink-soft: #5a564f;
+  --accent: #be2337;
+  --rule: #c4bdb1;
 
-  /* Kolory marki: znak i obrazki udostępniania mają je w obu motywach. Jasny kobalt to tylny arkusz znaku
-     i zarazem akcent trybu ciemnego. */
-  --brand-cobalt: #2f45e0;
-  --brand-cobalt-light: #8d9cff;
-  --brand-snow: #f4f6ff;
+  /* Kolory marki: papier, sadza i karmin. Znak, arkusze w kolorach strony i obrazki udostępniania mają je
+     w obu motywach. Głęboki karmin to stan najechania i wciśnięcia na karminowych przyciskach. */
+  --brand-paper: #e9e5de;
+  --brand-ink: #17171a;
+  --brand-crimson: #be2337;
+  --brand-crimson-deep: #9e1c2e;
+  /* Drugi plan na karminowym arkuszu: 4.9:1. */
+  --brand-crimson-soft: #f7e4e6;
 
   --display: 'Anybody Variable', 'Anybody Fallback', 'Arial Narrow', sans-serif;
   --text: 'Literata Variable', 'Literata Fallback', Georgia, serif;
@@ -54,17 +57,26 @@
   /* Ok. 68 znaków Literaty w wierszu. */
   --measure: 33em;
 
+  /* Głos nagłówków: ciężki, wąski Anybody (imię w hero, tytuły sekcji, nazwy produktów). */
+  --tight: 58%;
+  --heavy: 850;
+  /* Śródtytuły (kafle, pytania, nazwy w listach) w tym samym głosie, odrobinę szerzej dla czytelności. */
+  --tight-sub: 74%;
+  /* Kształt przycisków i plakietek: lekko zaokrąglony prostokąt. 999px przywraca pigułki w całym serwisie. */
+  --radius-control: 0.375rem;
+
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #131c2e;
-    --paper-deep: #1f2a40;
-    --ink: #dce2e8;
-    --ink-soft: #97a3b7;
-    --cobalt: #8d9cff;
-    --rule: #33405a;
+    --paper: #141416;
+    --paper-deep: #1f1f23;
+    --ink: #e9e5de;
+    --ink-soft: #a8a39a;
+    /* Karmin marki na sadzy ma tylko 3:1; jaśniejszy odcień trzyma 5.6:1. */
+    --accent: #ef5b6b;
+    --rule: #36353b;
     color-scheme: dark;
   }
 }
@@ -116,7 +128,7 @@ p {
 }
 
 a {
-  color: var(--cobalt);
+  color: var(--accent);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }
@@ -125,7 +137,7 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 3px solid var(--cobalt);
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -135,10 +147,10 @@ a:hover {
   outline: none;
 }
 
-/* Zaznaczenie w kolorach arkusza: kobalt na papierze, a na kobaltowych arkuszach odwrotnie
+/* Zaznaczenie w kolorach arkusza: karmin na papierze, a na karminowych arkuszach odwrotnie
    (te ustawiają --select-bg i --select-ink). */
 ::selection {
-  background: var(--select-bg, var(--cobalt));
+  background: var(--select-bg, var(--accent));
   color: var(--select-ink, var(--paper));
 }
 
@@ -147,6 +159,9 @@ a:hover {
   max-width: 88rem;
   margin-inline: auto;
   padding-inline: var(--gutter);
+  /* Kolumna jest kontenerem: dopasowane tytuły mierzą jej prawdziwą szerokość (cqi), także wewnątrz arkuszy,
+     które mają jeszcze własny odstęp od krawędzi okna. */
+  container-type: inline-size;
 }
 
 .visually-hidden {
@@ -179,8 +194,8 @@ a:hover {
 }
 .block-title {
   font-size: var(--step-4);
-  font-weight: 300;
-  font-stretch: 105%;
+  font-weight: var(--heavy);
+  font-stretch: var(--tight);
   overflow-wrap: anywhere;
   margin-bottom: 1.5rem;
 }
@@ -188,20 +203,15 @@ a:hover {
   color: var(--ink-soft);
   margin-bottom: 2.5rem;
 }
-@media (min-width: 48rem) {
-  .block-title {
-    font-stretch: 140%;
-  }
-}
 
-/* Podstrony: blog, CV. Tytuł stoi w kobaltowym arkuszu (Base), treść pod nim. */
+/* Podstrony: blog, CV. Tytuł stoi w karminowym arkuszu (Base), treść pod nim. */
 .page {
   padding-block: clamp(2rem, 8vh, 5rem);
 }
 .page-title {
   font-size: clamp(4rem, 16vw, 11rem);
-  font-weight: 300;
-  font-stretch: 150%;
+  font-weight: var(--heavy);
+  font-stretch: var(--tight);
   line-height: 0.9;
 }
 .empty-state {
@@ -237,17 +247,18 @@ a:hover {
   background-size: 0.75rem 0.75rem;
 }
 
-/* Kinetyczny tytuł sekcji: przy wjeździe na ekran krój rośnie z wąskiego i lekkiego do szerokiego i grubego,
-   jak soczewka w hero. Napis się nie zawija, a rozmiar mieści stan końcowy w szerokości strony.
-   `--fit` to szerokość napisu w em przy szerokości 150% i grubości 800, zmierzona w przeglądarce.
-   Na telefonie tytuł kończy na szerokości 110% (napis węższy o 28%, zmierzone dla wszystkich tytułów)
-   i może być o tyle większy: inaczej „Umiejętności” wychodziło mniejsze od nagłówków kart pod nim. */
+/* Kinetyczny tytuł sekcji: przy wjeździe na ekran napis nabiera tuszu, z cienkiego i najwęższego do ciężkiego
+   i wąskiego głosu nagłówków. Napis się nie zawija, a rozmiar mieści stan końcowy w szerokości strony.
+   `--fit` to szerokość napisu w em w stanie końcowym (szerokość 58%, grubość 850), zmierzona w przeglądarce.
+   Stan początkowy jest węższy od końcowego, więc w trakcie animacji napis nigdy nie wychodzi poza kolumnę.
+   Rozmiar liczy się od szerokości kolumny `.wrap` (100cqi), nie okna. Na telefonie limit to 5.5rem: bez niego
+   krótkie słowa („Kontakt”) wychodziły 1.6 raza większe od długich („Umiejętności”) i przytłaczały nazwy
+   projektów; z limitem wszystkie tytuły mają 76–88 px. */
 .kinetic {
-  --end: 150%;
-  --end-ratio: 1;
-  font-size: min(9rem, calc((min(100vw, 88rem) - 2 * var(--gutter)) / (var(--fit) * var(--end-ratio) * 1.05)));
-  font-weight: 700;
-  font-stretch: var(--end);
+  --cap: 9rem;
+  font-size: min(var(--cap), 100cqi / (var(--fit) * 1.05));
+  font-weight: var(--heavy);
+  font-stretch: var(--tight);
   line-height: 0.95;
   letter-spacing: -0.01em;
   white-space: nowrap;
@@ -264,18 +275,17 @@ a:hover {
 }
 @media (max-width: 40rem) {
   .kinetic {
-    --end: 110%;
-    --end-ratio: 0.725;
+    --cap: 5.5rem;
   }
 }
 @keyframes kinetic {
   from {
-    font-stretch: 55%;
-    font-weight: 250;
+    font-stretch: 50%;
+    font-weight: 200;
   }
   to {
-    font-stretch: var(--end);
-    font-weight: 700;
+    font-stretch: var(--tight);
+    font-weight: var(--heavy);
   }
 }
 

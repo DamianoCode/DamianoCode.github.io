@@ -1,14 +1,24 @@
 ---
 import SiteHeader from './SiteHeader.astro';
 import { profile } from '../data/profile';
+import { projects } from '../data/projects';
 
-const lines = [profile.name, profile.surname];
+// Dowód już na pierwszym ekranie: główny projekt i adres, pod którym działa.
+const lead = projects.find((project) => project.tier === 'lead')!;
+const live = lead.links[0];
+
+// Szerokość każdej linii w em w spoczynku (szerokość 58, grubość 850), zmierzona w przeglądarce: przybliżone
+// dopasowanie, zanim skrypt soczewki dopasuje napis dokładnie.
+const lines = [
+  { word: profile.name, em: 2.45 },
+  { word: profile.surname, em: 1.51 },
+];
 ---
 
 <header class="hero" aria-labelledby="hero-title">
-  <!-- Pierwszy arkusz strony: kobaltowy, z nagłówkiem strony w środku. Na komputerze przy przewijaniu zostaje
+  <!-- Pierwszy arkusz strony: papierowy, w ramie z sadzy, z nagłówkiem strony w środku. Na komputerze przy przewijaniu zostaje
        przypięty i odsuwa się w głąb, a następna sekcja nasuwa się na niego jak kolejny arkusz na stos.
-       Strona zamyka się arkuszem Kontakt w tym samym kolorze. Cały arkusz jest nagłówkiem strony (banner), więc stoi
+       Strona zamyka się karminowym arkuszem Kontakt. Cały arkusz jest nagłówkiem strony (banner), więc stoi
        przed <main>, a skok do treści prowadzi od razu do projektów. -->
   <div class="hero-pin">
   <div class="sheet hero-sheet">
@@ -18,8 +28,8 @@ const lines = [profile.name, profile.surname];
         <h1 id="hero-title" class="hero-title">
           <span class="visually-hidden">{profile.fullName}, {profile.role.toLowerCase()}</span>
           <span class="type" aria-hidden="true" data-type>
-            {lines.map((word, i) => (
-              <span class={`line ${i === 0 ? 'line-start' : 'line-end'}`} data-line>
+            {lines.map(({ word, em }) => (
+              <span class="line" style={`--em-width: ${em}`} data-line>
                 <span class="word">
                   {[...word].map((ch) => (
                     <span class="ch">{ch}</span>
@@ -31,32 +41,40 @@ const lines = [profile.name, profile.surname];
         </h1>
 
         <p class="role">
-          Fullstack developer.<br />Piszę kod razem z agentami AI.
+          Buduję aplikacje.<br />Ogarniam agentów.
         </p>
       </div>
 
       <div class="intro">
-        <dl class="rail">
-          <div>
-            <dt class="visually-hidden">Dostępność</dt>
-            <dd><span class="status-dot" aria-hidden="true"></span>Otwarty: {profile.availability}</dd>
-          </div>
-          <div>
-            <dt>Miasto</dt>
-            <dd>{profile.city}, {profile.remote}</dd>
-          </div>
-        </dl>
-        <div class="intro-text">
-          <p>
-            Buduję aplikacje od bazy danych po interfejs: Next.js, TypeScript, PostgreSQL. Z Claude Code pracuję
-            jak z drugim programistą, a do tego piszę narzędzia, które tę pracę porządkują.
-          </p>
-          <p class="intro-actions">
-            <a href="#projekty">Zobacz projekty</a>
-            <a href="#kontakt">Napisz do mnie</a>
-          </p>
-        </div>
+        <p>
+          Aplikacje od bazy danych po interfejs: Next.js, TypeScript, PostgreSQL. Ostatnio {lead.name},
+          wspólna mapa dla paczki znajomych. Działa na <a href={live.href}>{live.label}</a>.
+        </p>
+        <p class="intro-actions">
+          <a class="cta" href="#projekty">
+            Zobacz projekty
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
+          </a>
+          <a href="#kontakt">Napisz do mnie</a>
+        </p>
       </div>
+
+      <dl class="rail">
+        <div>
+          <dt class="visually-hidden">Miasto</dt>
+          <dd>
+            <svg class="pin" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21Z" />
+              <circle cx="12" cy="9.8" r="2.3" />
+            </svg>
+            {profile.city} · {profile.remote}
+          </dd>
+        </div>
+        <div>
+          <dt class="visually-hidden">Dostępność</dt>
+          <dd><span class="status-dot" aria-hidden="true"></span>Otwarty na {profile.availability}</dd>
+        </div>
+      </dl>
     </div>
   </div>
   </div>
@@ -82,26 +100,22 @@ const lines = [profile.name, profile.surname];
 
 <style>
   .hero {
-    /* Kolory arkusza są stałe w obu motywach, jak w arkuszu Kontakt. */
-    --sheet-bg: var(--brand-cobalt);
-    --select-bg: var(--brand-snow);
-    --select-ink: var(--brand-cobalt);
-    --ink: var(--brand-snow);
-    --ink-soft: #c9d0ff;
-    --cobalt: var(--brand-snow);
-    /* Na kobaltowym arkuszu znak się odwraca: jasny arkusz z przodu, kobaltowa litera. */
-    --mark-front: var(--brand-snow);
-    --mark-letter: var(--brand-cobalt);
-    /* Szerokość kolumny z opisem roli; ta sama kolumna niesie plakietki pod kreską. */
-    --aside-ratio: 0.34;
-    --aside: calc(var(--aside-ratio) * 100%);
-    --aside-gap: 2rem;
+    /* Kolory arkusza są stałe w obu motywach: papier, sadza i karmin jak w znaku. */
+    --sheet-bg: var(--brand-paper);
+    --select-bg: var(--brand-crimson);
+    --select-ink: var(--brand-paper);
+    --ink: var(--brand-ink);
+    --ink-soft: #5a564f;
+    --accent: var(--brand-crimson);
+    --mark-body: var(--brand-ink);
     --row-gap: clamp(0.25rem, 1.5vh, 1rem);
     position: relative;
     color: var(--ink);
   }
+  /* Rama z sadzy wokół papierowego arkusza, w obu motywach. */
   .hero-pin {
     padding-block: var(--sheet-gap);
+    background: var(--brand-ink);
   }
 
   /* Arkusz ma zaokrąglenia pozostałych (klasa `.sheet`), ale nie ich największą szerokość: zajmuje całe okno
@@ -120,12 +134,14 @@ const lines = [profile.name, profile.surname];
   .hero-sheet :global(.site-head) {
     max-width: none;
   }
+  /* Najmniejszy odstęp od menu: na niskim laptopie treść wypełnia cały arkusz i imię stykało się z menu. */
   .hero-inner {
     max-width: none;
     margin-top: auto;
+    padding-top: clamp(0.75rem, 2.5vh, 1.5rem);
   }
   .hero :focus-visible {
-    outline-color: var(--ink);
+    outline-color: var(--accent);
   }
 
   /* Pierwsza sekcja treści jest nieprzezroczysta i leży nad hero: przy przewijaniu nasuwa się na arkusz. */
@@ -135,18 +151,10 @@ const lines = [profile.name, profile.surname];
     background: var(--paper);
   }
 
-  /* Rama napisu. Opis roli liczy swoje położenie z tych samych wartości, z których skrypt wylicza rozmiar liter:
-     wysokości wiersza i szerokości linii (jednostki cqw ramy). */
+  /* Rama napisu: imię i nazwisko jedno pod drugim, wyrównane do lewej, pod nimi hasło. */
   .stage {
     position: relative;
-    container-type: inline-size;
-    --type-height: clamp(11rem, min(calc(100svh - 28rem), 58vw), 56rem);
-    --row-height: calc((var(--type-height) - var(--row-gap)) / 2);
-    /* Odstęp od dolnej krawędzi linii (line-height 0.8) do linii pisma Anybody, w em; zmierzony w przeglądarce. */
-    --descent: 0.12;
-    --end-inset: 0px;
-    --size-end: min((100cqw - var(--end-inset)) / 2.25, var(--row-height) / 0.8);
-    --baseline-end: calc(var(--type-height) - var(--descent) * var(--size-end));
+    --type-height: clamp(9rem, min(calc(100svh - 36rem), 64vw), 52rem);
   }
 
   .type {
@@ -165,19 +173,9 @@ const lines = [profile.name, profile.surname];
     min-height: 0;
     container-type: size;
   }
-  .line-start {
-    --em-width: 3.75;
-  }
-  .line-end {
-    --em-width: 2.25;
-    justify-content: flex-end;
-  }
-  /* Skrypt skaluje napis od strony, do której linia jest wyrównana. */
-  .line-start .word {
+  /* Skrypt skaluje napis od lewej krawędzi. */
+  .word {
     transform-origin: left bottom;
-  }
-  .line-end .word {
-    transform-origin: right bottom;
   }
   .word {
     display: block;
@@ -185,13 +183,13 @@ const lines = [profile.name, profile.surname];
     font-family: var(--display);
     /* Przybliżone dopasowanie przed startem skryptu; skrypt dopasowuje dokładnie. */
     font-size: min(100cqw / var(--em-width), 100cqh / 0.8);
-    font-weight: 400;
+    font-weight: var(--heavy);
     line-height: 0.8;
     letter-spacing: -0.005em;
   }
   .ch {
     display: inline-block;
-    font-variation-settings: 'wdth' 100, 'wght' 640;
+    font-variation-settings: 'wdth' 58, 'wght' 850;
   }
 
   /* Po starcie skryptu każda litera stoi na własnej pozycji i przesuwa ją transform.
@@ -209,70 +207,30 @@ const lines = [profile.name, profile.surname];
     transform-origin: left bottom;
   }
 
+  /* Hasło: ten sam ciężki, wąski głos co imię, w karminie. */
   .role {
-    margin-top: clamp(1.25rem, 3vh, 2rem);
+    margin-top: clamp(1rem, 2.5vh, 1.75rem);
     font-family: var(--display);
-    font-weight: 700;
-    font-stretch: 112%;
-    font-size: clamp(1.5rem, 2.4vw, 2.4rem);
-    line-height: 1.08;
+    font-weight: var(--heavy);
+    font-stretch: var(--tight);
+    /* Hasło rośnie z szerokością, ale na niskim ekranie także maleje z wysokością: imię ma zostać co najmniej
+       2.5 raza większe, inaczej na laptopie 1280×720 wychodzą trzy równe nagłówki. */
+    font-size: clamp(1.75rem, min(3.6vw, 6svh), 3.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.005em;
+    color: var(--accent);
   }
 
   .intro {
     display: grid;
-    gap: 1.5rem var(--aside-gap);
-    margin-top: clamp(1.25rem, 3vh, 2.5rem);
-    padding-top: 1.5rem;
-    border-top: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
-  }
-
-  /* Metadane jako plakietki, tak jak technologie na kartach projektów. */
-  .rail {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: start;
-    gap: 0.5rem;
-    margin: 0;
-    font-family: var(--display);
-    font-size: var(--label);
-    line-height: 1.3;
-  }
-  .rail div {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.35rem 0.85rem;
-    border: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
-    border-radius: 999px;
-  }
-  .rail dt {
-    color: var(--ink-soft);
-    font-stretch: 90%;
-  }
-  .rail dd {
-    margin: 0;
-    font-weight: 600;
-  }
-  .status-dot {
-    display: inline-block;
-    width: 0.55rem;
-    height: 0.55rem;
-    margin-right: 0.5rem;
-    border-radius: 50%;
-    background: #5fe3a1;
-    vertical-align: 0.05em;
-    box-shadow: 0 0 0 0 color-mix(in srgb, #5fe3a1 60%, transparent);
-  }
-
-  .intro-text {
-    display: grid;
-    gap: 1rem;
-    align-content: start;
+    gap: 1.25rem;
+    margin-top: clamp(1.25rem, 3vh, 2.25rem);
   }
   .intro-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
+    align-items: center;
+    gap: 0.75rem 1.75rem;
     font-family: var(--display);
     font-weight: 600;
     font-size: var(--label-l);
@@ -281,53 +239,109 @@ const lines = [profile.name, profile.surname];
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
+    color: var(--ink);
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
   }
-  .intro-actions a:first-child {
-    color: var(--sheet-bg);
-    background: var(--ink);
-    padding: 0.6rem 1.1rem;
-    border-radius: 999px;
+  .cta {
+    gap: 0.75rem;
+    padding: 0.7rem 1.35rem;
+    border-radius: var(--radius-control);
+    background: var(--accent);
+    color: var(--brand-paper) !important;
     text-decoration: none;
     transition: background-color 0.2s ease, transform 0.1s ease;
   }
-  .intro-actions a:first-child:hover {
-    background: #ffffff;
+  .cta svg {
+    width: 1.2em;
+    height: 1.2em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
-  .intro-actions a:first-child:active {
+  .cta:hover {
+    background: var(--brand-crimson-deep);
+  }
+  .cta:active {
     transform: translateY(1px);
   }
-  .intro-actions a:last-child {
-    padding-block: 0.6rem;
-    color: var(--ink);
-    text-decoration-thickness: 2px;
-  }
-
-  @media (min-width: 60rem) {
-    .intro {
-      grid-template-columns: var(--aside) minmax(0, 1fr);
+  @media (prefers-reduced-motion: no-preference) {
+    .cta svg {
+      transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .cta:hover svg {
+      transform: translateX(0.2em);
     }
   }
 
-  /* Na szerokim i dość wysokim ekranie opis roli zajmuje pustą kolumnę obok drugiej linii napisu,
-     a druga linia kończy się na prawej krawędzi kolumny obok. Niższy ekran nie zmieściłby opisu w wierszu. */
-  @media (min-width: 64rem) and (min-height: 46rem) {
+  /* Stopka arkusza: cienka kreska, miasto po lewej, dostępność po prawej. */
+  .rail {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin: clamp(1.5rem, 4vh, 2.75rem) 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 40%, transparent);
+    font-family: var(--display);
+    font-size: var(--label);
+    font-weight: 600;
+    font-stretch: 90%;
+    line-height: 1.3;
+  }
+  .rail dd {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+  }
+  .pin {
+    width: 1.15em;
+    height: 1.15em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+  }
+  .status-dot {
+    display: inline-block;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: #1e6b47;
+    box-shadow: 0 0 0 0 color-mix(in srgb, #1e6b47 50%, transparent);
+  }
+
+  /* Telefon: wąski krój czyta się dobrze w dużym rozmiarze, ale przy 28 px prześwity w a, e, s się zamykają.
+     Hasło zostaje w tym samym głosie, tylko szersze i odrobinę większe. */
+  @media (max-width: 40rem) {
+    .role {
+      font-size: var(--step-2);
+      font-stretch: 68%;
+    }
+  }
+
+  /* Niski laptop (1280×720, 1366×768): stałe odstępy zjadały wysokość imienia, aż hasło dorównywało mu
+     rozmiarem. Ciaśniejsze odstępy oddają imieniu ok. 5rem, więc zostaje ok. 2.5 raza większe od hasła. */
+  @media (min-width: 48rem) and (max-height: 50rem) {
+    .hero-sheet {
+      padding-bottom: 1.25rem;
+    }
     .stage {
-      display: grid;
-      --end-inset: calc(var(--aside-ratio) * 100cqw + var(--aside-gap));
+      --type-height: clamp(9rem, calc(100svh - 31rem), 52rem);
     }
-    .hero-title,
     .role {
-      grid-area: 1 / 1;
+      margin-top: 0.6rem;
     }
-    /* Opis stoi na drugiej linii pisma: jego własna linia pisma leży 0.26em nad dolną krawędzią wiersza. */
-    .role {
-      align-self: end;
-      width: calc(var(--aside-ratio) * 100cqw);
-      margin-top: 0;
-      margin-bottom: calc(var(--type-height) - var(--baseline-end) - 0.26em);
+    .intro {
+      gap: 0.75rem;
+      margin-top: 0.9rem;
     }
-    .line-end {
-      margin-inline-start: var(--end-inset);
+    .rail {
+      margin-top: 1rem;
+      padding-top: 0.75rem;
     }
   }
 
@@ -371,7 +385,7 @@ const lines = [profile.name, profile.surname];
         position: absolute;
         inset: 0;
         z-index: -1;
-        background: #060915;
+        background: #0b0b0d;
         opacity: 0;
         pointer-events: none;
         animation: fade-in linear both;
@@ -389,7 +403,7 @@ const lines = [profile.name, profile.surname];
         position: absolute;
         inset: 0;
         border-radius: inherit;
-        background: #0b1233;
+        background: var(--brand-ink);
         pointer-events: none;
         opacity: 0;
         animation: dim linear both;
@@ -434,7 +448,7 @@ const lines = [profile.name, profile.surname];
   @keyframes pulse {
     70%,
     100% {
-      box-shadow: 0 0 0 0.45rem color-mix(in srgb, #5fe3a1 0%, transparent);
+      box-shadow: 0 0 0 0.45rem color-mix(in srgb, #1e6b47 0%, transparent);
     }
   }
 </style>

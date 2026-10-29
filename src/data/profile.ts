@@ -4,8 +4,8 @@ export const profile = {
   name: 'Damian',
   surname: 'Ułaś',
   fullName: 'Damian Ułaś',
-  /** Nick z GitHuba, pokazywany przy znaku w nagłówku. */
-  handle: 'DamianoCode',
+  /** Podpis marki przy znaku w nagłówku: nick małymi literami, jak klawisze d i c w znaku. */
+  wordmark: 'damianocode',
   role: 'Fullstack developer',
   city: 'Zamość',
   email: 'damianulas@gmail.com',

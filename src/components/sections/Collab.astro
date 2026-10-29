@@ -35,7 +35,7 @@ import { mailto, profile, subjects } from '../../data/profile';
 
 <style>
   /* Arkusz w głębszym odcieniu papieru: odcina się od tła jak pozostałe arkusze, ale nie konkuruje
-     z kobaltowym hero i Kontaktem, które zamykają stronę z obu stron. */
+     z hero i karminowym Kontaktem, które zamykają stronę z obu stron. */
   .collab {
     margin-top: clamp(4rem, 12vh, 8rem);
     /* Następny arkusz (Agenci AI) leży tuż obok, jak kolejna kartka na stosie. */
@@ -54,9 +54,9 @@ import { mailto, profile, subjects } from '../../data/profile';
     align-content: start;
   }
   .pitch-title {
-    font-size: var(--step-4);
-    font-weight: 800;
-    font-stretch: 115%;
+    font-size: clamp(3rem, 7vw, 5rem);
+    font-weight: var(--heavy);
+    font-stretch: var(--tight);
     line-height: 0.98;
   }
   .pitch-text {
@@ -66,13 +66,13 @@ import { mailto, profile, subjects } from '../../data/profile';
   }
   .actions a {
     color: var(--ink);
-    text-decoration-color: var(--cobalt);
+    text-decoration-color: var(--accent);
     text-decoration-thickness: 2px;
   }
   .actions a.primary {
     padding: 0.6rem 1.15rem;
-    border-radius: 999px;
-    background: var(--cobalt);
+    border-radius: var(--radius-control);
+    background: var(--accent);
     color: var(--paper);
     text-decoration: none;
   }
@@ -95,9 +95,9 @@ import { mailto, profile, subjects } from '../../data/profile';
     color: color-mix(in srgb, var(--ink-soft) 80%, var(--ink));
   }
   .team-title {
-    font-size: var(--step-1);
-    font-weight: 700;
-    font-stretch: 112%;
+    font-size: var(--step-2);
+    font-weight: var(--heavy);
+    font-stretch: var(--tight-sub);
     line-height: 1.1;
     hyphens: auto;
     overflow-wrap: break-word;

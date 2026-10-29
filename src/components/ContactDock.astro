@@ -3,13 +3,18 @@
   - „Napisz do mnie” prowadzi do arkusza Kontakt i chowa się, gdy Kontakt jest już na ekranie;
   - strzałka wraca na górę strony i zostaje do samego końca, bo tam jest najbardziej potrzebna.
   Kontakt pozostaje pod ręką niezależnie od kierunku przewijania; strzałka wraca przy przewijaniu w górę.
+  Na telefonie przy czytaniu (przewijanie w dół) kontakt kurczy się do samego klawisza z kopertą, żeby nie
+  zasłaniać tekstu kart; napis wraca przy przewijaniu w górę. Nazwa linku zostaje ta sama dla czytnika ekranu.
   Bez skryptu się nie pokazują: zostaje menu i sam arkusz Kontakt.
 -->
 <div class="dock" data-dock hidden>
   <a class="dock-up" href="#top" aria-label="Wróć na górę strony">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" /></svg>
   </a>
-  <a class="dock-write" href="#kontakt" data-dock-write>Napisz do mnie</a>
+  <a class="dock-write" href="#kontakt" data-dock-write>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h17v11h-17zM4 7l8 6.5L20 7" /></svg>
+    <span class="dock-label">Napisz do mnie</span>
+  </a>
 </div>
 
 <script>
@@ -51,8 +56,8 @@
 </script>
 
 <style>
-  /* Skróty w kolorach arkusza Kontakt. Biała obwódka oddziela je od kart w dowolnym kolorze,
-     także od kobaltowej karty Claudiusa; cień nie służy tu za sygnał „kliknij”. */
+  /* Skróty w kolorach arkusza Kontakt. Papierowa obwódka oddziela je od kart w dowolnym kolorze,
+     także od karminowej karty Claudiusa; cień nie służy tu za sygnał „kliknij”. */
   .dock {
     position: fixed;
     right: max(1rem, env(safe-area-inset-right));
@@ -76,10 +81,10 @@
     align-items: center;
     justify-content: center;
     min-height: 3rem;
-    border: 2px solid var(--brand-snow);
-    border-radius: 999px;
-    background: var(--brand-cobalt);
-    color: var(--brand-snow);
+    border: 2px solid var(--brand-paper);
+    border-radius: var(--radius-control);
+    background: var(--brand-crimson);
+    color: var(--brand-paper);
     font-family: var(--display);
     font-weight: 600;
     font-size: var(--label-l);
@@ -87,7 +92,32 @@
     pointer-events: auto;
   }
   .dock-write {
-    padding: 0.6rem 1.25rem;
+    gap: 0.55rem;
+    padding: 0.6rem 1.25rem 0.6rem 1rem;
+  }
+  .dock-write svg {
+    flex: none;
+    width: 1.3rem;
+    height: 1.3rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  /* Telefon w trakcie czytania: sam klawisz 48 × 48 px. Napis znika tylko wizualnie. */
+  @media (max-width: 48rem) {
+    .dock[data-down] .dock-write {
+      width: 3rem;
+      padding: 0;
+    }
+    .dock[data-down] .dock-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
   }
   .dock-write[data-off] {
     display: none !important;
@@ -108,14 +138,14 @@
     stroke-linejoin: round;
   }
   .dock a:hover {
-    background: var(--brand-snow);
-    color: var(--brand-cobalt);
+    background: var(--brand-ink);
+    color: var(--brand-paper);
   }
   .dock a:active {
     transform: translateY(1px);
   }
   .dock a:focus-visible {
-    outline: 3px solid var(--brand-cobalt);
+    outline: 3px solid var(--brand-crimson);
     outline-offset: 3px;
   }
   @media (prefers-reduced-motion: no-preference) {

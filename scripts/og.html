@@ -6,25 +6,26 @@
   @font-face { font-family: A; src: url(../node_modules/@fontsource-variable/anybody/files/anybody-latin-standard-normal.woff2); font-weight: 100 900; font-stretch: 50% 150%; }
   @font-face { font-family: A; src: url(../node_modules/@fontsource-variable/anybody/files/anybody-latin-ext-standard-normal.woff2); font-weight: 100 900; font-stretch: 50% 150%; unicode-range: U+0100-024F; }
   html, body { margin: 0; }
-  body { width: 1200px; height: 630px; background: #dce2e8; font-family: A; overflow: hidden; }
-  /* Obrazek udostępniania powtarza hero: kobaltowy arkusz, znak w nagłówku i logotyp z soczewką (osie jak w scripts/brand/logo.py). */
-  .sheet { position: absolute; inset: 14px; border-radius: 36px; background: #2f45e0; color: #f4f6ff; box-sizing: border-box; padding: 34px 52px 40px; display: grid; grid-template-rows: auto 1fr 1fr auto; }
-  .head { display: flex; justify-content: space-between; align-items: center; font-size: 26px; font-variation-settings: 'wdth' 115, 'wght' 800; }
-  .brand { display: flex; align-items: center; gap: 16px; }
-  .brand img { width: 52px; height: 52px; }
-  .head span:last-child { font-variation-settings: 'wdth' 90, 'wght' 450; color: #c9d0ff; }
-  .line { display: flex; align-items: flex-end; font-size: 215px; line-height: 0.8; white-space: nowrap; }
-  .end { justify-content: flex-end; }
-  .line span { display: inline-block; }
-  .foot { margin-top: 26px; padding-top: 18px; border-top: 2px solid rgb(244 246 255 / 0.35); font-size: 28px; font-variation-settings: 'wdth' 112, 'wght' 700; }
+  body { width: 1200px; height: 630px; background: #17171a; font-family: A; overflow: hidden; }
+  /* Obrazek udostępniania powtarza hero: papierowy arkusz w ramie z sadzy, znak z podpisem, imię w ciężkim,
+     wąskim kroju i karminowe hasło. */
+  .sheet { position: absolute; inset: 14px; border-radius: 30px; background: #e9e5de; color: #17171a; box-sizing: border-box; padding: 34px 56px 36px; display: flex; flex-direction: column; }
+  .head { display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 16px; font-size: 40px; font-variation-settings: 'wdth' 62, 'wght' 850; }
+  .brand img { width: 66px; height: 44px; }
+  .stack { font-size: 24px; font-variation-settings: 'wdth' 90, 'wght' 600; color: #5a564f; }
+  .name { margin-top: auto; font-size: 232px; line-height: 0.84; letter-spacing: -0.005em; font-variation-settings: 'wdth' 58, 'wght' 850; }
+  .role { margin-top: 14px; font-size: 76px; line-height: 0.98; color: #be2337; font-variation-settings: 'wdth' 58, 'wght' 850; }
+  .foot { margin-top: 26px; padding-top: 16px; border-top: 2px solid rgb(23 23 26 / 0.4); display: flex; justify-content: space-between; font-size: 24px; font-variation-settings: 'wdth' 90, 'wght' 600; }
+  .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #1e6b47; margin-right: 12px; }
 </style>
 </head>
 <body>
 <div class="sheet">
-  <div class="head"><span class="brand"><img src="../public/brand/mark-inverse.svg" alt="" />Damian Ułaś</span><span>Next.js, TypeScript, Claude Code</span></div>
-  <div class="line"><span style="font-variation-settings:'wdth' 78,'wght' 620">D</span><span style="font-variation-settings:'wdth' 86,'wght' 660">a</span><span style="font-variation-settings:'wdth' 124,'wght' 780">m</span><span style="font-variation-settings:'wdth' 150,'wght' 860">i</span><span style="font-variation-settings:'wdth' 122,'wght' 770">a</span><span style="font-variation-settings:'wdth' 84,'wght' 650">n</span></div>
-  <div class="line end"><span style="font-variation-settings:'wdth' 80,'wght' 640">U</span><span style="font-variation-settings:'wdth' 104,'wght' 720">ł</span><span style="font-variation-settings:'wdth' 150,'wght' 860">a</span><span style="font-variation-settings:'wdth' 116,'wght' 760">ś</span></div>
-  <div class="foot">Fullstack developer. Piszę kod razem z agentami AI.</div>
+  <div class="head"><span class="brand"><img src="../public/brand/znak-klawiatura.svg" alt="" />damianocode</span><span class="stack">Next.js · TypeScript · PostgreSQL</span></div>
+  <div class="name">Damian Ułaś</div>
+  <div class="role">Buduję aplikacje. Ogarniam agentów.</div>
+  <div class="foot"><span>Zamość · zdalnie</span><span><span class="dot"></span>Otwarty na projekty, B2B albo etat</span></div>
 </div>
 </body>
 </html>

@@ -32,9 +32,9 @@ Personal portfolio of Damian Ułaś, a fullstack developer from Zamość. It exi
 - Undecided: whether and when the blog gets real posts, and when the full CV (PDF and experience entries) is published.
 
 ## Brand Commitments
-- Name: Damian Ułaś. Role line: "Fullstack developer. Piszę kod razem z agentami AI."
+- Name: Damian Ułaś. Wordmark: "damianocode" next to the keyboard mark. Hero statement (confirmed by the owner 2026-10-29): "Buduję aplikacje. Ogarniam agentów." The structured role stays "Fullstack developer" (SEO, schema, footer).
 - Voice: Polish, first person, direct and unpretentious.
-- **No headshot.** The site deliberately has no photo of his face; do not add one or a placeholder for one.
+- **No headshot.** The site deliberately has no photo of his face; do not add one or a placeholder for one. An illustrated avatar (manga line art, red headphones) exists for social profiles only (owner, 2026-10-29); it may appear on the site only as a deliberate, owner-approved moment, never as a hero portrait. Approved placement (2026-10-29): the Contact sign-off.
 
 ## Evidence on Hand
 - Projects (`src/data/projects.ts`): PlaceMates (lead; Next.js 16, Supabase, PostGIS; live at placemates.pl), Asystent korepetytora (private repo, in progress), Widżet Claude Code (C#/.NET 10/WPF, installer), Claudius (Claude Code plugin), Panel sklepu internetowego (2023–2026; Next.js 14, Clerk, Prisma), plus an archive of six repositories from 2021–2022.
