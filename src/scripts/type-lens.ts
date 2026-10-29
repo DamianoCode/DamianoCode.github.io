@@ -14,7 +14,7 @@
  *   do wskaźnika przesunięć układu (CLS).
  */
 
-/** Tyle poziomów daje kroki poniżej 1 jednostki szerokości i 3 jednostek grubości: poniżej progu widoczności. */
+/** Przygotowane warianty ograniczają koszt rysowania kroju; geometrię między nimi interpolujemy. */
 const LEVELS = 100;
 /** Spoczynek to głos nagłówków: szerokość 58, grubość 850. Soczewka poszerza litery przy kursorze do 115
  *  i dociąża do 900, a dalsze zwęża do 50 i rozjaśnia do 640: napis zostaje ciężki, a ruch widać w szerokości. */
@@ -40,6 +40,8 @@ type Char = {
   level: number;
   /** Przesunięcie litery w napisie, w pikselach przed przeskalowaniem. */
   x: number;
+  /** Korekta szerokości między przygotowanymi wariantami kroju. */
+  stretch: number;
   /** Szerokość litery przy 100px dla każdego poziomu (puste, dopóki poziom nie jest zmierzony). */
   advances: number[];
 };
@@ -99,6 +101,7 @@ function measureRestWidth(line: Line) {
     for (const c of line.chars) {
       const el = c.el.cloneNode(true) as HTMLElement;
       el.style.fontVariationSettings = VARIATIONS[REST_LEVEL];
+      el.style.transform = 'none';
       probe.append(el);
     }
     return () => probe.getBoundingClientRect().width;
@@ -147,6 +150,7 @@ async function prepareVariants(line: Line, fontSize: number) {
         levels.map((level) => {
           const el = c.el.cloneNode(true) as HTMLElement;
           el.style.fontVariationSettings = VARIATIONS[level];
+          el.style.transform = 'none';
           probe.append(el);
           return { c, level, el };
         }),
@@ -175,6 +179,7 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
       u: U_REST,
       level: -1,
       x: -1,
+      stretch: 1,
       advances: [],
     })),
     alignEnd: box.classList.contains('line-end'),
@@ -201,6 +206,7 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
   let lensY = 0.5;
   let sweepStart = 0;
   let frame = 0;
+  let lastTick = 0;
   let reported = '';
 
   /** Zgłasza osie litery pod soczewką, tylko gdy zmieniły się widoczne wartości. */
@@ -229,19 +235,27 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
     const unit = line.fontSize / 100;
     let x = 0;
     for (const c of line.chars) {
-      if (Math.abs(x - c.x) > 0.15) {
+      // Geometria jest ciągła, choć sam krój korzysta z przygotowanych, dyskretnych wariantów.
+      const position = clamp01(c.u) * LEVELS;
+      const lower = line.nearest[Math.floor(position)];
+      const upper = line.nearest[Math.ceil(position)];
+      const blend = lower === upper ? 0 : clamp01((position - lower) / (upper - lower));
+      const advance = c.advances[lower] + (c.advances[upper] - c.advances[lower]) * blend;
+      const stretch = advance / c.advances[c.level];
+      if (Math.abs(x - c.x) > 0.005 || Math.abs(stretch - c.stretch) > 0.00001) {
         c.x = x;
-        c.el.style.transform = `translateX(${x.toFixed(1)}px)`;
+        c.stretch = stretch;
+        c.el.style.transform = `translateX(${x.toFixed(3)}px) scaleX(${stretch.toFixed(6)})`;
       }
-      x += c.advances[c.level] * unit;
+      x += advance * unit;
     }
 
     const scale = Math.min(line.boxWidth / x, line.boxHeight / (LINE_HEIGHT * line.fontSize));
     const offset = line.alignEnd ? line.boxWidth - x * scale : 0;
-    if (Math.abs(scale - line.scale) > 0.0005 || Math.abs(offset - line.offset) > 0.2) {
+    if (Math.abs(scale - line.scale) > 0.00001 || Math.abs(offset - line.offset) > 0.01) {
       line.scale = scale;
       line.offset = offset;
-      line.word.style.transform = `translateX(${offset.toFixed(1)}px) scale(${scale.toFixed(4)})`;
+      line.word.style.transform = `translateX(${offset.toFixed(3)}px) scale(${scale.toFixed(6)})`;
     }
     line.visualWidth = x * scale;
     line.visualLeft = line.boxLeft + offset;
@@ -280,6 +294,10 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
 
   const tick = (now: number) => {
     frame = 0;
+    const delta = lastTick ? Math.min(now - lastTick, 50) : 1000 / 60;
+    lastTick = now;
+    const ease = 1 - (1 - EASE) ** (delta / (1000 / 60));
+    let influence = 1;
     if (sweepStart) {
       const t = (now - sweepStart) / SWEEP_MS;
       if (t >= 1) {
@@ -290,6 +308,9 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
         const first = lines[0];
         lensX = first.boxLeft + first.boxWidth * (-0.15 + 1.3 * eased);
         lensY = 0.5;
+        // Ostatnie 600 ms wygasza soczewkę do spoczynku bez nagłej zmiany celu na końcu przejazdu.
+        const fade = clamp01((t - 0.6) / 0.4);
+        influence = 1 - fade * fade * (3 - 2 * fade);
       }
     }
 
@@ -304,10 +325,11 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
 
       line.chars.forEach((c, k) => {
         // Blisko soczewki: szeroko i grubo. Daleko: wąsko i lekko.
-        const target =
+        const focus =
           lensX === null ? U_REST : Math.exp(-(((k + 0.5) / n - x) ** 2) / (2 * SPREAD ** 2)) * amp;
-        c.u += (target - c.u) * EASE;
-        if (Math.abs(target - c.u) > 0.004) moving = true;
+        const target = U_REST + (focus - U_REST) * influence;
+        c.u += (target - c.u) * ease;
+        if (Math.abs(target - c.u) > 0.0001) moving = true;
         else c.u = target;
         peak = Math.max(peak, c.u);
         show(line, c);
@@ -321,7 +343,10 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
   };
 
   const wake = () => {
-    if (!frame && visible) frame = requestAnimationFrame(tick);
+    if (!frame && visible) {
+      lastTick = 0;
+      frame = requestAnimationFrame(tick);
+    }
   };
 
   const release = () => {
