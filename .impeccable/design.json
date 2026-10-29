@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-29T10:31:51.678684Z",
+  "generatedAt": "2026-10-29T16:12:28.734Z",
   "title": "Design System: Damian Ułaś — portfolio",
   "extensions": {
     "colorMeta": {
@@ -363,6 +363,11 @@
         "name": "screen-float",
         "value": "0 0 0 1px var(--line), 0 2rem 3.5rem -1.25rem var(--shadow)",
         "purpose": "Screenshots floating in cards."
+      },
+      {
+        "name": "hero-note",
+        "value": "0 0.35rem 0.6rem -0.3rem rgb(23 23 26 / 0.35)",
+        "purpose": "Small downward paper shadow beneath the taped brb note."
       }
     ],
     "motion": [
@@ -428,8 +433,23 @@
       },
       {
         "name": "type-lens",
-        "value": "width 50–115, weight 640–900, rest 58 / 850, 100 pre-measured levels",
-        "purpose": "Hero name reacting to the cursor or one sweep on touch."
+        "value": "width 50–115, weight 640–900, rest 58 / 850; 101 pre-measured variants (levels 0–100), interpolated advances and scaleX",
+        "purpose": "Hero name follows the mouse or pen; continuous letter geometry avoids snapping between prepared font variants. No layout reads in the animation loop; reduced motion shows the resting type."
+      },
+      {
+        "name": "type-lens-sweep",
+        "value": "1500ms ease-in-out quadratic sweep; last 600ms influence fades with 1 - t²(3 - 2t); frame-time smoothing 1 - 0.84^(delta / (1000 / 60)), delta capped at 50ms",
+        "purpose": "One entrance sweep after font variants are prepared; fade merges directly into the resting type. Mouse or pen movement interrupts the sweep."
+      },
+      {
+        "name": "hero-bubble",
+        "value": "0.5s cubic-bezier(0.16, 1, 0.3, 1), 1s delay; opacity 0→1, scale 0.6→1",
+        "purpose": "The HTML speech bubble appears after the keyboard signature; disabled under reduced motion."
+      },
+      {
+        "name": "hero-note",
+        "value": "0.9s cubic-bezier(0.16, 1, 0.3, 1), 1.35s delay; opacity 0→1, rotate 10deg→0deg, translateY(-0.6rem)→0",
+        "purpose": "The brb note settles over the empty chair; disabled under reduced motion."
       }
     ],
     "breakpoints": [
@@ -500,15 +520,15 @@
       "name": "Site header",
       "kind": "nav",
       "refersTo": "sheet-hero",
-      "description": "Keyboard mark, lowercase wordmark and links with a crimson underline.",
-      "html": "<div class=\"ds-head\"><a class=\"ds-home\" href=\"#\"><svg aria-hidden=\"true\" viewBox=\"0 0 96 64\"><path fill=\"#17171A\" fill-rule=\"evenodd\" d=\"M8 0H88Q96 0 96 8V56Q96 64 88 64H8Q0 64 0 56V8Q0 0 8 0ZM10 10H18Q20 10 20 12V20Q20 22 18 22H10Q8 22 8 20V12Q8 10 10 10ZM27 10H35Q37 10 37 12V20Q37 22 35 22H27Q25 22 25 20V12Q25 10 27 10ZM44 10H52Q54 10 54 12V20Q54 22 52 22H44Q42 22 42 20V12Q42 10 44 10ZM61 10H69Q71 10 71 12V20Q71 22 69 22H61Q59 22 59 20V12Q59 10 61 10ZM78 10H86Q88 10 88 12V20Q88 22 86 22H78Q76 22 76 20V12Q76 10 78 10ZM10 27H18Q20 27 20 29V37Q20 39 18 39H10Q8 39 8 37V29Q8 27 10 27ZM27 27H35Q37 27 37 29V37Q37 39 35 39H27Q25 39 25 37V29Q25 27 27 27ZM44 27H52Q54 27 54 29V37Q54 39 52 39H44Q42 39 42 37V29Q42 27 44 27ZM61 27H69Q71 27 71 29V37Q71 39 69 39H61Q59 39 59 37V29Q59 27 61 27ZM78 27H86Q88 27 88 29V37Q88 39 86 39H78Q76 39 76 37V29Q76 27 78 27ZM23 46H73Q75 46 75 48V54Q75 56 73 56H23Q21 56 21 54V48Q21 46 23 46Z\"/><rect x=\"25\" y=\"10\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><rect x=\"59\" y=\"27\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><g fill=\"#E9E5DE\"><path fill-rule=\"evenodd\" d=\"M32.6 12h1.7v8h-1.6v-.5c-.5.4-1 .6-1.7.6-1.7 0-2.7-1.2-2.7-3.1s1-3.1 2.7-3.1c.6 0 1.1.2 1.6.6ZM31.3 15.4c-.9 0-1.4.6-1.4 1.6s.5 1.6 1.4 1.6 1.4-.6 1.4-1.6-.5-1.6-1.4-1.6Z\"/><path d=\"M67.8 31.2l-1.1 1.1c-.4-.4-.7-.6-1.2-.6-1 0-1.6.7-1.6 1.8s.6 1.8 1.6 1.8c.5 0 .8-.2 1.2-.6l1.1 1.1c-.6.7-1.3 1-2.3 1-2 0-3.3-1.3-3.3-3.3s1.3-3.3 3.3-3.3c1 0 1.7.3 2.3 1Z\"/></g></svg>damianocode</a><nav><a href=\"#\" aria-current=\"page\">Projekty</a><a href=\"#\">Agenci AI</a><a href=\"#\">Kontakt</a></nav></div>",
-      "css": ".ds-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0 2rem;padding:.5rem 1.5rem;background:#e9e5de;border-radius:1.5rem;font-family:\"Anybody Variable\",\"Arial Narrow\",sans-serif}.ds-home{display:inline-flex;align-items:center;gap:.7rem;min-height:2.75rem;color:#17171a;text-decoration:none;font-weight:850;font-stretch:62%;font-size:1.6rem}.ds-home svg{width:3rem;height:2rem}.ds-head nav{display:flex;gap:0 1.25rem;font-size:1.05rem;font-stretch:90%}.ds-head nav a{display:inline-flex;align-items:center;min-height:2.75rem;color:#17171a;text-decoration:none;background:linear-gradient(transparent,transparent) no-repeat 0 calc(50% + .85em)/100% 2px}.ds-head nav a:hover,.ds-head nav a[aria-current=page]{background-image:linear-gradient(#be2337,#be2337)}.ds-head a:focus-visible{outline:3px solid #be2337;outline-offset:3px}"
+      "description": "Keyboard mark, lowercase wordmark, section links and a PL/EN language switch; below 48rem the menu occupies its own row.",
+      "html": "<div class=\"ds-head\"><a class=\"ds-home\" href=\"#\"><svg aria-hidden=\"true\" viewBox=\"0 0 96 64\"><path fill=\"#17171A\" fill-rule=\"evenodd\" d=\"M8 0H88Q96 0 96 8V56Q96 64 88 64H8Q0 64 0 56V8Q0 0 8 0ZM10 10H18Q20 10 20 12V20Q20 22 18 22H10Q8 22 8 20V12Q8 10 10 10ZM27 10H35Q37 10 37 12V20Q37 22 35 22H27Q25 22 25 20V12Q25 10 27 10ZM44 10H52Q54 10 54 12V20Q54 22 52 22H44Q42 22 42 20V12Q42 10 44 10ZM61 10H69Q71 10 71 12V20Q71 22 69 22H61Q59 22 59 20V12Q59 10 61 10ZM78 10H86Q88 10 88 12V20Q88 22 86 22H78Q76 22 76 20V12Q76 10 78 10ZM10 27H18Q20 27 20 29V37Q20 39 18 39H10Q8 39 8 37V29Q8 27 10 27ZM27 27H35Q37 27 37 29V37Q37 39 35 39H27Q25 39 25 37V29Q25 27 27 27ZM44 27H52Q54 27 54 29V37Q54 39 52 39H44Q42 39 42 37V29Q42 27 44 27ZM61 27H69Q71 27 71 29V37Q71 39 69 39H61Q59 39 59 37V29Q59 27 61 27ZM78 27H86Q88 27 88 29V37Q88 39 86 39H78Q76 39 76 37V29Q76 27 78 27ZM23 46H73Q75 46 75 48V54Q75 56 73 56H23Q21 56 21 54V48Q21 46 23 46Z\"/><rect x=\"25\" y=\"10\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><rect x=\"59\" y=\"27\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><g fill=\"#E9E5DE\"><path fill-rule=\"evenodd\" d=\"M32.6 12h1.7v8h-1.6v-.5c-.5.4-1 .6-1.7.6-1.7 0-2.7-1.2-2.7-3.1s1-3.1 2.7-3.1c.6 0 1.1.2 1.6.6ZM31.3 15.4c-.9 0-1.4.6-1.4 1.6s.5 1.6 1.4 1.6 1.4-.6 1.4-1.6-.5-1.6-1.4-1.6Z\"/><path d=\"M67.8 31.2l-1.1 1.1c-.4-.4-.7-.6-1.2-.6-1 0-1.6.7-1.6 1.8s.6 1.8 1.6 1.8c.5 0 .8-.2 1.2-.6l1.1 1.1c-.6.7-1.3 1-2.3 1-2 0-3.3-1.3-3.3-3.3s1.3-3.3 3.3-3.3c1 0 1.7.3 2.3 1Z\"/></g></svg>damianocode</a><nav aria-label=\"Główna\"><a href=\"#\" aria-current=\"page\">Projekty</a><a href=\"#\">Agenci AI</a><a href=\"#\">Umiejętności</a><a href=\"#\">Kontakt</a></nav><a class=\"ds-lang\" href=\"#\" hreflang=\"en\" lang=\"en\" aria-label=\"English version\">EN</a></div>",
+      "css": ".ds-head{display:flex;flex-wrap:wrap;align-items:center;padding:.5rem 1.5rem;background:#e9e5de;border-radius:1.5rem;font-family:\"Anybody Variable\",\"Arial Narrow\",sans-serif}.ds-home{display:inline-flex;align-items:center;gap:.7rem;min-height:2.75rem;color:#17171a;text-decoration:none;font-weight:850;font-stretch:62%;font-size:1.6rem}.ds-home svg{width:3rem;height:2rem}.ds-head nav{margin-left:auto;padding-left:2rem;display:flex;flex-wrap:wrap;gap:0 1.25rem;font-size:1.05rem;font-stretch:90%}.ds-head nav a{display:inline-flex;align-items:center;min-height:2.75rem;color:#17171a;text-decoration:none;background:linear-gradient(transparent,transparent) no-repeat 0 calc(50% + .85em)/100% 2px}.ds-head nav a:hover,.ds-head nav a[aria-current=page]{background-image:linear-gradient(#be2337,#be2337)}.ds-head a:focus-visible{outline:3px solid #be2337;outline-offset:3px}.ds-lang{position:relative;display:inline-flex;align-items:center;min-height:2.75rem;margin-left:1rem;padding-left:1rem;color:#17171a;font-family:\"Anybody Variable\",\"Arial Narrow\",sans-serif;font-size:1.05rem;text-decoration:none;font-weight:700;letter-spacing:.04em;background:linear-gradient(transparent,transparent) no-repeat 0 calc(50% + .85em)/100% 2px;background-origin:content-box;background-clip:content-box}.ds-lang::before{content:\"\";position:absolute;left:0;top:50%;height:1em;border-left:1px solid rgb(23 23 26 / .4);translate:0 -50%}.ds-lang:hover{background-image:linear-gradient(#be2337,#be2337)}@media(max-width:47.99rem){.ds-head .ds-lang{order:1;margin-left:auto;padding-left:0}.ds-head .ds-lang::before{display:none}.ds-head nav{order:2;flex-basis:100%;margin-left:0;padding-left:0}}@media(max-width:30rem){.ds-head nav{gap:0 .8rem;font-stretch:78%}}@media(max-width:22rem){.ds-head nav{gap:0 .55rem;font-stretch:70%}}"
     },
     {
       "name": "Hero sheet",
       "kind": "custom",
       "refersTo": "sheet-hero",
-      "description": "Paper sheet in a soot frame: heavy narrow name, crimson statement, bottom rail.",
+      "description": "Typography and bottom rail of the paper hero sheet in its soot frame. The live page pairs this with responsive manga artwork; the name uses the type-lens motion tokens.",
       "html": "<div class=\"ds-frame\"><div class=\"ds-hero\"><p class=\"ds-name\">Damian<br>Ułaś</p><p class=\"ds-role\">Buduję aplikacje.<br>Ogarniam agentów.</p><dl class=\"ds-rail\"><dd>Zamość · zdalnie</dd><dd><span></span>Otwarty na projekty, B2B albo etat</dd></dl></div></div>",
       "css": ".ds-frame{background:#17171a;padding:.75rem;border-radius:1.9rem}.ds-hero{background:#e9e5de;color:#17171a;border-radius:1.5rem;padding:2rem 2.25rem 1.5rem;font-family:\"Anybody Variable\",\"Arial Narrow\",sans-serif}.ds-name{margin:0;font-size:5.5rem;line-height:.84;font-weight:850;font-stretch:58%;letter-spacing:-.005em}.ds-role{margin:1rem 0 0;color:#be2337;font-size:2rem;line-height:.98;font-weight:850;font-stretch:58%}.ds-rail{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 2rem;margin:1.5rem 0 0;padding-top:.9rem;border-top:1px solid rgb(23 23 26 / .4);font-size:.95rem;font-weight:600;font-stretch:90%}.ds-rail dd{margin:0;display:inline-flex;align-items:center;gap:.5rem}.ds-rail span{width:.55rem;height:.55rem;border-radius:50%;background:#1e6b47}"
     },
@@ -535,6 +555,14 @@
       "description": "Keyboard with crimson d and c keys; recolored only through --mark-* variables.",
       "html": "<div class=\"ds-marks\"><span class=\"ds-on-paper\"><svg aria-hidden=\"true\" viewBox=\"0 0 96 64\"><path fill=\"#17171A\" fill-rule=\"evenodd\" d=\"M8 0H88Q96 0 96 8V56Q96 64 88 64H8Q0 64 0 56V8Q0 0 8 0ZM10 10H18Q20 10 20 12V20Q20 22 18 22H10Q8 22 8 20V12Q8 10 10 10ZM27 10H35Q37 10 37 12V20Q37 22 35 22H27Q25 22 25 20V12Q25 10 27 10ZM44 10H52Q54 10 54 12V20Q54 22 52 22H44Q42 22 42 20V12Q42 10 44 10ZM61 10H69Q71 10 71 12V20Q71 22 69 22H61Q59 22 59 20V12Q59 10 61 10ZM78 10H86Q88 10 88 12V20Q88 22 86 22H78Q76 22 76 20V12Q76 10 78 10ZM10 27H18Q20 27 20 29V37Q20 39 18 39H10Q8 39 8 37V29Q8 27 10 27ZM27 27H35Q37 27 37 29V37Q37 39 35 39H27Q25 39 25 37V29Q25 27 27 27ZM44 27H52Q54 27 54 29V37Q54 39 52 39H44Q42 39 42 37V29Q42 27 44 27ZM61 27H69Q71 27 71 29V37Q71 39 69 39H61Q59 39 59 37V29Q59 27 61 27ZM78 27H86Q88 27 88 29V37Q88 39 86 39H78Q76 39 76 37V29Q76 27 78 27ZM23 46H73Q75 46 75 48V54Q75 56 73 56H23Q21 56 21 54V48Q21 46 23 46Z\"/><rect x=\"25\" y=\"10\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><rect x=\"59\" y=\"27\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><g fill=\"#E9E5DE\"><path fill-rule=\"evenodd\" d=\"M32.6 12h1.7v8h-1.6v-.5c-.5.4-1 .6-1.7.6-1.7 0-2.7-1.2-2.7-3.1s1-3.1 2.7-3.1c.6 0 1.1.2 1.6.6ZM31.3 15.4c-.9 0-1.4.6-1.4 1.6s.5 1.6 1.4 1.6 1.4-.6 1.4-1.6-.5-1.6-1.4-1.6Z\"/><path d=\"M67.8 31.2l-1.1 1.1c-.4-.4-.7-.6-1.2-.6-1 0-1.6.7-1.6 1.8s.6 1.8 1.6 1.8c.5 0 .8-.2 1.2-.6l1.1 1.1c-.6.7-1.3 1-2.3 1-2 0-3.3-1.3-3.3-3.3s1.3-3.3 3.3-3.3c1 0 1.7.3 2.3 1Z\"/></g></svg></span><span class=\"ds-on-soot\"><svg aria-hidden=\"true\" viewBox=\"0 0 96 64\"><path fill=\"#E9E5DE\" fill-rule=\"evenodd\" d=\"M8 0H88Q96 0 96 8V56Q96 64 88 64H8Q0 64 0 56V8Q0 0 8 0ZM10 10H18Q20 10 20 12V20Q20 22 18 22H10Q8 22 8 20V12Q8 10 10 10ZM27 10H35Q37 10 37 12V20Q37 22 35 22H27Q25 22 25 20V12Q25 10 27 10ZM44 10H52Q54 10 54 12V20Q54 22 52 22H44Q42 22 42 20V12Q42 10 44 10ZM61 10H69Q71 10 71 12V20Q71 22 69 22H61Q59 22 59 20V12Q59 10 61 10ZM78 10H86Q88 10 88 12V20Q88 22 86 22H78Q76 22 76 20V12Q76 10 78 10ZM10 27H18Q20 27 20 29V37Q20 39 18 39H10Q8 39 8 37V29Q8 27 10 27ZM27 27H35Q37 27 37 29V37Q37 39 35 39H27Q25 39 25 37V29Q25 27 27 27ZM44 27H52Q54 27 54 29V37Q54 39 52 39H44Q42 39 42 37V29Q42 27 44 27ZM61 27H69Q71 27 71 29V37Q71 39 69 39H61Q59 39 59 37V29Q59 27 61 27ZM78 27H86Q88 27 88 29V37Q88 39 86 39H78Q76 39 76 37V29Q76 27 78 27ZM23 46H73Q75 46 75 48V54Q75 56 73 56H23Q21 56 21 54V48Q21 46 23 46Z\"/><rect x=\"25\" y=\"10\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><rect x=\"59\" y=\"27\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><g fill=\"#E9E5DE\"><path fill-rule=\"evenodd\" d=\"M32.6 12h1.7v8h-1.6v-.5c-.5.4-1 .6-1.7.6-1.7 0-2.7-1.2-2.7-3.1s1-3.1 2.7-3.1c.6 0 1.1.2 1.6.6ZM31.3 15.4c-.9 0-1.4.6-1.4 1.6s.5 1.6 1.4 1.6 1.4-.6 1.4-1.6-.5-1.6-1.4-1.6Z\"/><path d=\"M67.8 31.2l-1.1 1.1c-.4-.4-.7-.6-1.2-.6-1 0-1.6.7-1.6 1.8s.6 1.8 1.6 1.8c.5 0 .8-.2 1.2-.6l1.1 1.1c-.6.7-1.3 1-2.3 1-2 0-3.3-1.3-3.3-3.3s1.3-3.3 3.3-3.3c1 0 1.7.3 2.3 1Z\"/></g></svg></span></div>",
       "css": ".ds-marks{display:flex;gap:1rem}.ds-marks span{display:grid;place-items:center;padding:1.5rem 2rem;border-radius:1.25rem}.ds-on-paper{background:#e9e5de}.ds-on-soot{background:#17171a}.ds-marks svg{width:6rem;height:4rem}"
+    },
+    {
+      "name": "Hero illustration overlays",
+      "kind": "custom",
+      "refersTo": "sheet-hero",
+      "description": "Translatable HTML speech bubble and taped brb note over the manga artwork. The sample shows the overlays independently of the image.",
+      "html": "<div class=\"ds-overlays\"><p class=\"ds-bubble\">Czekamy na człowieka.</p><p class=\"ds-note\" aria-label=\"Zaraz wracam.\">brb</p></div>",
+      "css": ".ds-overlays{position:relative;display:flex;align-items:center;justify-content:space-around;gap:2rem;padding:2rem;background:#e9e5de;color:#17171a;font-family:\"Anybody Variable\",\"Arial Narrow\",sans-serif}.ds-bubble{position:relative;margin:0;padding:.55rem .9rem;border:1.5px solid #17171a;border-radius:1.25rem;background:#e9e5de;font-size:.95rem;line-height:1.25;font-weight:600;font-stretch:90%}.ds-bubble::after{content:\"\";position:absolute;bottom:-.45rem;left:22%;width:.8rem;height:.8rem;border-right:1.5px solid #17171a;border-bottom:1.5px solid #17171a;background:#e9e5de;transform:skewX(-20deg) rotate(45deg)}.ds-note{position:relative;margin:0;padding:.45rem .8rem .5rem;background:color-mix(in srgb,#e9e5de 45%,#fff);font-size:1.5rem;font-weight:850;font-stretch:74%;line-height:1;box-shadow:0 .35rem .6rem -.3rem rgb(23 23 26 / .35);transform:rotate(6deg)}.ds-note::before{content:\"\";position:absolute;left:50%;top:-.45rem;width:2.2rem;height:.8rem;background:rgb(23 23 26 / .16);transform:translateX(-50%) rotate(-4deg)}"
     }
   ],
   "narrative": {
