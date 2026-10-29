@@ -87,7 +87,7 @@ const [emailUser, emailDomain] = profile.email.split('@');
       class="copy"
       type="button"
       data-copy={profile.email}
-      data-done={copy.copied}
+      data-copied-label={copy.copied}
       data-failed={copy.failed}
       hidden
     >
@@ -134,7 +134,7 @@ const [emailUser, emailDomain] = profile.email.split('@');
       try {
         await navigator.clipboard.writeText(button.dataset.copy!);
         copied = true;
-        status.textContent = button.dataset.done!;
+        status.textContent = button.dataset.copiedLabel!;
       } catch {
         status.textContent = button.dataset.failed!;
       }
