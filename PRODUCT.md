@@ -23,13 +23,13 @@ Personal portfolio of Damian Ułaś, a fullstack developer from Zamość. It exi
 ## Operating Context
 - Visitors evaluate the work through project write-ups, screenshots, live links (placemates.pl) and public repositories.
 - Contact happens by email (mailto plus copy-address button), LinkedIn, GitHub, or the CV page.
-- Content is maintained by Damian himself in TS data files (`src/data/*.ts`) and a Markdown blog collection (`src/content/blog`). The README documents this.
+- Content is maintained by Damian himself in TS data files (`src/data/*.ts`), localized CV data (`src/data/cv.json`) and a Markdown blog collection (`src/content/blog`). The README documents this.
 
 ## Capabilities and Constraints
 - Static Astro site, no backend, deployed to GitHub Pages from `main` (`damianocode.github.io`; a custom domain is possible via `public/CNAME`).
 - Sections: Hero, Projects, AI work ("Agenci AI"), Skills (skill-by-project matrix), latest blog posts (hidden while empty), "Po godzinach" (interests), Contact. Separate `/cv` page and blog.
-- Polish at `/`, English at `/en` (home page only; shipped 2026-10-29). Copy lives as `{ pl, en }` in `src/data/*.ts` and in each component's `copy` object; the blog and the CV stay Polish-only. New copy needs both languages.
-- Undecided: whether and when the blog gets real posts, and when the full CV (PDF and experience entries) is published.
+- Polish at `/`, English at `/en`; CV at `/cv` and `/en/cv`, with local PDF downloads in both languages. Copy lives as `{ pl, en }` in data and each component's `copy` object; only the blog remains Polish-only. New copy needs both languages.
+- Undecided: whether and when the blog gets real posts. CV implementation includes experience, skills, projects, education, language switching and build-time validation; deployment follows the site's normal release workflow.
 
 ## Brand Commitments
 - Name: Damian Ułaś. Wordmark: "damianocode" next to the keyboard mark. Hero statement (confirmed by the owner 2026-10-29): "Buduję aplikacje. Ogarniam agentów." The structured role stays "Fullstack developer" (SEO, schema, footer).
@@ -40,7 +40,8 @@ Personal portfolio of Damian Ułaś, a fullstack developer from Zamość. It exi
 - Projects (`src/data/projects.ts`): PlaceMates (lead; Next.js 16, Supabase, PostGIS; live at placemates.pl), Asystent korepetytora (private repo, in progress), Widżet Claude Code (C#/.NET 10/WPF, installer), Claudius (Claude Code plugin), Panel sklepu internetowego (2023–2026; Next.js 14, Clerk, Prisma), plus an archive of six repositories from 2021–2022.
 - Screenshots in `src/assets/projects/` (PlaceMates and tutor app desktop and mobile; widget states).
 - AI process description in `src/data/ai.ts`.
-- **Absent, do not fabricate:** testimonials, client or employer logos, metrics or user numbers, a headshot, a CV PDF or experience history, published blog posts, analytics.
+- CV: original PL/EN PDFs dated 2026-10-29 supplied from Google Drive, stored in `public/cv/`; experience and education transcribed into `src/data/cv.json`.
+- **Absent, do not fabricate:** testimonials, client or employer logos, metrics or user numbers, a headshot, published blog posts, analytics.
 
 ## Product Principles
 1. **Proof before claims.** Every claim leans on a shipped project, a link or a repository; nothing is asserted that the work does not show.
