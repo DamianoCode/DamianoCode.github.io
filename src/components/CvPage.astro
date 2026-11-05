@@ -1,0 +1,116 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCv, cvPath } from '../data/cv';
+import { getProfile, mailto } from '../data/profile';
+import { getProjects } from '../data/projects';
+import { home, localeOf, languageTag } from '../i18n';
+
+const locale = localeOf(Astro);
+const cv = getCv(locale);
+const profile = getProfile(locale);
+const projects = getProjects(locale).filter((p) => p.id !== 'ecommerce');
+const copy = {
+  pl: { title: 'CV', download: 'Pobierz CV', open: 'Otwórz PDF', language: 'Polski', updated: 'Aktualizacja', other: 'CV in English', experience: 'Doświadczenie', skills: 'Umiejętności', projects: 'Wybrane projekty', education: 'Wykształcenie i języki', contact: 'Porozmawiajmy o współpracy', back: 'Zobacz portfolio', description: 'CV Damiana Ułasia: doświadczenie w ERP/WMS, aplikacjach webowych i pracy z agentami AI. Przeczytaj online lub pobierz PDF.' },
+  en: { title: 'CV', download: 'Download CV', open: 'Open PDF', language: 'English', updated: 'Updated', other: 'CV po polsku', experience: 'Experience', skills: 'Skills', projects: 'Selected projects', education: 'Education and languages', contact: 'Let’s talk about working together', back: 'Explore the portfolio', description: 'Damian Ułaś’s CV: experience with ERP/WMS, web applications and AI agents. Read online or download the PDF.' },
+}[locale];
+const otherLocale = locale === 'pl' ? 'en' : 'pl';
+const formattedDate = new Intl.DateTimeFormat(languageTag[locale], { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(cv.document.updated));
+---
+
+<Base title={`CV, ${profile.fullName}, ${profile.role}`} description={copy.description} alternates={{ pl: '/cv', en: '/en/cv' }}>
+  <h1 slot="masthead" class="page-title">{copy.title}</h1>
+  <article class="wrap page cv">
+    <div class="cv-intro">
+      <div class="identity">
+        <h2>{profile.fullName}</h2>
+        <p class="role">{profile.role}</p>
+      </div>
+      <aside class="documents" aria-label={locale === 'pl' ? 'CV w PDF' : 'CV as PDF'}>
+        <a class="download" href={cv.document.path} download={`Damian-Ulas-CV-${locale.toUpperCase()}.pdf`}>{copy.download} <span>PDF</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M5 16v5h14v-5" /></svg></a>
+        <p class="document-meta">{copy.language} · PDF · {Math.ceil(cv.document.bytes / 1024)} KB<br />{copy.updated}: <time datetime={cv.document.updated}>{formattedDate}</time></p>
+        <p class="actions"><a href={cv.document.path} type="application/pdf">{copy.open}</a><a href={cvPath(otherLocale)} lang={otherLocale} hreflang={otherLocale}>{copy.other}</a></p>
+      </aside>
+      <div class="profile-copy">
+        <p class="summary">{cv.summary}</p>
+        <p class="meta">{profile.city} · {profile.remote} · {profile.availability}</p>
+        <p class="actions"><a href={mailto()}>{profile.email}</a><a href={profile.linkedin} rel="me">LinkedIn</a></p>
+      </div>
+    </div>
+    <nav class="contents actions" aria-label={locale === 'pl' ? 'Sekcje CV' : 'CV sections'}>
+      <a href="#doswiadczenie">{copy.experience}</a><a href="#umiejetnosci">{copy.skills}</a><a href="#projekty-cv">{copy.projects}</a><a href="#wyksztalcenie">{copy.education}</a>
+    </nav>
+    <section class="cv-section" id="doswiadczenie" aria-labelledby="experience-title">
+      <h2 id="experience-title">{copy.experience}</h2>
+      <ol>{cv.experience.map((entry) => <li class="entry"><p class="period">{entry.period}</p><div><h3>{entry.title}</h3><p class="place">{entry.place}</p><p>{entry.description}</p></div></li>)}</ol>
+    </section>
+    <section class="cv-section" id="umiejetnosci" aria-labelledby="skills-title">
+      <h2 id="skills-title">{copy.skills}</h2>
+      <dl>{cv.skills.map((skill) => <div class="entry"><dt>{skill.title}</dt><dd>{skill.description}</dd></div>)}</dl>
+    </section>
+    <section class="cv-section" id="projekty-cv" aria-labelledby="projects-title">
+      <h2 id="projects-title">{copy.projects}</h2>
+      <ol>{projects.map((project) => <li class="entry"><p class="period">{project.year}</p><div><h3><a href={`${home(locale)}#${project.id}`}>{project.name}</a></h3><p class="place">{project.kind}{project.status && ` · ${project.status}`}</p><p>{project.summary}</p><p class="stack">{project.stack.join(', ')}</p></div></li>)}</ol>
+    </section>
+    <section class="cv-section" id="wyksztalcenie" aria-labelledby="education-title">
+      <h2 id="education-title">{copy.education}</h2>
+      <ol>{cv.education.map((entry) => <li class="entry"><p class="period">{entry.period}</p><div><h3>{entry.title}</h3><p>{entry.place}</p><p class="languages">{cv.languages}</p></div></li>)}</ol>
+    </section>
+    <div class="closing"><h2>{copy.contact}</h2><p class="actions"><a href={mailto()}>{profile.email}</a><a href={home(locale)}>{copy.back}</a><a href={cv.document.path} download>{copy.download} (PDF)</a></p></div>
+  </article>
+</Base>
+
+<style>
+  .cv { max-width: 76rem; }
+  .cv-intro { display: grid; grid-template-areas: 'identity' 'documents' 'profile'; gap: 1.5rem 4rem; align-items: start; }
+  .identity { grid-area: identity; }
+  .profile-copy { grid-area: profile; }
+  .identity h2 { font-size: var(--step-3); font-weight: var(--heavy); font-stretch: var(--tight-sub); }
+  .role { font-family: var(--display); font-size: var(--step-1); margin-top: 0.25rem; }
+  .summary { max-width: 65ch; }
+  .meta, .document-meta, .period, .place, .stack { font-family: var(--display); font-size: var(--label); color: var(--ink-soft); }
+  .meta { margin-top: 1.5rem; }
+  .documents { grid-area: documents; background: var(--paper-deep); padding: 1.5rem; border-radius: var(--radius-control); }
+  .download { display: flex; align-items: center; gap: 0.65rem; min-height: 3rem; padding: 0.7rem 1.1rem; background: var(--brand-crimson); color: var(--brand-paper); border-radius: var(--radius-control); text-decoration: none; font: 600 var(--label-l) var(--display); }
+  .download:hover { background: var(--brand-crimson-deep); }
+  .download span { font-size: var(--label-s); }
+  .download svg { width: 1.25rem; height: 1.25rem; margin-left: auto; fill: none; stroke: currentColor; stroke-width: 1.6; }
+  .document-meta { margin-block: 1rem 0.5rem; line-height: 1.6; }
+  .documents .actions { gap: 0 1rem; font-size: var(--label); }
+  @media (prefers-color-scheme: light) { .documents .actions a { color: var(--brand-crimson-deep); } }
+  .contents { margin-block: 2.5rem 1rem; padding-block: 1rem; border-block: 1px solid var(--rule); }
+  .cv-section { padding-top: 2.5rem; scroll-margin-top: 1rem; }
+  .cv-section + .cv-section { margin-top: 1.5rem; }
+  .cv-section h2, .closing h2 { font-size: var(--step-3); font-weight: var(--heavy); font-stretch: var(--tight-sub); margin-bottom: 1.25rem; }
+  ol, dl { margin: 0; padding: 0; list-style: none; }
+  .entry { display: grid; gap: 0.5rem 3rem; padding-block: 1.5rem; border-top: 1px solid var(--rule); }
+  .entry p, dd { max-width: 65ch; }
+  .entry h3 { font-size: var(--step-1); }
+  .entry h3 a { color: inherit; text-decoration-color: var(--accent); }
+  .place { margin-block: 0.3rem 0.75rem; }
+  .period { font-variant-numeric: tabular-nums; }
+  dt { font-family: var(--display); font-weight: 600; }
+  dd { margin: 0; }
+  .stack, .languages { margin-top: 0.75rem; }
+  .closing { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--rule); }
+  @media (min-width: 48rem) { .entry { grid-template-columns: 11rem 1fr; } }
+  @media (min-width: 64rem) { .cv-intro { grid-template-columns: minmax(0, 1fr) 20rem; grid-template-areas: 'identity documents' 'profile documents'; } }
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    :global(header.masthead), :global(.site-foot), .documents, .contents, .closing { display: none !important; }
+    :global(body) { background: white !important; color: black !important; }
+    :global(.masthead) { background: white !important; color: black !important; padding: 0; }
+    :global(.masthead-inner) { padding: 0 !important; }
+    :global(.page-title) { font-size: var(--step-2); }
+    .cv { max-width: none; padding: 1rem 0; font-size: 10pt; }
+    .cv-intro { display: block; }
+    .identity { margin-bottom: 1rem; }
+    .cv-section { padding-top: 1rem; }
+    .cv-section + .cv-section { margin-top: 0; }
+    .cv-section h2 { font-size: 16pt; break-after: avoid; }
+    .entry { grid-template-columns: 8rem 1fr; padding-block: 0.7rem; break-inside: avoid; }
+    .entry h3 { font-size: 12pt; }
+    .meta, .period, .place, .stack { color: black; font-size: 9pt; }
+    .entry p, dd, .summary { max-width: none; }
+    a { color: black; }
+  }
+</style>

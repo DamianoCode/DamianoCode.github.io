@@ -1,6 +1,6 @@
 ---
 import BrandMark from './BrandMark.astro';
-import { cvReady } from '../data/cv';
+import { cvReady, cvPath } from '../data/cv';
 import { getProfile } from '../data/profile';
 import { home, localeOf } from '../i18n';
 import { getPublishedPosts } from '../lib/posts';
@@ -31,14 +31,15 @@ const nav = [
   { href: anchor('ai'), label: labels.ai },
   { href: anchor('umiejetnosci'), label: labels.skills },
   { href: '/blog', label: 'Blog', current: path.startsWith('/blog'), hidden: !hasPosts },
-  { href: '/cv', label: 'CV', current: path.startsWith('/cv'), hidden: !cvReady || locale !== 'pl' },
+  { href: cvPath(locale), label: 'CV', current: /^\/(en\/)?cv(?:\.html|\/)?$/.test(path), hidden: !cvReady },
   { href: anchor('kontakt'), label: labels.contact },
 ].filter((item) => !item.hidden);
 
-// Przełącznik prowadzi na stronę główną drugiego języka (podstrony są tylko po polsku).
+// CV zachowuje podstronę podczas zmiany języka; blog pozostaje tylko po polsku.
+const isCv = /^\/(en\/)?cv(?:\.html|\/)?$/.test(path);
 const other = locale === 'pl'
-  ? { href: home('en'), short: 'EN', name: 'English version', lang: 'en' }
-  : { href: home('pl'), short: 'PL', name: 'Wersja polska', lang: 'pl' };
+  ? { href: isCv ? cvPath('en') : home('en'), short: 'EN', name: 'English version', lang: 'en' }
+  : { href: isCv ? cvPath('pl') : home('pl'), short: 'PL', name: 'Wersja polska', lang: 'pl' };
 ---
 
 <div class="wrap site-head" id="top">

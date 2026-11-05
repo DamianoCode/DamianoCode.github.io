@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import avatar from '../../assets/brand/awatar.webp';
-import { cvReady } from '../../data/cv';
+import { cvReady, cvPath } from '../../data/cv';
 import { getProfile, getSubjects, mailto } from '../../data/profile';
 import { getProjects } from '../../data/projects';
 import { projectTone } from '../../data/tones';
@@ -11,8 +11,7 @@ const locale = localeOf(Astro);
 const profile = getProfile(locale);
 const subjects = getSubjects(locale);
 const projects = getProjects(locale);
-// CV jest tylko po polsku, więc angielska strona zawsze prosi o nie mailem.
-const showCv = cvReady && locale === 'pl';
+const showCv = cvReady;
 
 const copy = {
   pl: {
@@ -113,7 +112,7 @@ const [emailUser, emailDomain] = profile.email.split('@');
     <p class="actions elsewhere">
       <a href={profile.linkedin} rel="me">LinkedIn</a>
       <a href={profile.github} rel="me">GitHub</a>
-      {showCv ? <a href="/cv">CV</a> : <a href={mailto(subjects.cv)}>{copy.askCv}</a>}
+      {showCv ? <a href={cvPath(locale)}>CV</a> : <a href={mailto(subjects.cv)}>{copy.askCv}</a>}
     </p>
   </div>
   </div>
