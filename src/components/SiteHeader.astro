@@ -6,7 +6,7 @@ import { home, localeOf } from '../i18n';
 import { getPublishedPosts } from '../lib/posts';
 
 /**
- * Pasek nagłówka: znak, menu i przełącznik języka. Zwykle renderuje go Base; strona główna wstawia go do
+ * Pasek nagłówka: znak, menu sekcji, skróty do podstron i przełącznik języka. Zwykle renderuje go Base; strona główna wstawia go do
  * arkusza hero, żeby poruszał się razem z nim. Element <header> (landmark banner) daje arkusz, w którym
  * pasek leży.
  */
@@ -25,18 +25,21 @@ const labels = {
 // Kotwice sekcji są takie same w obu językach; zmienia się tylko strona, na której leżą.
 const anchor = (id: string) => `${root === '/' ? '/' : root}#${id}`;
 
-// Blog i CV trafiają do menu dopiero wtedy, gdy mają treść: link do pustej strony to ślepy zaułek.
+// Menu prowadzi wyłącznie do sekcji, w tej samej kolejności co treść strony.
 const nav = [
   { href: anchor('projekty'), label: labels.projects },
   { href: anchor('ai'), label: labels.ai },
   { href: anchor('umiejetnosci'), label: labels.skills },
-  { href: '/blog', label: 'Blog', current: path.startsWith('/blog'), hidden: !hasPosts },
-  { href: cvPath(locale), label: 'CV', current: /^\/(en\/)?cv(?:\.html|\/)?$/.test(path), hidden: !cvReady },
   { href: anchor('kontakt'), label: labels.contact },
-].filter((item) => !item.hidden);
+];
 
 // CV zachowuje podstronę podczas zmiany języka; blog pozostaje tylko po polsku.
 const isCv = /^\/(en\/)?cv(?:\.html|\/)?$/.test(path);
+// Podstrony mają osobną grupę przy języku; puste strony nie dostają skrótu.
+const pages = [
+  { href: '/blog', label: 'Blog', current: path.startsWith('/blog'), hidden: !hasPosts },
+  { href: cvPath(locale), label: 'CV', current: isCv, hidden: !cvReady },
+].filter((item) => !item.hidden);
 const other = locale === 'pl'
   ? { href: isCv ? cvPath('en') : home('en'), short: 'EN', name: 'English version', lang: 'en' }
   : { href: isCv ? cvPath('pl') : home('pl'), short: 'PL', name: 'Wersja polska', lang: 'pl' };
@@ -46,12 +49,15 @@ const other = locale === 'pl'
   <a class="home" href={root}><BrandMark />{profile.wordmark}</a>
   <nav aria-label={labels.nav}>
     {nav.map((item) => (
-      <a href={item.href} aria-current={item.current ? 'page' : undefined}>
-        {item.label}
-      </a>
+      <a href={item.href}>{item.label}</a>
     ))}
   </nav>
-  <a class="lang" href={other.href} hreflang={other.lang} lang={other.lang} aria-label={other.name}>{other.short}</a>
+  <div class="utilities">
+    {pages.map((item) => (
+      <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.label}</a>
+    ))}
+    <a class="lang" href={other.href} hreflang={other.lang} lang={other.lang} aria-label={other.name}>{other.short}</a>
+  </div>
 </div>
 
 <style>
@@ -65,14 +71,14 @@ const other = locale === 'pl'
     margin-left: auto;
     padding-left: 2rem;
   }
-  /* Telefon: znak i przełącznik języka w pierwszym wierszu, menu sekcji w całej szerokości pod nimi. */
+  /* Telefon: znak i skróty w pierwszym wierszu, cztery kotwice w całej szerokości pod nimi. */
   @media (max-width: 47.99rem) {
-    .site-head .lang {
+    .site-head .utilities {
       order: 1;
       margin-left: auto;
       padding-left: 0;
     }
-    .site-head .lang::before {
+    .site-head .utilities::before {
       display: none;
     }
     .site-head nav {
@@ -104,7 +110,8 @@ const other = locale === 'pl'
     font-stretch: 90%;
   }
   /* Cel dotyku ma co najmniej 44 px wysokości; kreska aktywnego linku leży tuż pod napisem. */
-  nav a {
+  nav a,
+  .utilities a {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
@@ -112,32 +119,29 @@ const other = locale === 'pl'
     text-decoration: none;
     background: linear-gradient(transparent, transparent) no-repeat 0 calc(50% + 0.85em) / 100% 2px;
   }
-  .lang:hover,
+  .utilities a:hover,
+  .utilities a[aria-current='page'],
   nav a:hover,
-  nav a[aria-current='page'] {
+  nav a:active {
     background-image: linear-gradient(var(--accent), var(--accent));
   }
-  /* Przełącznik języka: skrót w grubszym kroju, oddzielony od menu cienką kreską. Na komputerze stoi za menu,
-     na telefonie w pierwszym wierszu obok znaku, żeby menu sekcji zmieściło się w jednym wierszu pod nim. */
-  .lang {
+  /* Cienka kreska oddziela przejścia do podstron i języka od przewijania sekcji. */
+  .utilities {
     position: relative;
     display: inline-flex;
     align-items: center;
-    min-height: 2.75rem;
+    gap: 1rem;
     margin-left: 1rem;
     padding-left: 1rem;
-    color: var(--ink);
     font-family: var(--display);
     font-size: var(--label-l);
-    text-decoration: none;
-    background: linear-gradient(transparent, transparent) no-repeat 0 calc(50% + 0.85em) / 100% 2px;
+    font-stretch: 90%;
+  }
+  .lang {
     font-weight: 700;
     letter-spacing: 0.04em;
-    /* Kreska po najechaniu tylko pod skrótem, nie pod odstępem od separatora. */
-    background-origin: content-box;
-    background-clip: content-box;
   }
-  .lang::before {
+  .utilities::before {
     content: '';
     position: absolute;
     left: 0;
