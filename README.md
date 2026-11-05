@@ -13,11 +13,12 @@ npm run images   # renderuje public/og.jpg (wymaga Chrome)
 
 - **Dwa języki:** polski pod `/`, angielski pod `/en` (strona główna). Każdy tekst ma wersję `pl` i `en`:
   w danych (`src/data/*.ts`) i w obiekcie `copy` na początku komponentu. Brak tłumaczenia to błąd typu w `astro check`.
-  Blog i CV są tylko po polsku. Nowe dopasowane słowo (tytuł sekcji, hasło kafla) wymaga zmierzenia `fit` w obu językach.
+  Blog jest tylko po polsku. CV ma wersje `/cv` i `/en/cv`. Nowe dopasowane słowo (tytuł sekcji, hasło kafla) wymaga zmierzenia `fit` w obu językach.
 - **Projekty, umiejętności, sekcja AI, teksty SEO:** `src/data/projects.ts`, `skills.ts`, `ai.ts`, `profile.ts`. Tabela umiejętności buduje się z pola `usedIn`.
 - **Blog:** plik `.md` w `src/content/blog/` = wpis (wzór: `jak-pisac-wpisy.md`, ma `draft: true`). Wpisy trafiają do `/rss.xml` i sitemapy.
-- **CV:** uzupełnij `src/data/cv.ts` (doświadczenie, edukacja, opcjonalnie PDF w `public/`). Dopóki jest puste, `/cv` pokazuje komunikat i ma `noindex`.
-  Gdy CV będzie gotowe, usuń filtr `/cv` z `astro.config.mjs`, żeby trafiło do sitemapy.
+- **CV:** treść PL/EN edytuj w `src/data/cv.json`. PDF-y znajdują się w `public/cv/damian-ulas-cv-pl.pdf` i `public/cv/damian-ulas-cv-en.pdf`; podmieniaj je pod tymi samymi nazwami. Zaktualizuj `document.updated` (data dokumentu, `YYYY-MM-DD`) i odpowiadającą treść HTML w obu językach. Rozmiar pliku oblicza się automatycznie. Projekty są pobierane ze wspólnych danych portfolio.
+  `src/data/cv.ts` i schemat w `src/lib/cv-validation.mjs` sprawdzają kompletność obu języków, lokalne ścieżki, istnienie PDF-ów, ich nagłówek, zakończenie, limit 5 MB i poprawną datę kalendarzową. Błąd przerywa build zamiast publikować niedziałający link. Uruchom `npm run test:cv`, `npm run check` i `npm run build`, a potem sprawdź otwieranie i pobieranie obu dokumentów. CV automatycznie trafia do sitemapy.
+  Źródłem pierwszych PDF-ów są dokumenty PL/EN z Dysku Google z 2026-10-29. Publikujemy wyłącznie gotowe PDF-y i dane strony, bez DOCX-ów, notatek weryfikacyjnych ani danych dostępowych. Pliki są publiczne, zawierają kontakt z oryginałów (w tym telefon) i nie wymagają dostępu do Dysku Google. Przed podmianą przejrzyj treść i metadane PDF-u; kontrola formatu przy buildzie nie jest skanerem bezpieczeństwa.
 - **Menu i stopka:** „Blog” i RSS pokazują się dopiero po pierwszym opublikowanym wpisie, a „CV” dopiero, gdy `cv.ts` ma treść.
 - **Typografia:** `src/middleware.ts` przy budowaniu wstawia twardą spację po jednoliterowych słowach (a, i, o, u, w, z), więc nie zostają na końcu wiersza. W tekstach nie trzeba wpisywać `&nbsp;`.
 

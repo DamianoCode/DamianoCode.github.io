@@ -1,13 +1,12 @@
 ---
-import { cvReady } from '../../data/cv';
+import { cvReady, cvPath } from '../../data/cv';
 import { getProfile, getSubjects, mailto } from '../../data/profile';
 import { localeOf } from '../../i18n';
 
 const locale = localeOf(Astro);
 const profile = getProfile(locale);
 const subjects = getSubjects(locale);
-// CV jest tylko po polsku, więc angielska strona zawsze prosi o nie mailem.
-const showCv = cvReady && locale === 'pl';
+const showCv = cvReady;
 
 const copy = {
   pl: {
@@ -55,7 +54,7 @@ const copy = {
       <h3 class="team-title">{copy.team}</h3>
       <p>{copy.forms}, {profile.remote}.</p>
       <p class="actions team-actions">
-        {showCv ? <a href="/cv">{copy.cv}</a> : <a href={mailto(subjects.cv)}>{copy.askCv}</a>}
+        {showCv ? <a href={cvPath(locale)}>{copy.cv}</a> : <a href={mailto(subjects.cv)}>{copy.askCv}</a>}
         <a href={mailto(subjects.job)}>{copy.job}</a>
       </p>
     </div>

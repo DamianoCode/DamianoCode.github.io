@@ -1,0 +1,34 @@
+{
+  "pl": {
+    "document": { "path": "/cv/damian-ulas-cv-pl.pdf", "updated": "2026-10-29" },
+    "summary": "Tworzę aplikacje webowe od bazy danych po interfejs. Od stycznia 2022 rozwijam system EMX w Emultimax; realizuję też własne projekty w Next.js i PostgreSQL oraz narzędzia do pracy z agentami AI. Łączę doświadczenie w systemach ERP/WMS i e-commerce z codzienną pracą w Claude Code.",
+    "experience": [
+      { "period": "01.2022 – obecnie", "title": "Web Developer", "place": "Emultimax", "description": "Rozwijam i utrzymuję EMX, wewnętrzny system klasy ERP w React, Node.js i MSSQL. Zaprojektowałem i wdrożyłem moduł WMS; wspieram rozwój sklepu internetowego oraz tworzę i utrzymuję strony firmowe. Pracuję zespołowo z kontrolą wersji Git." },
+      { "period": "11.2020 – obecnie", "title": "Developer", "place": "Freelance", "description": "Tworzę i rozwijam aplikacje webowe od frontendu i backendu po wdrożenie. Wcześniej zbudowałem i rozwijałem sklep vape-point.pl." },
+      { "period": "10.2021 – 12.2021", "title": "Specjalista SEO", "place": "Sunrise System", "description": "Analizowałem strony pod kątem SEO, wdrażałem zmiany on-page i współpracowałem z działem copywritingu." }
+    ],
+    "skills": [
+      { "title": "Frontend", "description": "TypeScript, JavaScript, React, Next.js, HTML, CSS, Tailwind CSS" },
+      { "title": "Backend i dane", "description": "Node.js, NestJS, Express, REST API, PostgreSQL, MSSQL, Drizzle, Prisma" },
+      { "title": "Narzędzia", "description": "Git, GitHub, Claude Code, agenci AI; C# / .NET / WPF w projekcie desktopowym" }
+    ],
+    "education": [{ "period": "10.2016 – 03.2020", "title": "Informatyka, inż.", "place": "Politechnika Lubelska" }],
+    "languages": "Polski: ojczysty · Angielski: B2"
+  },
+  "en": {
+    "document": { "path": "/cv/damian-ulas-cv-en.pdf", "updated": "2026-10-29" },
+    "summary": "I build web applications from database to interface. Since January 2022, I have developed EMX at Emultimax alongside personal projects using Next.js and PostgreSQL and tools for working with AI agents. My experience spans ERP/WMS systems, e-commerce and daily development with Claude Code.",
+    "experience": [
+      { "period": "01.2022 – Present", "title": "Web Developer", "place": "Emultimax", "description": "Develop and maintain EMX, an internal ERP-class system built with React, Node.js and MSSQL. Designed and implemented a WMS module; support the company online store and build and maintain corporate websites. Collaborate in a team using Git version control." },
+      { "period": "11.2020 – Present", "title": "Developer", "place": "Freelance", "description": "Build and maintain web applications from frontend and backend to deployment. Previously built and developed the vape-point.pl online store." },
+      { "period": "10.2021 – 12.2021", "title": "SEO Specialist", "place": "Sunrise System", "description": "Analysed websites for SEO, implemented on-page changes and collaborated with the copywriting team." }
+    ],
+    "skills": [
+      { "title": "Frontend", "description": "TypeScript, JavaScript, React, Next.js, HTML, CSS, Tailwind CSS" },
+      { "title": "Backend and data", "description": "Node.js, NestJS, Express, REST APIs, PostgreSQL, MSSQL, Drizzle, Prisma" },
+      { "title": "Tools", "description": "Git, GitHub, Claude Code, AI agents; C# / .NET / WPF in a desktop project" }
+    ],
+    "education": [{ "period": "10.2016 – 03.2020", "title": "BEng in Computer Science", "place": "Lublin University of Technology" }],
+    "languages": "Polish: native · English: B2"
+  }
+}
