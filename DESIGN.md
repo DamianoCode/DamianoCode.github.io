@@ -42,6 +42,19 @@ typography:
     fontWeight: 850
     lineHeight: 1
     fontVariation: "'wdth' 74"
+  wordmark:
+    fontFamily: "'Anybody Variable', 'Arial Narrow', sans-serif"
+    fontSize: "1.6rem"
+    fontWeight: 850
+    lineHeight: 1.6
+    letterSpacing: "-0.005em"
+    fontVariation: "'wdth' 62"
+  cv-heading:
+    fontFamily: "'Anybody Variable', 'Arial Narrow', sans-serif"
+    fontSize: "clamp(2.2rem, 5vw, 2.67rem)"
+    fontWeight: 850
+    lineHeight: 1.02
+    fontVariation: "'wdth' 74"
   body:
     fontFamily: "'Literata Variable', Georgia, serif"
     fontSize: "1.125rem"
@@ -96,6 +109,17 @@ components:
     padding: "0.7rem 1.35rem"
   button-primary-hover:
     backgroundColor: "{colors.crimson-deep}"
+  cv-download:
+    backgroundColor: "{colors.crimson}"
+    textColor: "{colors.paper}"
+    typography: "{typography.label-large}"
+    rounded: "{rounded.control}"
+    padding: "0.7rem 1.1rem"
+  cv-documents:
+    backgroundColor: "{colors.paper-deep}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.control}"
+    padding: "1.5rem"
   button-on-crimson:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.crimson}"
@@ -212,6 +236,8 @@ The fallbacks are local Arial and Georgia with `size-adjust` (108% and 105%), so
 - **Kinetic section title** (850, up to 9rem, 5.5rem below 40rem, fitted to the column, width 58%): grows from width 50% / weight 200 to the display voice as it enters, like ink filling in; the start state is narrower than the end, so it never overflows. Size is `100cqi / (--fit × 1.05)` against the `.wrap` column (a size container), so titles inside sheets respect the sheet's own inset. The phone cap keeps all titles within 76–88px instead of swinging with word length. `--fit` is the width in em at the end state.
 - **Title** (product names): 850 at width 58%, clamp(2.75rem, 12.5vw, 7rem), min(7.5rem, 6.6vw) from 64rem; about half the section title on phones, so the product never reads as a caption.
 - **Subhead** (850, width 74%).
+- **Wordmark** (850, width 62%, 1.6rem, tracking -0.005em): the lowercase signature beside the keyboard mark, independent of the general label scale.
+- **CV heading** (850, width 74%, clamp(2.2rem, 5vw, 2.67rem), line-height 1.02): identity and section headings in the reading-oriented CV layout.
 - **Body** (Literata 400, 1.125rem, line-height 1.6, max 33em). **Small** (`--step-small`, 1rem). **Lead** (`--lead`, clamp(1.2rem, 1rem + 1vw, 1.5rem)).
 - **Label**, Anybody only: `--label-s` 0.85rem (chips, footer, matrix group headers in capitals), `--label` 0.95rem at width 85–95% (metadata, hero rail), `--label-l` 1.05rem weight 600 (actions, navigation, dock).
 
@@ -227,6 +253,12 @@ The fallbacks are local Arial and Georgia with `size-adjust` (108% and 105%), so
 Content sits in a centered column (`.wrap`, max 88rem, gutter clamp(1rem, 4vw, 3.5rem)). Sheets break out to almost the full window (a sheet gap from the edges, capped at 90rem so their content lines up with section titles). The hero fills the first viewport inside its soot frame: header on top, then the name, the crimson statement, a short intro, the two actions and a bottom rail (hairline, "Zamość · zdalnie" on the left, availability on the right). On a 375×667 phone the primary action stays in the first screen. From 64rem the hero is a 5fr/7fr grid: name, statement, intro and actions on the left, the 3:2 illustration on the right resting on the rail's hairline, its width capped at (100svh − 13rem) × 1.5 so the hero still fits the first screen. Below 64rem a separate low 3:1 composition sits between the actions and the rail, with a strip above it for the bubble and note; below 48rem it bleeds almost to the sheet edge. The body is a full-height column, so the footer sits at the bottom of short subpages.
 
 Sections are generous (block padding clamp(3rem, 9vh, 6.5rem)). Product cards stack: from 64rem wide and 44rem tall they stick to the top with a growing offset, a denser variant between 44rem and 50rem of height; on phones and short windows they keep their natural height and slide over each other. Bentos use 7fr/5fr or a 12-column grid from 60rem. Key breakpoints: 30rem, 40rem, 48rem, 52rem, 60rem, 64rem.
+
+The homepage hero and every subpage masthead share the full-width top-sheet rule: only the sheet gap separates them from the window edges, including on 1920px and 2560px displays. The shared header and masthead title also span that sheet with the normal gutter, independently of the 88rem content column. The CV reading column stays narrower for prose. Keep this geometry in the shared `sheet-wide` rule and `SiteHeader`, rather than a homepage-only header override.
+
+The header separates section navigation from page shortcuts. Below 48rem, the mark and the page/language group share the first row; the four section links occupy the full second row. Section labels narrow from width 90% to 78% below 30rem, then 70% below 22rem, with gaps reducing from 1.25rem to 0.8rem and 0.55rem.
+
+The CV reading column is capped at 76rem with paragraphs no wider than 65ch. On phones its opening grid reads identity, PDF panel, then profile copy. From 64rem the PDF panel occupies a 20rem right column beside the identity and profile; from 48rem list entries use an 11rem metadata column and a flexible text column. The print view is a separate A4 reading layout with 14mm page margins, 10pt body text and 8rem metadata columns; navigation, PDF controls and closing actions are omitted.
 
 **The Content Line Rule.** Whatever breaks out to the edges, its text starts on the same line as the section titles.
 
@@ -265,7 +297,12 @@ Hairline border in the local line color, `--radius-control`, Anybody 0.85rem at 
 - **Inverted sheet:** the AI section swaps paper and ink (soot sheet in light mode, paper sheet in dark mode).
 
 ### Navigation
-One `SiteHeader` everywhere: the keyboard mark and the wordmark "damianocode" (Anybody 850 at width 62%, 1.6rem) on the left, links on the right in Anybody at width 90% (78% under 30rem), 44px targets, a 2px crimson underline on hover and for the current page. Blog appears once it has content (Polish only); CV is available in Polish and English. After the menu sits the language switch ("EN" on Polish pages, "PL" on English ones), Anybody 700 with a hairline separator; on CV it stays on the corresponding CV route. Below 48rem it moves to the first row next to the mark and the section menu takes the full second row.
+One `SiteHeader` everywhere: the keyboard mark and the wordmark "damianocode" on the left, four section links on the right in content order: Projects, AI agents, Skills, Contact. On subpages these links return to the matching homepage anchors. CV and, once it has published content, the Polish-only Blog sit in a separate page/language group after the section menu. A 1px ink hairline at 40% opacity separates the groups on desktop; it disappears in the two-row phone layout. The language switch ("EN" on Polish pages, "PL" on English ones) uses Anybody 700 with 0.04em tracking; on CV it preserves the corresponding CV route.
+
+All header links have 44px minimum height and a 2px local-accent underline on hover. Page shortcuts use the same underline and `aria-current="page"` for the current page; section links have a pressed underline, without claiming a current-page state. Keyboard focus keeps the local 3px outline. The header inherits paper/ink colors from the hero or paper-on-crimson from the subpage masthead; the page/language group is separated by spacing rather than an external-link icon. Below 48rem that whole group moves beside the mark and the four section links take the second row.
+
+### CV document panel
+A quiet Paper Deep container with `--radius-control` corners and 1.5rem padding. The crimson download action has a paper label, a smaller PDF tag and a drawn 1.25rem download arrow; it uses Anybody 600 at the large-label size, 0.7rem / 1.1rem padding and a minimum height of 3rem. Hover deepens to Crimson Deep; focus keeps the local accent outline. Document language, size and date sit below in the metadata face, followed by links to open the PDF and switch CV language. In light mode those secondary links use Crimson Deep for contrast; in dark mode they use Night Crimson. This panel is tonal rather than lifted: no shadow. It appears before the profile text on phones and beside it on wide screens.
 
 ### Brand mark (signature)
 A keyboard: a soot body with ten key cut-outs and a space bar, two of them crimson keys carrying a paper "d" and "c". Geometry lives in `public/brand/znak-klawiatura.svg` and is copied into `src/data/brand.ts`; `BrandMark` recolors it only through `--mark-body`, `--mark-key`, `--mark-letter` (on crimson: paper body, soot keys). On load someone types the signature once: the d key presses, then the c (0.32s each); no motion under reduced motion. The favicon is a simplified six-key version on a soot square (`public/favicon.svg`, `favicon.ico`, `apple-touch-icon.png`). The illustrated avatar signs off the Contact sheet; everywhere else it lives on social profiles.
@@ -278,7 +315,10 @@ A keyboard: a soot body with ten key cut-outs and a space bar, two of them crims
 - **Share image:** `scripts/og.html` lays the wordmark, the name and "Człowiek w pętli." over the night scene's empty sky (`scripts/assets/noc.webp`), rendered to `public/og.jpg` by `npm run images`.
 
 ### Subpage masthead
-Blog, CV and 404 open with a crimson sheet holding the site header and the page title; content follows on paper. The top part is the page's `<header>` (banner landmark), the title part opens `<main>`.
+Blog, CV and 404 open with a full-width crimson sheet holding the shared site header and the page title; content follows on paper. Its edges and header alignment match the homepage hero at every viewport width. The top part is the page's `<header>` (banner landmark), the title part opens `<main>`.
+
+### Page transitions
+Same-origin document navigation uses native cross-document View Transitions: a 220ms ease-in-out crossfade for the page, with the shared header captured separately under `site-header`. This keeps its position continuous while the paper and crimson contexts blend. Ordinary document navigation reinitializes the page's existing scripts. Unsupported browsers use ordinary navigation; `prefers-reduced-motion: reduce` opts out of transitions entirely. In-page anchors retain their own interruptible scroll behavior, and PDF downloads remain native links.
 
 ### Floating dock
 After the visitor scrolls past the hero, two crimson controls with a 2px paper ring sit in the bottom-right thumb zone: a 48px "back to top" key with a drawn arrow and a "Napisz do mnie" button that jumps to Contact and disappears while Contact is on screen. The contact button stays available while scrolling in either direction and carries a drawn envelope; only the back-to-top key hides on scroll down and returns on scroll up. Below 48rem, while scrolling down (reading), the contact button collapses to a 48px envelope key so it never covers card text; its label stays in the accessible name and returns on scroll up. Hover turns soot. It fades and rises in 0.3s, without motion under reduced motion, and stays hidden without script.
