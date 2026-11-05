@@ -296,6 +296,10 @@ a:hover {
   border-radius: 1.5rem;
   overflow: hidden;
 }
+/* Górny arkusz ma tę samą pełną szerokość na stronie głównej i podstronach. */
+.sheet-wide {
+  margin-inline: var(--sheet-gap);
+}
 @media (min-width: 64rem) {
   .sheet {
     border-radius: 2rem;

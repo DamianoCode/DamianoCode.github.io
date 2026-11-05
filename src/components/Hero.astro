@@ -47,7 +47,7 @@ const lines = [
        Strona zamyka się karminowym arkuszem Kontakt. Cały arkusz jest nagłówkiem strony (banner), więc stoi
        przed <main>, a skok do treści prowadzi od razu do projektów. -->
   <div class="hero-pin">
-  <div class="sheet hero-sheet">
+  <div class="sheet sheet-wide hero-sheet">
     <SiteHeader />
     <div class="wrap hero-inner">
       <div class="stage">
@@ -148,7 +148,6 @@ const lines = [
   /* Arkusz ma zaokrąglenia pozostałych (klasa `.sheet`), ale nie ich największą szerokość: zajmuje całe okno
      z małym odstępem od krawędzi i mieści się w pierwszym ekranie. Nagłówek u góry, treść przy dolnej krawędzi. */
   .hero-sheet {
-    margin-inline: var(--sheet-gap);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -156,11 +155,7 @@ const lines = [
     padding-bottom: clamp(2rem, 6vh, 4rem);
     background: var(--sheet-bg);
   }
-  /* Nagłówek i treść hero rozciągają się na całą szerokość arkusza, a nie na kolumnę 88rem pozostałych sekcji:
-     na dużym monitorze napis wypełnia okno zamiast stać w wąskim pasie pośrodku. */
-  .hero-sheet :global(.site-head) {
-    max-width: none;
-  }
+  /* Treść hero rozciąga się na całą szerokość górnego arkusza, tak jak wspólny SiteHeader. */
   /* Najmniejszy odstęp od menu: na niskim laptopie treść wypełnia cały arkusz i imię stykało się z menu. */
   .hero-inner {
     max-width: none;
