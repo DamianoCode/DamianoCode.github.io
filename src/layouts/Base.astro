@@ -144,13 +144,13 @@ const website = {
     {ownHeader ? (
       <slot name="banner" />
     ) : (
-      <header class:list={['sheet masthead', { 'masthead-top': hasTitle }]}>
+      <header class:list={['sheet sheet-wide masthead', { 'masthead-top': hasTitle }]}>
         <SiteHeader />
       </header>
     )}
     <main id="tresc">
       {!ownHeader && hasTitle && (
-        <div class="sheet masthead masthead-title">
+        <div class="sheet sheet-wide masthead masthead-title">
           <div class="wrap masthead-inner">
             <slot name="masthead" />
           </div>
@@ -218,6 +218,7 @@ const website = {
     outline-color: var(--ink);
   }
   .masthead-inner {
+    max-width: none;
     padding-block: clamp(1.5rem, 6vh, 4rem) clamp(2rem, 6vh, 3.5rem);
   }
 

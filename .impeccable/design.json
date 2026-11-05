@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-29T16:12:28.734Z",
+  "generatedAt": "2026-11-05T21:35:34.877Z",
   "title": "Design System: Damian Ułaś — portfolio",
   "extensions": {
     "colorMeta": {
@@ -341,6 +341,14 @@
       "label-large": {
         "displayName": "Label L",
         "purpose": "Actions and navigation."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "Lowercase keyboard signature in the shared header: width 62, weight 850, 1.6rem, tracking -0.005em."
+      },
+      "cv-heading": {
+        "displayName": "CV heading",
+        "purpose": "Identity and section headings on the CV reading page, using --step-3 and width 74."
       }
     },
     "shadows": [
@@ -450,9 +458,18 @@
         "name": "hero-note",
         "value": "0.9s cubic-bezier(0.16, 1, 0.3, 1), 1.35s delay; opacity 0→1, rotate 10deg→0deg, translateY(-0.6rem)→0",
         "purpose": "The brb note settles over the empty chair; disabled under reduced motion."
+      },
+      {
+        "name": "page-crossfade",
+        "value": "native cross-document View Transitions; root and site-header snapshots, 220ms ease-in-out",
+        "purpose": "Same-origin document navigation keeps the shared header position continuous; reduced motion opts out and unsupported browsers retain ordinary document navigation."
       }
     ],
     "breakpoints": [
+      {
+        "name": "xxs",
+        "value": "22rem"
+      },
       {
         "name": "xs",
         "value": "30rem"
@@ -520,9 +537,9 @@
       "name": "Site header",
       "kind": "nav",
       "refersTo": "sheet-hero",
-      "description": "Keyboard mark, lowercase wordmark, section links and a PL/EN language switch; below 48rem the menu occupies its own row.",
-      "html": "<div class=\"ds-head\"><a class=\"ds-home\" href=\"#\"><svg aria-hidden=\"true\" viewBox=\"0 0 96 64\"><path fill=\"#17171A\" fill-rule=\"evenodd\" d=\"M8 0H88Q96 0 96 8V56Q96 64 88 64H8Q0 64 0 56V8Q0 0 8 0ZM10 10H18Q20 10 20 12V20Q20 22 18 22H10Q8 22 8 20V12Q8 10 10 10ZM27 10H35Q37 10 37 12V20Q37 22 35 22H27Q25 22 25 20V12Q25 10 27 10ZM44 10H52Q54 10 54 12V20Q54 22 52 22H44Q42 22 42 20V12Q42 10 44 10ZM61 10H69Q71 10 71 12V20Q71 22 69 22H61Q59 22 59 20V12Q59 10 61 10ZM78 10H86Q88 10 88 12V20Q88 22 86 22H78Q76 22 76 20V12Q76 10 78 10ZM10 27H18Q20 27 20 29V37Q20 39 18 39H10Q8 39 8 37V29Q8 27 10 27ZM27 27H35Q37 27 37 29V37Q37 39 35 39H27Q25 39 25 37V29Q25 27 27 27ZM44 27H52Q54 27 54 29V37Q54 39 52 39H44Q42 39 42 37V29Q42 27 44 27ZM61 27H69Q71 27 71 29V37Q71 39 69 39H61Q59 39 59 37V29Q59 27 61 27ZM78 27H86Q88 27 88 29V37Q88 39 86 39H78Q76 39 76 37V29Q76 27 78 27ZM23 46H73Q75 46 75 48V54Q75 56 73 56H23Q21 56 21 54V48Q21 46 23 46Z\"/><rect x=\"25\" y=\"10\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><rect x=\"59\" y=\"27\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><g fill=\"#E9E5DE\"><path fill-rule=\"evenodd\" d=\"M32.6 12h1.7v8h-1.6v-.5c-.5.4-1 .6-1.7.6-1.7 0-2.7-1.2-2.7-3.1s1-3.1 2.7-3.1c.6 0 1.1.2 1.6.6ZM31.3 15.4c-.9 0-1.4.6-1.4 1.6s.5 1.6 1.4 1.6 1.4-.6 1.4-1.6-.5-1.6-1.4-1.6Z\"/><path d=\"M67.8 31.2l-1.1 1.1c-.4-.4-.7-.6-1.2-.6-1 0-1.6.7-1.6 1.8s.6 1.8 1.6 1.8c.5 0 .8-.2 1.2-.6l1.1 1.1c-.6.7-1.3 1-2.3 1-2 0-3.3-1.3-3.3-3.3s1.3-3.3 3.3-3.3c1 0 1.7.3 2.3 1Z\"/></g></svg>damianocode</a><nav aria-label=\"Główna\"><a href=\"#\" aria-current=\"page\">Projekty</a><a href=\"#\">Agenci AI</a><a href=\"#\">Umiejętności</a><a href=\"#\">Kontakt</a></nav><a class=\"ds-lang\" href=\"#\" hreflang=\"en\" lang=\"en\" aria-label=\"English version\">EN</a></div>",
-      "css": ".ds-head{display:flex;flex-wrap:wrap;align-items:center;padding:.5rem 1.5rem;background:#e9e5de;border-radius:1.5rem;font-family:\"Anybody Variable\",\"Arial Narrow\",sans-serif}.ds-home{display:inline-flex;align-items:center;gap:.7rem;min-height:2.75rem;color:#17171a;text-decoration:none;font-weight:850;font-stretch:62%;font-size:1.6rem}.ds-home svg{width:3rem;height:2rem}.ds-head nav{margin-left:auto;padding-left:2rem;display:flex;flex-wrap:wrap;gap:0 1.25rem;font-size:1.05rem;font-stretch:90%}.ds-head nav a{display:inline-flex;align-items:center;min-height:2.75rem;color:#17171a;text-decoration:none;background:linear-gradient(transparent,transparent) no-repeat 0 calc(50% + .85em)/100% 2px}.ds-head nav a:hover,.ds-head nav a[aria-current=page]{background-image:linear-gradient(#be2337,#be2337)}.ds-head a:focus-visible{outline:3px solid #be2337;outline-offset:3px}.ds-lang{position:relative;display:inline-flex;align-items:center;min-height:2.75rem;margin-left:1rem;padding-left:1rem;color:#17171a;font-family:\"Anybody Variable\",\"Arial Narrow\",sans-serif;font-size:1.05rem;text-decoration:none;font-weight:700;letter-spacing:.04em;background:linear-gradient(transparent,transparent) no-repeat 0 calc(50% + .85em)/100% 2px;background-origin:content-box;background-clip:content-box}.ds-lang::before{content:\"\";position:absolute;left:0;top:50%;height:1em;border-left:1px solid rgb(23 23 26 / .4);translate:0 -50%}.ds-lang:hover{background-image:linear-gradient(#be2337,#be2337)}@media(max-width:47.99rem){.ds-head .ds-lang{order:1;margin-left:auto;padding-left:0}.ds-head .ds-lang::before{display:none}.ds-head nav{order:2;flex-basis:100%;margin-left:0;padding-left:0}}@media(max-width:30rem){.ds-head nav{gap:0 .8rem;font-stretch:78%}}@media(max-width:22rem){.ds-head nav{gap:0 .55rem;font-stretch:70%}}"
+      "description": "Keyboard signature, four homepage section links, and a separate CV / page / language group. Below 48rem the shortcuts stay beside the mark and the section menu takes the second row.",
+      "html": "<div class=\"ds-head\"><a class=\"ds-home\" href=\"#\"><svg aria-hidden=\"true\" viewBox=\"0 0 96 64\"><path fill=\"#17171A\" fill-rule=\"evenodd\" d=\"M8 0H88Q96 0 96 8V56Q96 64 88 64H8Q0 64 0 56V8Q0 0 8 0ZM10 10H18Q20 10 20 12V20Q20 22 18 22H10Q8 22 8 20V12Q8 10 10 10ZM27 10H35Q37 10 37 12V20Q37 22 35 22H27Q25 22 25 20V12Q25 10 27 10ZM44 10H52Q54 10 54 12V20Q54 22 52 22H44Q42 22 42 20V12Q42 10 44 10ZM61 10H69Q71 10 71 12V20Q71 22 69 22H61Q59 22 59 20V12Q59 10 61 10ZM78 10H86Q88 10 88 12V20Q88 22 86 22H78Q76 22 76 20V12Q76 10 78 10ZM10 27H18Q20 27 20 29V37Q20 39 18 39H10Q8 39 8 37V29Q8 27 10 27ZM27 27H35Q37 27 37 29V37Q37 39 35 39H27Q25 39 25 37V29Q25 27 27 27ZM44 27H52Q54 27 54 29V37Q54 39 52 39H44Q42 39 42 37V29Q42 27 44 27ZM61 27H69Q71 27 71 29V37Q71 39 69 39H61Q59 39 59 37V29Q59 27 61 27ZM78 27H86Q88 27 88 29V37Q88 39 86 39H78Q76 39 76 37V29Q76 27 78 27ZM23 46H73Q75 46 75 48V54Q75 56 73 56H23Q21 56 21 54V48Q21 46 23 46Z\"/><rect x=\"25\" y=\"10\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><rect x=\"59\" y=\"27\" width=\"12\" height=\"12\" rx=\"2\" fill=\"#BE2337\"/><g fill=\"#E9E5DE\"><path fill-rule=\"evenodd\" d=\"M32.6 12h1.7v8h-1.6v-.5c-.5.4-1 .6-1.7.6-1.7 0-2.7-1.2-2.7-3.1s1-3.1 2.7-3.1c.6 0 1.1.2 1.6.6ZM31.3 15.4c-.9 0-1.4.6-1.4 1.6s.5 1.6 1.4 1.6 1.4-.6 1.4-1.6-.5-1.6-1.4-1.6Z\"/><path d=\"M67.8 31.2l-1.1 1.1c-.4-.4-.7-.6-1.2-.6-1 0-1.6.7-1.6 1.8s.6 1.8 1.6 1.8c.5 0 .8-.2 1.2-.6l1.1 1.1c-.6.7-1.3 1-2.3 1-2 0-3.3-1.3-3.3-3.3s1.3-3.3 3.3-3.3c1 0 1.7.3 2.3 1Z\"/></g></svg>damianocode</a><nav class=\"ds-nav\" aria-label=\"Główna\"><a href=\"/#projekty\">Projekty</a><a href=\"/#ai\">Agenci AI</a><a href=\"/#umiejetnosci\">Umiejętności</a><a href=\"/#kontakt\">Kontakt</a></nav><div class=\"ds-utilities\"><a href=\"/cv\">CV</a><a class=\"ds-lang\" href=\"/en\" hreflang=\"en\" lang=\"en\" aria-label=\"English version\">EN</a></div></div>",
+      "css": ".ds-head{--ink:var(--brand-ink,#17171a);--accent:var(--brand-crimson,#be2337);--display:\"Anybody Variable\",\"Arial Narrow\",sans-serif;--heavy:850;--label-l:1.05rem;background:var(--brand-paper,#e9e5de);border-radius:1.5rem;padding:.5rem 1rem}.ds-home svg{width:3rem;height:2rem}.ds-head a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.ds-head { max-width: none; view-transition-name: site-header; display: flex; flex-wrap: wrap; align-items: center; padding-block: 0.5rem; } .ds-head .ds-nav { margin-left: auto; padding-left: 2rem; } @media (max-width: 47.99rem) { .ds-head .ds-utilities { order: 1; margin-left: auto; padding-left: 0; } .ds-head .ds-utilities::before { display: none; } .ds-head .ds-nav { order: 2; flex-basis: 100%; margin-left: 0; padding-left: 0; } } .ds-home { display: inline-flex; align-items: center; gap: 0.7rem; font-family: var(--display); font-weight: var(--heavy); font-stretch: 62%; font-size: 1.6rem; letter-spacing: -0.005em; min-height: 2.75rem; color: var(--ink); text-decoration: none; } .ds-nav { display: flex; flex-wrap: wrap; gap: 0 1.25rem; font-family: var(--display); font-size: var(--label-l); font-stretch: 90%; } .ds-nav a, .ds-utilities a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--ink); text-decoration: none; background: linear-gradient(transparent, transparent) no-repeat 0 calc(50% + 0.85em) / 100% 2px; } .ds-utilities a:hover, .ds-utilities a[aria-current='page'], .ds-nav a:hover, .ds-nav a:active { background-image: linear-gradient(var(--accent), var(--accent)); } .ds-utilities { position: relative; display: inline-flex; align-items: center; gap: 1rem; margin-left: 1rem; padding-left: 1rem; font-family: var(--display); font-size: var(--label-l); font-stretch: 90%; } .ds-lang { font-weight: 700; letter-spacing: 0.04em; } .ds-utilities::before { content: ''; position: absolute; left: 0; top: 50%; height: 1em; border-left: 1px solid color-mix(in srgb, var(--ink) 40%, transparent); translate: 0 -50%; } @media (max-width: 30rem) { .ds-nav { gap: 0 0.8rem; font-stretch: 78%; } } @media (max-width: 22rem) { .ds-nav { gap: 0 0.55rem; font-stretch: 70%; } }"
     },
     {
       "name": "Hero sheet",
@@ -563,6 +580,14 @@
       "description": "Translatable HTML speech bubble and taped brb note over the manga artwork. The sample shows the overlays independently of the image.",
       "html": "<div class=\"ds-overlays\"><p class=\"ds-bubble\">Czekamy na człowieka.</p><p class=\"ds-note\" aria-label=\"Zaraz wracam.\">brb</p></div>",
       "css": ".ds-overlays{position:relative;display:flex;align-items:center;justify-content:space-around;gap:2rem;padding:2rem;background:#e9e5de;color:#17171a;font-family:\"Anybody Variable\",\"Arial Narrow\",sans-serif}.ds-bubble{position:relative;margin:0;padding:.55rem .9rem;border:1.5px solid #17171a;border-radius:1.25rem;background:#e9e5de;font-size:.95rem;line-height:1.25;font-weight:600;font-stretch:90%}.ds-bubble::after{content:\"\";position:absolute;bottom:-.45rem;left:22%;width:.8rem;height:.8rem;border-right:1.5px solid #17171a;border-bottom:1.5px solid #17171a;background:#e9e5de;transform:skewX(-20deg) rotate(45deg)}.ds-note{position:relative;margin:0;padding:.45rem .8rem .5rem;background:color-mix(in srgb,#e9e5de 45%,#fff);font-size:1.5rem;font-weight:850;font-stretch:74%;line-height:1;box-shadow:0 .35rem .6rem -.3rem rgb(23 23 26 / .35);transform:rotate(6deg)}.ds-note::before{content:\"\";position:absolute;left:50%;top:-.45rem;width:2.2rem;height:.8rem;background:rgb(23 23 26 / .16);transform:translateX(-50%) rotate(-4deg)}"
+    },
+    {
+      "name": "CV document panel",
+      "kind": "card",
+      "refersTo": "cv-documents",
+      "description": "Tonal document controls from the CV page: primary download, language / size / date metadata, open-PDF and alternate-language links. Appears before the profile on mobile and in a 20rem column from 64rem.",
+      "html": "<aside class=\"ds-cv-documents\" aria-label=\"CV w PDF\"><a class=\"ds-cv-download\" href=\"/cv/damian-ulas-cv-pl.pdf\" download=\"Damian-Ulas-CV-PL.pdf\">Pobierz CV <span>PDF</span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 3v12m-5-5 5 5 5-5M5 16v5h14v-5\"/></svg></a><p class=\"ds-cv-document-meta\">Polski · PDF · 96 KB<br/>Aktualizacja: <time datetime=\"2026-10-29\">29 października 2026</time></p><p class=\"ds-cv-document-actions\"><a href=\"/cv/damian-ulas-cv-pl.pdf\" type=\"application/pdf\">Otwórz PDF</a><a href=\"/en/cv\" lang=\"en\" hreflang=\"en\">CV in English</a></p></aside>",
+      "css": ".ds-cv-documents{box-sizing:border-box;width:min(20rem,100%);padding:1.5rem;border-radius:var(--radius-control,.375rem);background:var(--paper-deep,#ded8ce);color:var(--ink,#17171a);font-family:var(--display,\"Anybody Variable\",\"Arial Narrow\",sans-serif)}.ds-cv-download{box-sizing:border-box;display:flex;align-items:center;gap:.65rem;min-height:3rem;padding:.7rem 1.1rem;border-radius:var(--radius-control,.375rem);background:var(--brand-crimson,#be2337);color:var(--brand-paper,#e9e5de);text-decoration:none;font:600 var(--label-l,1.05rem) var(--display,\"Anybody Variable\",\"Arial Narrow\",sans-serif)}.ds-cv-download:hover{background:var(--brand-crimson-deep,#9e1c2e)}.ds-cv-download span{font-size:var(--label-s,.85rem)}.ds-cv-download svg{width:1.25rem;height:1.25rem;margin-left:auto;fill:none;stroke:currentColor;stroke-width:1.6;flex-shrink:0}.ds-cv-document-meta{margin:1rem 0 .5rem;font-size:var(--label,.95rem);line-height:1.6;color:var(--ink-soft,#5a564f)}.ds-cv-document-actions{display:flex;flex-wrap:wrap;gap:0 1rem;margin:0;font-size:var(--label,.95rem)}.ds-cv-document-actions a{display:inline-flex;align-items:center;min-height:2.75rem;color:var(--brand-crimson-deep,#9e1c2e);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.2em}.ds-cv-document-actions a:hover{text-decoration-thickness:3px}.ds-cv-documents a:focus-visible{outline:3px solid var(--accent,#be2337);outline-offset:3px}@media(prefers-color-scheme:dark){.ds-cv-document-actions a{color:var(--accent,#ef5b6b)}}"
     }
   ],
   "narrative": {

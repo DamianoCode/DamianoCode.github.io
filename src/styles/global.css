@@ -91,7 +91,30 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
+
+/* Natywne przejścia między dokumentami zachowują zwykłe linki i inicjalizację skryptów każdej strony.
+   Wspólny nagłówek ma własną parę ujęć; treść łagodnie przenika przez 220 ms. */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-group(root),
+::view-transition-group(site-header),
+::view-transition-old(root),
+::view-transition-new(root),
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation-duration: 220ms;
+  animation-timing-function: ease-in-out;
+}
 @media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
   html { scroll-behavior: auto; }
 }
 
@@ -295,6 +318,10 @@ a:hover {
   margin-inline: max(var(--sheet-gap), (100% - var(--sheet-max)) / 2);
   border-radius: 1.5rem;
   overflow: hidden;
+}
+/* Górny arkusz ma tę samą pełną szerokość na stronie głównej i podstronach. */
+.sheet-wide {
+  margin-inline: var(--sheet-gap);
 }
 @media (min-width: 64rem) {
   .sheet {
