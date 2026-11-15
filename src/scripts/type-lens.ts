@@ -120,6 +120,20 @@ const idle = () =>
     'requestIdleCallback' in window ? requestIdleCallback(() => resolve(), { timeout: 250 }) : setTimeout(resolve, 16),
   );
 
+/** Let the page turn finish before preparing the decorative font variants. */
+function afterPageTransition() {
+  const page = document.documentElement;
+  if (!page.hasAttribute('data-page-transition')) return Promise.resolve();
+  return new Promise<void>((resolve) => {
+    const observer = new MutationObserver(() => {
+      if (page.hasAttribute('data-page-transition')) return;
+      observer.disconnect();
+      resolve();
+    });
+    observer.observe(page, { attributes: true, attributeFilter: ['data-page-transition'] });
+  });
+}
+
 function updateNearest(line: Line) {
   const measured = line.chars[0].advances;
   let last = -1;
@@ -136,15 +150,18 @@ function updateNearest(line: Line) {
 }
 
 /**
- * Tworzy warianty liter w docelowym rozmiarze i mierzy ich szerokość, porcjami. Pierwsza porcja
- * (spoczynek i skrajności) wykonuje się od razu, reszta w wolnych chwilach przeglądarki.
+ * Tworzy warianty liter w docelowym rozmiarze i mierzy ich szerokość, porcjami. Spoczynek mierzymy
+ * od razu, resztę w wolnych chwilach przeglądarki, po zakończeniu przejścia między stronami.
  * Przerywa się, gdy w międzyczasie zmieni się rozmiar napisu.
  */
 async function prepareVariants(line: Line, fontSize: number) {
-  const perChunk = Math.max(1, Math.floor(LETTERS_PER_CHUNK / line.chars.length));
-  for (let i = 0; i < PREPARE_ORDER.length; i += perChunk) {
+  const budget = document.documentElement.dataset.pageEntry === 'home' ? 6 : LETTERS_PER_CHUNK;
+  const perChunk = Math.max(1, Math.floor(budget / line.chars.length));
+  for (let i = 0; i < PREPARE_ORDER.length;) {
     if (line.preparedSize !== fontSize) return;
-    const levels = PREPARE_ORDER.slice(i, i + perChunk);
+    // Fit the resting cut first; prepare the decorative extremes in later idle batches.
+    const count = i === 0 ? 1 : perChunk;
+    const levels = PREPARE_ORDER.slice(i, i + count);
     withProbe(line, fontSize, (probe) => {
       const cells = line.chars.flatMap((c) =>
         levels.map((level) => {
@@ -160,7 +177,9 @@ async function prepareVariants(line: Line, fontSize: number) {
       };
     });
     updateNearest(line);
+    i += count;
     await idle();
+    await afterPageTransition();
   }
 }
 
@@ -385,12 +404,26 @@ export function initTypeLens(root: HTMLElement, section: HTMLElement, onAxes?: A
     }
   };
 
+  // A bfcache restore can resume a first-visit sweep that was still running when CV opened.
+  window.addEventListener('pagereveal', () => {
+    if (document.documentElement.dataset.pageEntry === 'home' && root.classList.contains('is-live')) settle();
+  });
+
   document.fonts.ready.then(async () => {
+    await afterPageTransition();
+    // Reuse the already rendered resting title instead of rasterizing another size at 100px.
+    // Computed dimensions exclude the scroll-driven transform of the hero's sheet.
+    for (const line of lines) {
+      const style = getComputedStyle(line.word);
+      const width = parseFloat(style.width);
+      const size = parseFloat(style.fontSize);
+      if (width > 0 && size > 0) line.restWidth = width * 100 / size;
+    }
     root.classList.add('is-live');
     measureGeometry();
     bind();
     await Promise.all(lines.map((line) => line.ready));
-    if (!reduce.matches) {
+    if (!reduce.matches && document.documentElement.dataset.pageEntry !== 'home') {
       // Jedno wejście: soczewka przejeżdża przez napis, potem wszystko wraca do spoczynku.
       sweepStart = performance.now();
       wake();

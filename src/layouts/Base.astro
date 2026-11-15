@@ -100,6 +100,59 @@ const website = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Parser-blocking: pagereveal must be registered before the first rendering opportunity. */}
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+        const page = (href) => {
+          if (!href) return null;
+          const url = new URL(href, location.href);
+          if (url.origin !== location.origin) return null;
+          const path = url.pathname.replace(/(?:\/index)?\.html$/, '').replace(/\/$/, '') || '/';
+          if (/^\/(?:en\/)?cv$/.test(path)) return 'cv';
+          if (path === '/' || path === '/en') return 'home';
+          return null;
+        };
+        const prepare = (transition, activation, incoming = false) => {
+          if (!transition) return;
+          if (reduced.matches) {
+            transition.skipTransition();
+            return;
+          }
+          const from = page(activation?.from?.url);
+          const to = page(activation?.entry?.url);
+          if (!from || !to || from === to) return;
+          root.dataset.pageTransition = to === 'cv' ? 'to-cv' : 'to-home';
+          if (incoming) {
+            root.dataset.pageEntry = to;
+            transition.ready.then(() => {
+              const sheets = document.getAnimations().filter((animation) =>
+                animation instanceof CSSAnimation && animation.animationName.startsWith('sheet-'));
+              for (const animation of sheets) {
+                animation.pause();
+                animation.currentTime = 0;
+              }
+              // Let initial ResizeObservers and layer uploads finish while the old sheet is intact.
+              requestAnimationFrame(() => requestAnimationFrame(() => {
+                // A slow render may leave the document timeline at a pre-capture frame.
+                const start = performance.now();
+                for (const animation of sheets) {
+                  if (animation.playState === 'paused' && root.hasAttribute('data-page-transition')) {
+                    animation.play();
+                    animation.startTime = start;
+                  }
+                }
+              }));
+            }).catch(() => {}); // A newer navigation may legitimately supersede this capture.
+          }
+          // Outbound documents can return from bfcache. Never cache a transition pose.
+          transition.finished.finally(() => delete root.dataset.pageTransition);
+        };
+        window.addEventListener('pageswap', (event) => prepare(event.viewTransition, event.activation));
+        window.addEventListener('pagereveal', (event) => prepare(event.viewTransition, window.navigation?.activation, true));
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={profile.fullName} />
