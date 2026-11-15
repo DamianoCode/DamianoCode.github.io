@@ -230,8 +230,14 @@ const codeLink = (p: Project) => p.links.find((l) => l.code);
   const cases = document.querySelector<HTMLElement>('.cases');
   if (cases) {
     const heights = new ResizeObserver((entries) => {
-      for (const { target } of entries) {
-        (target as HTMLElement).style.setProperty('--h', `${(target as HTMLElement).offsetHeight}px`);
+      // ResizeObserver already measured these boxes. Reading offsetHeight after each CSS write
+      // forced the whole page through repeated layouts during the first transition frame.
+      const sizes = entries.map(({ target, borderBoxSize }) => ({
+        target: target as HTMLElement,
+        height: Math.round(borderBoxSize[0]?.blockSize ?? (target as HTMLElement).offsetHeight),
+      }));
+      for (const { target, height } of sizes) {
+        target.style.setProperty('--h', `${height}px`);
       }
     });
     cases.querySelectorAll<HTMLElement>('.case').forEach((card) => heights.observe(card));

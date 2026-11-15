@@ -92,8 +92,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Natywne przejścia między dokumentami zachowują zwykłe linki i inicjalizację skryptów każdej strony.
-   Wspólny nagłówek ma własną parę ujęć; treść łagodnie przenika przez 220 ms. */
+/* Ordinary documents and links; the browser owns navigation, history and interruption. */
 @view-transition {
   navigation: auto;
 }
@@ -105,6 +104,85 @@ html {
 ::view-transition-new(site-header) {
   animation-duration: 220ms;
   animation-timing-function: ease-in-out;
+}
+
+/* Portfolio → CV: lift the next sheet onto the desk. Returning removes that same sheet.
+   Capture the header with its paper so its ink never floats over the wrong surface. */
+html[data-page-transition] {
+  --page-turn-duration: 780ms;
+  --page-turn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --page-turn-angle: -1.2deg;
+  --page-turn-inset: 0.955;
+}
+html[data-page-transition] .site-head {
+  view-transition-name: none;
+}
+/* A page return lands on the settled scene; do not replay its first-visit choreography. */
+html[data-page-entry='home'] .hero-art .bubble,
+html[data-page-entry='home'] .hero-art .note,
+html[data-page-entry='home'] .hero .brand-mark .key {
+  animation: none;
+}
+html[data-page-transition]::view-transition {
+  background: var(--brand-ink);
+}
+html[data-page-transition]::view-transition-group(root) {
+  animation: none;
+}
+html[data-page-transition]::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+html[data-page-transition]::view-transition-old(root),
+html[data-page-transition]::view-transition-new(root) {
+  height: 100%;
+  mix-blend-mode: normal;
+  backface-visibility: hidden;
+  transform-origin: 50% 100%;
+  animation-duration: var(--page-turn-duration);
+  animation-timing-function: var(--page-turn-ease);
+  animation-fill-mode: both;
+}
+html[data-page-transition='to-cv']::view-transition-old(root) {
+  animation-name: sheet-recede;
+}
+html[data-page-transition='to-cv']::view-transition-new(root) {
+  animation-name: sheet-arrive;
+}
+html[data-page-transition='to-home']::view-transition-old(root) {
+  z-index: 2;
+  animation-name: sheet-leave;
+  animation-duration: 660ms;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+}
+html[data-page-transition='to-home']::view-transition-new(root) {
+  z-index: 1;
+  animation-name: sheet-return;
+}
+@keyframes sheet-recede {
+  from { transform: none; opacity: 1; clip-path: inset(0 round 0); }
+  to { transform: translateY(-2vh) scale(var(--page-turn-inset)); opacity: 0.72; clip-path: inset(0 round 2rem); }
+}
+@keyframes sheet-arrive {
+  from { transform: translateY(104vh) rotate(var(--page-turn-angle)); clip-path: inset(0 round 2rem); }
+  to { transform: none; clip-path: inset(0 round 0); }
+}
+@keyframes sheet-leave {
+  from { transform: none; clip-path: inset(0 round 0); }
+  to { transform: translateY(104vh) rotate(calc(-1 * var(--page-turn-angle))); clip-path: inset(0 round 2rem); }
+}
+@keyframes sheet-return {
+  from { transform: translateY(-2vh) scale(var(--page-turn-inset)); opacity: 0.72; clip-path: inset(0 round 2rem); }
+  to { transform: none; opacity: 1; clip-path: inset(0 round 0); }
+}
+@media (max-width: 47.99rem) {
+  html[data-page-transition] {
+    --page-turn-duration: 660ms;
+    --page-turn-angle: -0.6deg;
+    --page-turn-inset: 0.975;
+  }
+  html[data-page-transition='to-home']::view-transition-old(root) {
+    animation-duration: 560ms;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   @view-transition {
