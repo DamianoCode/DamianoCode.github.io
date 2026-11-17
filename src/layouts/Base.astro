@@ -60,6 +60,7 @@ const cleanPath =
     .replace(/(index)?\.html$/, '')
     .replace(/(.)\/$/, '$1') || '/';
 const canonical = new URL(cleanPath, site).href;
+const googleSiteVerification = cleanPath === '/' ? process.env.GOOGLE_SITE_VERIFICATION?.trim() : undefined;
 const imageUrl = new URL(image, site).href;
 // Opis gotowego obrazka udostępniania (nocna scena z podpisem), nie samej osoby.
 const imageAlt = image.startsWith('/og') ? `${profile.fullName}, damianocode: ${copy.imageAlt}` : profile.fullName;
@@ -100,6 +101,7 @@ const website = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
     {/* Parser-blocking: pagereveal must be registered before the first rendering opportunity. */}
     <script is:inline>
       (() => {

@@ -23,6 +23,7 @@ jobs:
         env:
           # Po podpięciu własnej domeny zmień na nią (oraz dodaj public/CNAME).
           SITE_URL: https://damianocode.github.io
+          GOOGLE_SITE_VERIFICATION: ${{ secrets.GOOGLE_SITE_VERIFICATION }}
 
   deploy:
     needs: build
